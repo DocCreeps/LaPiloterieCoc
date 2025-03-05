@@ -1,5 +1,7 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+
+  <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <h1 class="text-3xl font-bold mb-8 text-center">Activité et Stats Des Clan La Piloterie</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div
         v-for="clan in clans"
@@ -48,9 +50,11 @@ export default {
         });
     },
     goToClan(clanTag) {
-      this.$router.push(`/clan/${clanTag}`);
+      // Supprimer le caractère # avant de rediriger
+      const cleanedClanTag = clanTag.replace('#', '');
+      this.$router.push(`/clan/${cleanedClanTag}`);
     }
-  }
+    }
 }
 </script>
 

@@ -14,7 +14,20 @@ export default {
   getClanDetails(clanTag) {
   const encodedTag = encodeURIComponent(`#${clanTag}`);
   const requestUrl=`/clans/${encodedTag}`;
-  console.log(`Requête URL : ${requestUrl}`);
+    return apiClient.get(requestUrl)
+      .then(response => {
+        console.log('Réponse de l\'API :', response.data);
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Erreur lors de la requête API :', error);
+        throw error;
+      });
+  },
+  getMemberDetails(memberTag) { // Ajout de la méthode getMemberDetails
+    const encodedTag = encodeURIComponent(memberTag);
+    const requestUrl = `/players/${encodedTag}`;
+    console.log(`Requête URL : ${requestUrl}`);
     return apiClient.get(requestUrl)
       .then(response => {
         console.log('Réponse de l\'API :', response.data);
