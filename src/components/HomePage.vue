@@ -1,24 +1,16 @@
 <template>
 
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-    <h1 class="text-3xl font-bold mb-8 text-center">Activité et Stats Des Clan La Piloterie</h1>
+    <h1 class="text-3xl font-bold mb-8 text-center">Quel Clan Analysé</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div
         v-for="clan in clans"
         :key="clan?.tag"
       class="max-w-sm mx-auto bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
       >
-      <div class="p-4">
-        <img :src="clan?.badgeUrls?.small" alt="Clan Badge" class="w-16 h-16 mx-auto">
+      <div class="p-4 cursor-pointer"  @click="goToClan(clan?.tag)">
+        <img :src="clan?.badgeUrls?.medium" alt="Clan Badge" class=" mx-auto">
         <h2 class="mt-4 text-xl font-semibold text-center">{{ clan?.name }}</h2>
-        <p class="text-gray-600 text-center">Membres : {{ clan?.members }}</p>
-        <p class="text-gray-600 text-center">Niveau : {{ clan?.clanLevel }}</p>
-        <button
-          @click="goToClan(clan?.tag)"
-          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600 block mx-auto"
-        >
-          Voir Détails
-        </button>
       </div>
     </div>
   </div>

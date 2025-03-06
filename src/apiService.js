@@ -39,7 +39,19 @@ export default {
         throw error;
       });
   },
-
+getWarLog(clanTag) {
+  const encodedTag = encodeURIComponent(`#${clanTag}`);
+  const requestUrl=`/clans/${encodedTag}/warlog`;
+  return apiClient.get(requestUrl)
+    .then(response => {
+      console.log('Réponse de l\'API :', response.data);
+      return response.data;
+    })
+    .catch(error => {
+      console.error('Erreur lors de la requête API :', error);
+      throw error;
+    });
+},
   // getCapitalDetails() { // Ajout de la méthode getMemberDetails
   //   const requestUrl = `/capitalleagues`;
   //   console.log(`Requête URL : ${requestUrl}`);
