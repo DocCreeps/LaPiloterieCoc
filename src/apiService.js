@@ -24,6 +24,7 @@ export default {
         throw error;
       });
   },
+
   getMemberDetails(memberTag) { // Ajout de la méthode getMemberDetails
     const encodedTag = encodeURIComponent(memberTag);
     const requestUrl = `/players/${encodedTag}`;
@@ -38,6 +39,21 @@ export default {
         throw error;
       });
   },
+
+  // getCapitalDetails() { // Ajout de la méthode getMemberDetails
+  //   const requestUrl = `/capitalleagues`;
+  //   console.log(`Requête URL : ${requestUrl}`);
+  //   return apiClient.get(requestUrl)
+  //     .then(response => {
+  //       console.log('Réponse de l\'API :', response.data);
+  //       return response.data;
+  //     })
+  //     .catch(error => {
+  //       console.error('Erreur lors de la requête API :', error);
+  //       throw error;
+  //     });
+  // },
+
 
   // Ajoute d'autres méthodes pour interagir avec l'API selon tes besoins
 };
