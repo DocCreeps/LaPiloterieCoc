@@ -3,10 +3,10 @@
     <div class="container mx-auto py-8 flex flex-col lg:flex-row lg:justify-between">
       <!-- Bloc de gauche : Infos du clan -->
       <div class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/3 mb-4 lg:mb-0">
-        <img :src="clan?.badgeUrls?.small" alt="Clan Badge" class="w-16 h-16 mx-auto mb-4">
+        <img :src="clan?.badgeUrls?.medium" alt="Clan Badge" class="h-30 w-30 mx-auto mb-4">
         <h1 class="text-3xl font-bold text-center">{{ clan?.name }}</h1>
         <p class="text-lg text-center">Niveau : {{ clan?.clanLevel }}</p>
-        <p class="text-lg text-center">Trophées Généraux : {{ clan?.clanPoints }}</p>
+        <p class="text-lg text-center">Trophées  : {{ clan?.clanPoints }}</p>
       </div>
 
       <!-- Bloc du milieu : Autres informations -->
@@ -17,7 +17,11 @@
       </div>
 
       <!-- Bloc de droite : Bandeau des statistiques de guerre -->
-      <div class="bg-blue-500 p-4 rounded-lg shadow-md text-white w-full lg:w-1/3">
+      <div class="bg-blue-500 p-4 rounded-lg shadow-md text-white w-full lg:w-1/3"
+           :key="clan.tag"
+           @click="getWarsDetail(clan.tag)"
+      >
+
         <h2 class="text-xl font-bold mb-4 text-center">Statistiques de Guerre</h2>
         <div class="flex flex-wrap justify-center">
           <div class="flex flex-col items-center bg-green-500 p-2 rounded-lg m-1">
@@ -96,6 +100,10 @@ export default {
     },
     goToMemberDetails(memberTag) {
       this.$router.push(`/players/${encodeURIComponent(memberTag)}`);
+    },
+    getWarsDetail(clanTag) {
+      const cleanedClanTag = clanTag.replace('#', '');
+      this.$router.push(`/wars/${cleanedClanTag}`);
     }
   }
 }

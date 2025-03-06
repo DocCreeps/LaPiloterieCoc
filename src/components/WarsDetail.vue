@@ -1,0 +1,217 @@
+<template>
+  <div class="min-h-screen bg-gray-100">
+    <!-- Bandeau des Statistiques de Guerre Générales -->
+    <div class="bg-blue-500 text-white p-4 fixed top-0 left-0 right-0 z-10">
+      <div class="container mx-auto flex flex-col md:flex-row md:items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold mb-4 md:mb-0">Statistiques de Guerre</h1>
+          <p class="text-lg mb-2">Ligue de Clan : {{ clan?.warLeague?.name }}</p>
+        </div>
+        <div class="flex flex-wrap justify-center">
+          <div class="flex flex-col items-center bg-green-600 p-2 rounded-lg m-1">
+            <p class="text-lg font-bold">Gagné</p>
+            <p class="text-lg">{{ clan?.warWins }}</p>
+          </div>
+          <div class="flex flex-col items-center bg-red-500 p-2 rounded-lg m-1">
+            <p class="text-lg font-bold">Perdu</p>
+            <p class="text-lg">{{ clan?.warLosses }}</p>
+          </div>
+          <div class="flex flex-col items-center bg-gray-500 p-2 rounded-lg m-1">
+            <p class="text-lg font-bold">Égalité</p>
+            <p class="text-lg">{{ clan?.warTies }}</p>
+          </div>
+          <div class="flex flex-col items-center bg-black p-2 rounded-lg m-1 mt-4 md:mt-0">
+            <p class="text-lg font-bold text-white">Total</p>
+            <p class="text-lg text-white">{{ totalWars }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenu Principal -->
+    <div class="container mx-auto py-16 mt-24">
+      <!-- Bloc déroulable pour les GDC (Guerres de Clans) -->
+      <div class="mb-8">
+        <div class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleGdc">
+          <h2 class="text-xl font-bold">Guerres de Clans</h2>
+        </div>
+        <div v-show="showGdc" class="bg-white p-4 rounded-lg shadow-md">
+          <!-- Lignes des Guerres de Clans -->
+          <div v-for="war in paginatedWars" :key="war.endTime" :class="getResultClass(war.result)" class="p-2 mb-2 rounded-lg flex flex-col md:flex-row gap-4 ">
+            <div class="flex items-center justify-center md:justify-start md:w-1/4">
+              <div class="hidden md:block">
+                <div class="text-gray-500">{{ formatDate(war.endTime) }}</div>
+              </div>
+            </div>
+
+            <div class="text-center md:text-right md:w-1/4">
+              <h4 class="text-lg font-semibold">{{ war.clan.name }}</h4>
+              <p class="text-gray-600">({{ (war.clan.destructionPercentage).toFixed(2) }}%)</p>
+            </div>
+
+            <div class="hidden md:flex items-center justify-center md:w-1/4">
+              <img :src="war.clan.badgeUrls.small" alt="Badge" class="w-16 h-16">
+            </div>
+
+            <div class="text-center md:w-1/4">
+              <div class="font-bold">
+                <strong>{{ war.clan.stars }} - {{ war.opponent.stars }}</strong>
+              </div>
+              <p class="text-gray-600">{{ war.teamSize }} vs {{ war.teamSize }}</p>
+            </div>
+
+            <div class="hidden md:flex items-center justify-center md:w-1/4">
+              <img :src="war.opponent.badgeUrls.small" alt="Badge" class="w-16 h-16">
+            </div>
+
+            <div class="text-center md:text-left md:w-1/4">
+              <h4 class="text-lg font-semibold"> {{ war.opponent.name }}</h4>
+              <p class="text-gray-600">({{ (war.opponent.destructionPercentage).toFixed(2) }}%)</p>
+            </div>
+
+          </div>
+
+          <!-- Pagination -->
+          <div class="flex justify-center mt-4">
+            <button
+              @click="prevPage"
+              :disabled="currentPage === 1"
+              class="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
+            >
+              Précédent
+            </button>
+            <span class="px-4 py-2 mx-1">{{ currentPage }} / {{ totalPages }}</span>
+            <button
+              @click="nextPage"
+              :disabled="currentPage === totalPages"
+              class="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
+            >
+              Suivant
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc déroulable pour les Ligues -->
+      <div>
+        <div class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleLeague">
+          <h2 class="text-xl font-bold">Ligues de Clans</h2>
+        </div>
+        <div v-show="showLeague" class="bg-white p-4 rounded-lg shadow-md">
+          <!-- Contenu des Ligues de Clans -->
+          <p>Détails des ligues de clans...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import apiService from '../apiService';
+
+export default {
+  data() {
+    return {
+      clan: null,
+      wars: [],
+      showGdc: false,
+      showLeague: false,
+      currentPage: 1,
+      itemsPerPage: 10
+    };
+  },
+  created() {
+    this.fetchClanDetails();
+    this.fetchWarDetails();
+  },
+  methods: {
+    fetchClanDetails() {
+      const clanTag = this.$route.params.clanTag;
+      apiService.getClanDetails(clanTag).then(response => {
+        this.clan = response;
+        console.log('Détails du clan :', this.clan);
+      }).catch(error => {
+        console.error('Erreur lors de la récupération des détails du clan :', error);
+      });
+    },
+    fetchWarDetails() {
+      const clanTag = this.$route.params.clanTag;
+      apiService.getWarLog(clanTag).then(response => {
+        this.wars = response.items;
+        console.log('Détails des guerres de clans :', this.wars);
+      }).catch(error => {
+        console.error('Erreur lors de la récupération des détails des guerres de clans :', error);
+      });
+    },
+    toggleGdc() {
+      this.showGdc = !this.showGdc;
+    },
+    toggleLeague() {
+      this.showLeague = !this.showLeague;
+    },
+    getResultClass(result) {
+      return {
+        'bg-green-100': result === 'win',
+        'bg-gray-100': result === 'draw',
+        'bg-red-100': result === 'lose'
+      };
+    },
+    formatDate(endTime) {
+      const date = new Date(endTime);
+      const now = new Date();
+      const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+      return `${diff}d ago`;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    }
+  },
+  computed: {
+    filteredWars() {
+      return this.wars.filter(war => war.opponent && war.opponent.name);
+    },
+    paginatedWars() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredWars.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredWars.length / this.itemsPerPage);
+    },
+    totalWars() {
+      return (this.clan?.warWins || 0) + (this.clan?.warLosses || 0) + (this.clan?.warTies || 0);
+    }
+  }
+}
+</script>
+
+<style scoped>
+.stat-item {
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  margin-bottom: 0;
+}
+
+.stat-item:hover {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+
+.bg-green-100 {
+  background-color: #d4edda;
+}
+
+.bg-gray-100 {
+  background-color: #f8f9fa;
+}
+
+.bg-red-100 {
+  background-color: #f8d7da;
+}
+</style>
