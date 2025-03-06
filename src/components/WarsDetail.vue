@@ -8,7 +8,7 @@
           <p class="text-lg mb-2">Ligue de Clan : {{ clan?.warLeague?.name }}</p>
         </div>
         <div class="flex flex-wrap justify-center">
-          <div class="flex flex-col items-center bg-green-500 p-2 rounded-lg m-1">
+          <div class="flex flex-col items-center bg-green-600 p-2 rounded-lg m-1">
             <p class="text-lg font-bold">Gagné</p>
             <p class="text-lg">{{ clan?.warWins }}</p>
           </div>
@@ -22,7 +22,7 @@
           </div>
           <div class="flex flex-col items-center bg-black p-2 rounded-lg m-1 mt-4 md:mt-0">
             <p class="text-lg font-bold text-white">Total</p>
-            <p class="text-lg text-white">{{ clan?.warWins + clan?.warLosses + clan?.warTies }}</p>
+            <p class="text-lg text-white">{{ totalWars }}</p>
           </div>
         </div>
       </div>
@@ -32,34 +32,71 @@
     <div class="container mx-auto py-16 mt-24">
       <!-- Bloc déroulable pour les GDC (Guerres de Clans) -->
       <div class="mb-8">
-        <button class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleGdc">
+        <div class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleGdc">
           <h2 class="text-xl font-bold">Guerres de Clans</h2>
-        </button>
+        </div>
         <div v-show="showGdc" class="bg-white p-4 rounded-lg shadow-md">
           <!-- Lignes des Guerres de Clans -->
-          <div v-for="war in wars" :key="war.endTime" :class="getResultClass(war.result)" class="p-2 mb-2 rounded-lg flex justify-between items-center">
-            <div class="flex items-center">
-              <img :src="war.clan.badgeUrls.small" alt="Badge" class="w-8 h-8 mr-2">
-              <span class="font-bold">{{ war.clan.name }}</span>
+          <div v-for="war in paginatedWars" :key="war.endTime" :class="getResultClass(war.result)" class="p-2 mb-2 rounded-lg flex flex-col md:flex-row gap-4 ">
+            <div class="flex items-center justify-center md:justify-start md:w-1/4">
+              <div class="hidden md:block">
+                <div class="text-gray-500">{{ formatDate(war.endTime) }}</div>
+              </div>
             </div>
-            <span class="text-lg">{{ war.clan.stars }} </span>
-            <span class="text-lg">{{ (war.clan.destructionPercentage).toFixed(2) }}%</span>
-            <span class="text-lg">VS</span>
-            <span class="text-lg">{{ (war.opponent.destructionPercentage).toFixed(2) }}%</span>
-            <span class="text-lg">{{ war.opponent.stars }} </span>
-            <div class="flex items-center">
-              <span class="font-bold">{{ war.opponent.name }}</span>
-              <img :src="war.opponent.badgeUrls.small" alt="Badge" class="w-8 h-8 mr-2">
+
+            <div class="text-center md:text-right md:w-1/4">
+              <h4 class="text-lg font-semibold">{{ war.clan.name }}</h4>
+              <p class="text-gray-600">({{ (war.clan.destructionPercentage).toFixed(2) }}%)</p>
             </div>
+
+            <div class="hidden md:flex items-center justify-center md:w-1/4">
+              <img :src="war.clan.badgeUrls.small" alt="Badge" class="w-16 h-16">
+            </div>
+
+            <div class="text-center md:w-1/4">
+              <div class="font-bold">
+                <strong>{{ war.clan.stars }} - {{ war.opponent.stars }}</strong>
+              </div>
+              <p class="text-gray-600">{{ war.teamSize }} vs {{ war.teamSize }}</p>
+            </div>
+
+            <div class="hidden md:flex items-center justify-center md:w-1/4">
+              <img :src="war.opponent.badgeUrls.small" alt="Badge" class="w-16 h-16">
+            </div>
+
+            <div class="text-center md:text-left md:w-1/4">
+              <h4 class="text-lg font-semibold"> {{ war.opponent.name }}</h4>
+              <p class="text-gray-600">({{ (war.opponent.destructionPercentage).toFixed(2) }}%)</p>
+            </div>
+
+          </div>
+
+          <!-- Pagination -->
+          <div class="flex justify-center mt-4">
+            <button
+              @click="prevPage"
+              :disabled="currentPage === 1"
+              class="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
+            >
+              Précédent
+            </button>
+            <span class="px-4 py-2 mx-1">{{ currentPage }} / {{ totalPages }}</span>
+            <button
+              @click="nextPage"
+              :disabled="currentPage === totalPages"
+              class="px-4 py-2 mx-1 bg-gray-300 rounded-lg"
+            >
+              Suivant
+            </button>
           </div>
         </div>
       </div>
 
       <!-- Bloc déroulable pour les Ligues -->
       <div>
-        <button class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleLeague">
+        <div class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleLeague">
           <h2 class="text-xl font-bold">Ligues de Clans</h2>
-        </button>
+        </div>
         <div v-show="showLeague" class="bg-white p-4 rounded-lg shadow-md">
           <!-- Contenu des Ligues de Clans -->
           <p>Détails des ligues de clans...</p>
@@ -77,8 +114,10 @@ export default {
     return {
       clan: null,
       wars: [],
-      showGdc: false, // Ouvert par défaut
-      showLeague: false
+      showGdc: false,
+      showLeague: false,
+      currentPage: 1,
+      itemsPerPage: 10
     };
   },
   created() {
@@ -116,6 +155,38 @@ export default {
         'bg-gray-100': result === 'draw',
         'bg-red-100': result === 'lose'
       };
+    },
+    formatDate(endTime) {
+      const date = new Date(endTime);
+      const now = new Date();
+      const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+      return `${diff}d ago`;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    }
+  },
+  computed: {
+    filteredWars() {
+      return this.wars.filter(war => war.opponent && war.opponent.name);
+    },
+    paginatedWars() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredWars.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.filteredWars.length / this.itemsPerPage);
+    },
+    totalWars() {
+      return (this.clan?.warWins || 0) + (this.clan?.warLosses || 0) + (this.clan?.warTies || 0);
     }
   }
 }
@@ -126,16 +197,20 @@ export default {
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   margin-bottom: 0;
 }
+
 .stat-item:hover {
   transform: scale(1.05);
   opacity: 0.8;
 }
+
 .bg-green-100 {
   background-color: #d4edda;
 }
+
 .bg-gray-100 {
   background-color: #f8f9fa;
 }
+
 .bg-red-100 {
   background-color: #f8d7da;
 }
