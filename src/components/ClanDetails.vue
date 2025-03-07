@@ -12,9 +12,30 @@
       <!-- Bloc du milieu : Autres informations -->
       <div class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/3 mb-4 lg:mb-0">
         <p class="text-lg">{{ clan?.description }}</p>
-        <p class="text-lg">Ligue des Guerres : {{ clan?.warLeague?.name }}</p>
-        <p class="text-lg">Ligue des Raids : {{ clan?.capitalLeague?.name }}</p>
+
+        <!-- Icône et texte pour la Ligue des Guerres -->
+        <div class="flex items-center mt-2">
+          <img
+            :src="getLeagueIcon(clan?.warLeague?.name)"
+            alt="Ligue des Guerres"
+            class="league-icon mr-2"
+          />
+          <p class="text-lg">Ligue de guerre</p>
+        </div>
+
+        <!-- Icône et texte pour la Ligue des Raids -->
+        <div class="flex items-center mt-2">
+
+          <img
+            :src="getLeagueIcon(clan?.capitalLeague?.name)"
+            alt="Ligue des Raids"
+            class="league-icon mr-2"
+          />
+          <p class="text-lg">Capital</p>
+        </div>
       </div>
+
+
 
 
       <!-- Bloc de droite : Bandeau des statistiques de guerre -->
@@ -91,10 +112,14 @@ export default {
   data() {
     return {
       clan: null,
+      leagues: [],
+      unrankedLeagueIcon: '',
     };
   },
   created() {
     this.fetchClanDetails();
+    this.fetchUnrankedLeagueIcon();
+    this.fetchLeagues();
   },
   methods: {
     fetchClanDetails() {
@@ -126,6 +151,35 @@ export default {
       // Redirige vers la page des Raids de Capital
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}/CapitalRaid`);
+    },
+    fetchUnrankedLeagueIcon() {
+      // Récupère l'icône "Non classé"
+      apiService.getLeagues().then(response => {
+        const unrankedLeague = response.items.find(league => league.name === 'Unranked');
+        if (unrankedLeague) {
+          this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
+        }
+      }).catch(error => {
+        console.error('Erreur lors de la récupération des ligues :', error);
+      });
+    },
+    fetchLeagues() {
+      apiService.getLeagues().then(response => {
+        this.leagues = response.items;
+        // Récupère l'icône "Non classé"
+        const unrankedLeague = this.leagues.find(league => league.name === 'Unranked');
+        if (unrankedLeague) {
+          this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
+        }
+        console.log('Ligues Disponibles :', this.leagues);
+      }).catch(error => {
+        console.error('Erreur lors de la récupération des ligues :', error);
+      });
+    },
+    getLeagueIcon(leagueName) {
+      // Trouve l'icône correspondant au nom de la ligue
+      const league = this.leagues.find(league => league.name === leagueName);
+      return league?.iconUrls?.small || this.unrankedLeagueIcon;
     },
   },
 };
