@@ -29,6 +29,9 @@ export default {
   created() {
     this.fetchClans();
   },
+  mounted() {
+    document.title = `Choix du clan à analysé`;
+  },
   methods: {
     fetchClans() {
       const clanTags = ['2G2LVRVR9', '2RCJY9QPY']; // Remplace par les tags réels de tes clans
