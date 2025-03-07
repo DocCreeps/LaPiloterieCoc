@@ -11,16 +11,16 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div class="text-center">
+            <!-- Badge de Ligue -->
+            <img
+              :src="member?.league?.iconUrls?.small || unrankedLeagueIcon"
+              alt="League Badge"
+              class="mx-auto mt-2"
+            >
             <!-- Nom de la Ligue -->
             <p class="text-lg">{{ member?.league?.name || "Non classé" }}</p>
             <!-- Points de Trophées -->
             <p class="text-2xl font-bold">{{ member?.trophies || 0 }} <i class="fas fa-trophy"></i></p>
-            <!-- Badge de Ligue -->
-            <img
-              :src="member?.league?.iconUrls?.medium || unrankedLeagueIcon"
-              alt="League Badge"
-              class="mx-auto mt-2"
-            >
           </div>
 
           <div class="text-center">
@@ -60,9 +60,10 @@
           <div class="text-center cursor-pointer"
                :key="member.clan.tag"
                @click="getClanDetails(member?.clan.tag)">
+            <img :src="member?.clan?.badgeUrls?.small" alt="Clan Badge" class="mx-auto mt-2">
             <p class="text-lg font-bold">{{ member?.clan.name }}</p>
             <p class="text-2xl semibold">{{ translateRole(member?.role) }}</p>
-            <img :src="member?.clan?.badgeUrls?.medium" alt="Clan Badge" class="mx-auto mt-2">
+
           </div>
         </div>
       </div>
@@ -98,11 +99,15 @@ export default {
     this.fetchUnrankedLeagueIcon(); // Récupérer l'icône "Unranked" lors du chargement
     this.fetchMemberDetails();
   },
+  mounted() {
+    document.title = `${this.member?.name }`;
+  },
   methods: {
     fetchMemberDetails() {
       const memberTag = this.$route.params.memberTag; // Utiliser directement le tag du membre sans le #
       apiService.getMemberDetails(memberTag).then(response => {
         this.member = response;
+        document.title = `Détails du clan - ${this.member?.name }`;
         console.log('Détails du membre :', this.member);
       }).catch(error => {
         console.error('Erreur lors de la récupération des détails du membre :', error);

@@ -124,12 +124,15 @@ export default {
     this.fetchClanDetails();
     this.fetchWarDetails();
   },
+  mounted() {
+    document.title = `Détail des 60 dernières GDC du clan - ${this.clan?.name }`;
+  },
   methods: {
     fetchClanDetails() {
       const clanTag = this.$route.params.clanTag;
       apiService.getClanDetails(clanTag).then(response => {
         this.clan = response;
-        console.log('Détails du clan :', this.clan);
+        document.title = `Détail des 60 dernières GDC du clan - ${this.clan?.name }`;
       }).catch(error => {
         console.error('Erreur lors de la récupération des détails du clan :', error);
       });
