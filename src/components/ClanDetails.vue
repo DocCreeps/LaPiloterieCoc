@@ -16,11 +16,9 @@
         <p class="text-lg">Ligue des Raids : {{ clan?.capitalLeague?.name }}</p>
       </div>
 
+
       <!-- Bloc de droite : Bandeau des statistiques de guerre -->
-      <div class="bg-blue-500 p-4 rounded-lg shadow-md text-white w-full lg:w-1/3"
-           :key="clan.tag"
-           @click="getWarsDetail(clan.tag)"
-      >
+      <div class="bg-blue-500 p-4 rounded-lg shadow-md text-white w-full lg:w-1/3">
 
         <h2 class="text-xl font-bold mb-4 text-center">Statistiques de Guerre</h2>
         <div class="flex flex-wrap justify-center">
@@ -42,6 +40,23 @@
           <p class="text-lg text-white">{{ clan?.warWins + clan?.warLosses + clan?.warTies }}</p>
         </div>
       </div>
+    </div>
+    <div class="container mx-auto py-8 flex justify-center gap-4">
+      <!-- Bouton pour Détails de Guerre -->
+      <button
+        @click="goToWarsDetail(clan.tag)"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Voir Détails de Guerre
+      </button>
+
+      <!-- Bouton pour Raids de Capital -->
+      <button
+        @click="goToCapitalRaid(clan.tag)"
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Voir Raids de Capital
+      </button>
     </div>
 
     <div class="container mx-auto py-8">
@@ -71,10 +86,11 @@
 
 <script>
 import apiService from '../apiService';
+
 export default {
   data() {
     return {
-      clan: null
+      clan: null,
     };
   },
   created() {
@@ -94,20 +110,27 @@ export default {
         leader: 'Chef',
         coLeader: 'Adjoint',
         admin: 'Aîné',
-        member: 'Membre'
+        member: 'Membre',
       };
       return roles[role] || role;
     },
     goToMemberDetails(memberTag) {
       this.$router.push(`/players/${encodeURIComponent(memberTag)}`);
     },
-    getWarsDetail(clanTag) {
+    goToWarsDetail(clanTag) {
+      // Redirige vers la page des détails de guerre
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/wars/${cleanedClanTag}`);
-    }
-  }
-}
+    },
+    goToCapitalRaid(clanTag) {
+      // Redirige vers la page des Raids de Capital
+      const cleanedClanTag = clanTag.replace('#', '');
+      this.$router.push(`/clan/${cleanedClanTag}/CapitalRaid`);
+    },
+  },
+};
 </script>
+
 
 <style scoped>
 /* Tes styles ici */

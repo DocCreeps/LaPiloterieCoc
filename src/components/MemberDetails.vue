@@ -11,10 +11,18 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div class="text-center">
-            <p class="text-lg">{{ member?.league?.name }}</p>
-            <p class="text-2xl font-bold">{{ member?.trophies }} <i class="fas fa-trophy"></i></p>
-            <img :src="member?.league?.iconUrls.medium" alt="League Badge" class=" mx-auto mt-2">
+            <!-- Nom de la Ligue -->
+            <p class="text-lg">{{ member?.league?.name || "Non classé" }}</p>
+            <!-- Points de Trophées -->
+            <p class="text-2xl font-bold">{{ member?.trophies || 0 }} <i class="fas fa-trophy"></i></p>
+            <!-- Badge de Ligue -->
+            <img
+              :src="member?.league?.iconUrls?.medium || unrankedLeagueIcon"
+              alt="League Badge"
+              class="mx-auto mt-2"
+            >
           </div>
+
           <div class="text-center">
             <div class="grid grid-cols-1 gap-2 player-details">
               <div class="flex justify-between">
@@ -82,10 +90,12 @@ import apiService from '../apiService';
 export default {
   data() {
     return {
-      member: null
+      member: null,
+      unrankedLeagueIcon: "", // Icône "Non classé"
     };
   },
   created() {
+    this.fetchUnrankedLeagueIcon(); // Récupérer l'icône "Unranked" lors du chargement
     this.fetchMemberDetails();
   },
   methods: {
@@ -98,22 +108,34 @@ export default {
         console.error('Erreur lors de la récupération des détails du membre :', error);
       });
     },
+    fetchUnrankedLeagueIcon() {
+      apiService.getLeagues().then(response => {
+        // Trouver l'entrée correspondant à "Unranked"
+        const unrankedLeague = response.items.find(league => league.name === "Unranked");
+        if (unrankedLeague) {
+          this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
+        }
+      }).catch(error => {
+        console.error('Erreur lors de la récupération des ligues :', error);
+      });
+    },
     translateRole(role) {
       const roles = {
         leader: 'Chef',
         coLeader: 'Adjoint',
         admin: 'Aîné',
-        member: 'Membre'
+        member: 'Membre',
       };
       return roles[role] || role;
     },
     getClanDetails(clanTag) {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}`);
-    }
-  }
-}
+    },
+  },
+};
 </script>
+
 
 <style scoped>
 /* Tes styles ici */

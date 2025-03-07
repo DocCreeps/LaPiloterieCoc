@@ -52,19 +52,30 @@ getWarLog(clanTag) {
       throw error;
     });
 },
-  // getCapitalDetails() { // Ajout de la méthode getMemberDetails
-  //   const requestUrl = `/capitalleagues`;
-  //   console.log(`Requête URL : ${requestUrl}`);
-  //   return apiClient.get(requestUrl)
-  //     .then(response => {
-  //       console.log('Réponse de l\'API :', response.data);
-  //       return response.data;
-  //     })
-  //     .catch(error => {
-  //       console.error('Erreur lors de la requête API :', error);
-  //       throw error;
-  //     });
-  // },
+  getCapitalDetails(clanTag) { // Ajout de la méthode getMemberDetails
+    const encodedTag = encodeURIComponent(`#${clanTag}`);
+    const requestUrl = `/clans/${encodedTag}/capitalraidseasons`;
+    console.log(`Requête URL : ${requestUrl}`);
+    return apiClient.get(requestUrl)
+      .then(response => {
+        console.log('Réponse de l\'API :', response.data);
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Erreur lors de la requête API :', error);
+        throw error;
+      });
+  },
+  getLeagues() {
+    const requestUrl = `/leagues`;
+    return apiClient.get(requestUrl)
+      .then(response => response.data)
+      .catch(error => {
+        console.error('Erreur lors de la récupération des ligues :', error);
+        throw error;
+      });
+  },
+
 
 
   // Ajoute d'autres méthodes pour interagir avec l'API selon tes besoins
