@@ -16,7 +16,6 @@ export default {
   const requestUrl=`/clans/${encodedTag}`;
     return apiClient.get(requestUrl)
       .then(response => {
-        console.log('Réponse de l\'API :', response.data);
         return response.data;
       })
       .catch(error => {
@@ -31,7 +30,6 @@ export default {
     console.log(`Requête URL : ${requestUrl}`);
     return apiClient.get(requestUrl)
       .then(response => {
-        console.log('Réponse de l\'API :', response.data);
         return response.data;
       })
       .catch(error => {
@@ -44,7 +42,6 @@ getWarLog(clanTag) {
   const requestUrl=`/clans/${encodedTag}/warlog`;
   return apiClient.get(requestUrl)
     .then(response => {
-      console.log('Réponse de l\'API :', response.data);
       return response.data;
     })
     .catch(error => {
@@ -58,7 +55,6 @@ getWarLog(clanTag) {
     console.log(`Requête URL : ${requestUrl}`);
     return apiClient.get(requestUrl)
       .then(response => {
-        console.log('Réponse de l\'API :', response.data);
         return response.data;
       })
       .catch(error => {
