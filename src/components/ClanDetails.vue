@@ -80,10 +80,9 @@
         <p class="text-center">Les statistiques de guerre sont privées.</p>
       </div>
 
-
     </div>
 
-    
+
 
     <div class="container mx-auto py-8">
       <h2 class="text-2xl font-bold mb-4 text-center">Liste des Membres</h2>
