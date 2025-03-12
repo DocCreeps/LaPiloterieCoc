@@ -30,10 +30,34 @@
 
     <!-- Contenu Principal -->
     <div class="container mx-auto py-16 mt-24">
+
+        <!-- Affichage des Guerres en Cours -->
+        <div v-if="currentWar" :class="getWarResultClass(currentWar)" class="p-2 mb-2 rounded-lg flex flex-col md:flex-row gap-4 items-center justify-center">
+          <div class="text-center  cursor-pointer" @click="getClanDetails(currentWar.clan.tag)">
+            <img :src="currentWar.clan.badgeUrls.medium" alt="Badge" class="mx-auto md:mx-0">
+            <h4 class="text-lg font-semibold">{{ currentWar.clan.name }}</h4>
+          </div>
+
+          <div class="text-center md:w-1/4">
+            <strong class="font-bold">{{ currentWar.clan.stars }} ⭐ - ⭐{{ currentWar.opponent.stars }}</strong>
+            <p class="text-gray-600">({{ (currentWar.clan.destructionPercentage).toFixed(2) }}%) - ({{ (currentWar.opponent.destructionPercentage).toFixed(2) }}%)</p>
+            <p class="text-gray-600">{{ currentWar.teamSize }} vs {{ currentWar.teamSize }}</p>
+          </div>
+
+          <div class="text-center cursor-pointer" @click="getClanDetails(currentWar.opponent.tag)">
+            <img :src="currentWar.opponent.badgeUrls.medium" alt="Badge" class=" mx-auto md:mx-0">
+            <h4 class="text-lg font-semibold">{{ currentWar.opponent.name }}</h4>
+          </div>
+
+        </div>
+
+
+
+
       <!-- Bloc déroulable pour les GDC (Guerres de Clans) -->
       <div class="mb-8">
         <div class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleGdc">
-          <h2 class="text-xl font-bold">Guerres de Clans</h2>
+          <h2 class="text-xl font-bold">60 dernière Guerres de Clans </h2>
         </div>
         <div v-show="showGdc" class="bg-white p-4 rounded-lg shadow-md">
           <!-- Lignes des Guerres de Clans -->
@@ -49,7 +73,9 @@
               <p class="text-gray-600">({{ (war.clan.destructionPercentage).toFixed(2) }}%)</p>
             </div>
 
-            <div class="hidden md:flex items-center justify-center md:w-1/4">
+            <div class="hidden md:flex items-center justify-center md:w-1/4 cursor-pointer"
+              :key="clan.tag"
+              @click="getClanDetails(clan.tag)">
               <img :src="war.clan.badgeUrls.small" alt="Badge" class="w-16 h-16">
             </div>
 
@@ -60,7 +86,9 @@
               <p class="text-gray-600">{{ war.teamSize }} vs {{ war.teamSize }}</p>
             </div>
 
-            <div class="hidden md:flex items-center justify-center md:w-1/4">
+            <div class="hidden md:flex items-center justify-center md:w-1/4 cursor-pointer"
+                 :key="clan.tag"
+                 @click="getClanDetails(war.opponent.tag)">
               <img :src="war.opponent.badgeUrls.small" alt="Badge" class="w-16 h-16">
             </div>
 
@@ -117,12 +145,14 @@ export default {
       showGdc: false,
       showLeague: false,
       currentPage: 1,
-      itemsPerPage: 10
+      itemsPerPage: 10,
+      currentWar: null
     };
   },
   created() {
     this.fetchClanDetails();
     this.fetchWarDetails();
+    this.fetchCurrentWarDetails();
   },
   mounted() {
     document.title = `Détail des 60 dernières GDC du clan - ${this.clan?.name }`;
@@ -141,9 +171,17 @@ export default {
       const clanTag = this.$route.params.clanTag;
       apiService.getWarLog(clanTag).then(response => {
         this.wars = response.items;
-        console.log('Détails des guerres de clans :', this.wars);
+
       }).catch(error => {
         console.error('Erreur lors de la récupération des détails des guerres de clans :', error);
+      });
+    },
+    fetchCurrentWarDetails() {
+      const clanTag = this.$route.params.clanTag;
+      apiService.getCurrentWar(clanTag).then(response => {
+        this.currentWar = response;
+      }).catch(error => {
+        console.error("Erreur lors de la récupération des détails de la guerre en cours :", error);
       });
     },
     toggleGdc() {
@@ -174,7 +212,18 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
-    }
+    },
+    getClanDetails(clanTag) {
+      const cleanedClanTag = clanTag.replace('#', '');
+      this.$router.push(`/clan/${cleanedClanTag}`);
+    },
+    getWarResultClass(war) {
+      if (war.clan.stars > war.opponent.stars) {
+        return 'bg-green-100'; // Léger fond vert si la guerre est en train d'être gagnée
+      } else {
+        return 'bg-red-100'; // Léger fond rouge sinon
+      }
+    },
   },
   computed: {
     filteredWars() {
@@ -190,7 +239,8 @@ export default {
     },
     totalWars() {
       return (this.clan?.warWins || 0) + (this.clan?.warLosses || 0) + (this.clan?.warTies || 0);
-    }
+    },
+
   }
 }
 </script>

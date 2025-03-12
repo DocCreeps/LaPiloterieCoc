@@ -71,6 +71,18 @@ getWarLog(clanTag) {
         throw error;
       });
   },
+  getCurrentWar(clanTag){
+    const encodedTag = encodeURIComponent(`#${clanTag}`);
+    const requestUrl=`/clans/${encodedTag}/currentwar`;
+    return apiClient.get(requestUrl)
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Erreur lors de la requête API :', error);
+        throw error;
+      });
+  },
 
 
   // Ajoute d'autres méthodes pour interagir avec l'API selon tes besoins

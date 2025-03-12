@@ -1,9 +1,9 @@
 <template>
   <!-- Bandeau des Statistiques des Raids de Capital -->
   <div v-if="clan" :class="['p-4 fixed top-0 left-0 right-0 z-10', raidStateClass]">
-    <div class="container mx-auto flex justify-center text-white">
-      <img :src="clan.badgeUrls?.medium" alt="Clan Badge" class="h-16 w-16 mr-4 cursor-pointer" :key="clan.tag"
-           @click="getClanDetails(clan.tag)">
+    <div class="container mx-auto flex justify-center text-white cursor-pointer" :key="clan.tag"
+         @click="getClanDetails(clan.tag)">
+      <img :src="clan.badgeUrls?.medium" alt="Clan Badge" class="h-16 w-16 mr-4">
       <div>
         <h2 class="text-2xl font-bold">{{ clan.name || "Nom du Clan" }}</h2>
         <h1 class="text-2xl font-bold">Capital de clan</h1>
@@ -64,7 +64,7 @@
       <p class="text-sm"><strong>Attaques Totales :</strong> {{ selectedRaid.totalAttacks || "N/A" }}</p>
     </div>
   </div>
-  <div v-if="selectedRaid.state === 'ongoing'" class="flex justify-center py-16 mt-24">
+  <div v-if="selectedRaid.members" class="flex justify-center py-16 mt-24">
     <div class="w-full max-w-4xl bg-white p-4 rounded-lg shadow-md flex space-x-8">
       <div class="w-1/2">
         <h2 class="text-xl font-bold mb-4 text-center">Membres avec Attaques</h2>
@@ -196,7 +196,12 @@ export default {
         console.error("Erreur lors de la récupération des membres du clan :", error);
       });
     },
+    getClanDetails(clanTag) {
+      const cleanedClanTag = clanTag.replace('#', '');
+      this.$router.push(`/clan/${cleanedClanTag}`);
+    },
   },
+
   computed: {
     // Fusion des données des membres de clan et de raids
     enrichedMembers() {
@@ -222,9 +227,8 @@ export default {
     zeroAttackMembers() {
       return this.enrichedMembers.filter(member => member.attacks === 0);
     },
-    // Retourne la classe CSS pour l'état des raids (en cours ou terminé)
-
   },
+
 };
 </script>
 

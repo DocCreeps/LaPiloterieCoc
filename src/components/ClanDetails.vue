@@ -50,7 +50,7 @@
       </div>
 
       <!-- Bloc de droite : Statistiques de guerre -->
-      <div class="bg-blue-500 p-4 rounded-lg shadow-md text-white w-full lg:w-1/3">
+      <div class="bg-blue-500 p-4 rounded-lg shadow-md text-white w-full lg:w-1/3" v-if="clan.isWarLogPublic === 'yes'">
         <h2 class="text-xl font-bold mb-4 text-center">Statistiques de Guerre</h2>
         <div class="flex flex-wrap justify-center">
           <div class="flex flex-col items-center bg-green-600 p-2 rounded-lg m-1">
@@ -71,11 +71,17 @@
           <p class="text-lg text-white">{{ (clan?.warWins || 0) + (clan?.warLosses || 0) + (clan?.warTies || 0) }}</p>
         </div>
       </div>
+      <div class="bg-red-500 p-4 rounded-lg shadow-md text-white w-full lg:w-1/3" v-else>
+        <h2 class="text-xl font-bold mb-4 text-center">Journal de Guerre Privé</h2>
+        <p class="text-center">Les statistiques de guerre sont privées.</p>
+      </div>
+
+
     </div>
 
     <div class="container mx-auto py-8 flex justify-center gap-4">
       <!-- Bouton pour Détails de Guerre -->
-      <button
+      <button v-if="clan.isWarLogPublic === 'yes'"
         @click="goToWarsDetail(clan.tag)"
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
@@ -186,7 +192,6 @@ export default {
         if (unrankedLeague) {
           this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
         }
-        console.log('Ligues Disponibles :', this.leagues);
       }).catch(error => {
         console.error('Erreur lors de la récupération des ligues :', error);
       });
