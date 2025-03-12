@@ -5,7 +5,14 @@
       <div class="container mx-auto flex flex-col md:flex-row md:items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold mb-4 md:mb-0">Statistiques de Guerre</h1>
-          <p class="text-lg mb-2">Ligue de Clan : {{ clan?.warLeague?.name }}</p>
+        </div>
+
+        <div>
+          <img
+            :src="getLeagueIcon(clan?.warLeague?.name)"
+            alt="Ligue de Guerre"
+            class="h-20 w-20 mb-2"
+          />
         </div>
         <div class="flex flex-wrap justify-center">
           <div class="flex flex-col items-center bg-green-600 p-2 rounded-lg m-1">
@@ -142,6 +149,8 @@ export default {
     return {
       clan: null,
       wars: [],
+      leagues: [],
+      unrankedLeagueIcon: '',
       showGdc: false,
       showLeague: false,
       currentPage: 1,
@@ -153,6 +162,7 @@ export default {
     this.fetchClanDetails();
     this.fetchWarDetails();
     this.fetchCurrentWarDetails();
+    this.fetchLeagues();
   },
   mounted() {
     document.title = `Détail des 60 dernières GDC du clan - ${this.clan?.name }`;
@@ -184,6 +194,17 @@ export default {
         console.error("Erreur lors de la récupération des détails de la guerre en cours :", error);
       });
     },
+    fetchLeagues() {
+      apiService.getLeagues().then(response => {
+        this.leagues = response.items;
+        const unrankedLeague = this.leagues.find(league => league.name === 'Unranked');
+        if (unrankedLeague) {
+          this.unrankedLeagueIcon = unrankedLeague.iconUrls.medium;
+        }
+      }).catch(error => {
+        console.error('Erreur lors de la récupération des ligues :', error);
+      });
+    },
     toggleGdc() {
       this.showGdc = !this.showGdc;
     },
@@ -196,6 +217,10 @@ export default {
         'bg-gray-100': result === 'draw',
         'bg-red-100': result === 'lose'
       };
+    },
+    getLeagueIcon(leagueName) {
+      const league = this.leagues.find(league => league.name === leagueName);
+      return league?.iconUrls?.small || this.unrankedLeagueIcon;
     },
     formatDate(endTime) {
       const date = new Date(endTime);
