@@ -12,7 +12,11 @@
         <!-- Section Détails : Ligue de Guerre, Infos & Ligue des Raids -->
         <div class="flex justify-between items-center mt-4">
           <!-- Ligue de Guerre -->
-          <div class="flex flex-col items-center">
+          <div class="flex flex-col items-center cursor-pointer" @click="goToWarsDetail(clan.tag)" v-if="clan.isWarLogPublic">
+            <img :src="getLeagueIcon(clan?.warLeague?.name)" alt="Ligue des Guerres" class="league-icon mb-1">
+            <p class="text-sm text-gray-600">Ligue Guerre</p>
+          </div>
+          <div class="flex flex-col items-center cursor-pointer" v-else>
             <img :src="getLeagueIcon(clan?.warLeague?.name)" alt="Ligue des Guerres" class="league-icon mb-1">
             <p class="text-sm text-gray-600">Ligue Guerre</p>
           </div>
@@ -27,7 +31,7 @@
           </div>
 
           <!-- Ligue des Raids Capital -->
-          <div class="flex flex-col items-center">
+          <div class="flex flex-col items-center cursor-pointer" @click="goToCapitalRaid(clan.tag)">
             <img :src="getLeagueIcon(clan?.capitalLeague?.name)" alt="Ligue des Raids" class="league-icon mb-1">
             <p class="text-sm text-gray-600">Capital Raids</p>
 <!--            <p class="text-lg">Capital {{ clan?.clanCapital.capitalHallLevel }}</p>-->
@@ -40,7 +44,6 @@
         <p class="text-lg">{{ clan?.description || "Description indisponible." }}</p>
 
         <p class="text-lg">Membres : {{ clan?.members }}/50</p>
-        <p class="text-lg">Membres : {{ clan?.isWarLogPublic }}</p>
         <div class="text-center mt-4 ">
           <div class="player-label-holder flex flex-row justify-center">
             <img v-for="label in clan?.labels" :key="label.id" :src="label.iconUrls.small" :title="label.name" class="player-label mx-2">
@@ -77,26 +80,9 @@
         <p class="text-center">Les statistiques de guerre sont privées.</p>
       </div>
 
-
     </div>
 
-    <div class="container mx-auto py-8 flex justify-center gap-4">
-      <!-- Bouton pour Détails de Guerre -->
-      <button v-if="clan.isWarLogPublic"
-        @click="goToWarsDetail(clan.tag)"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Voir Détails de Guerre
-      </button>
 
-      <!-- Bouton pour Raids de Capital -->
-      <button
-        @click="goToCapitalRaid(clan.tag)"
-        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Voir Raids de Capital
-      </button>
-    </div>
 
     <div class="container mx-auto py-8">
       <h2 class="text-2xl font-bold mb-4 text-center">Liste des Membres</h2>
