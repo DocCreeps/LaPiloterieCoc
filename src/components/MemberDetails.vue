@@ -27,27 +27,28 @@
             <div class="grid grid-cols-1 gap-2 player-details">
               <div class="flex justify-between">
                 <span>Expérience:</span>
-                <span><i class="fas fa-certificate"></i> <strong>{{ member?.expLevel }}</strong></span>
+                <span class="flex flex-row"><Icon icon="fa6-solid:certificate" width="25" height="25" style="color: dodgerblue"/> <strong class="ml-2">{{ member?.expLevel }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Trophées:</span>
-                <span><i class="fas fa-trophy"></i> <strong>{{ member?.trophies }}</strong> | <i class="far fa-trophy"></i> <strong>{{ member?.builderBaseTrophies }}</strong></span>
+                <span class="flex flex-row"><Icon icon="fa6-solid:trophy" width="25" height="25" /> <strong class="ml-2 mr-2">{{ member?.trophies }}</strong> | <Icon icon="iconoir:trophy" width="25" height="25" class="ml-2"/> <strong class="ml-2">{{ member?.builderBaseTrophies }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Meilleurs Trophées:</span>
-                <span><i class="fas fa-trophy-alt"></i> <strong>{{ member?.bestTrophies }}</strong> | <i class="far fa-trophy-alt"></i> <strong>{{ member?.bestBuilderBaseTrophies }}</strong></span>
+                <span class="flex flex-row"><Icon icon="fa6-solid:trophy" width="25" height="25" /> <strong class="ml-2 mr-2">{{ member?.bestTrophies }}</strong> | <Icon icon="iconoir:trophy" width="25" height="25" class="ml-2" /> <strong class="ml-2">{{ member?.bestBuilderBaseTrophies }}</strong></span>
               </div>
+
               <div class="flex justify-between">
                 <span>Dons:</span>
-                <span><i class="fas fa-long-arrow-alt-up"></i> <strong>{{ member?.donations }}</strong> | <i class="fas fa-long-arrow-alt-down"></i> <strong>{{ member?.donationsReceived }}</strong></span>
+                <span class="flex flex-row"><Icon icon="fa6-solid:arrow-up-long" width="25" height="25" style="color: green"/> <strong class="ml-2 mr-2">{{ member?.donations }}</strong> | <Icon icon="fa6-solid:arrow-down" width="25" height="25" style="color: red" class="ml-2"/> <strong class="ml-2">{{ member?.donationsReceived }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Ratio:</span>
-                <span><strong><i class="fas fa-balance-scale-left"></i>{{ (member?.donations / member?.donationsReceived || 0).toFixed(2) }}</strong></span>
+                <span class="flex flex-row"><Icon icon="fa6-solid:scale-balanced" width="25" height="25" /><strong class="ml-2">{{ (member?.donations / member?.donationsReceived || 0).toFixed(2) }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Activité:</span>
-                <span><i class="fad fa-sword"></i> <strong>{{ member?.attackWins }}</strong> | <i class="fas fa-shield-alt"></i> <strong>{{ member?.defenseWins }}</strong></span>
+                <span class="flex flex-row"><Icon icon="mingcute:sword-fill" width="25" height="25" /> <strong class="ml-2 mr-2">{{ member?.attackWins }}</strong> | <Icon icon="fa6-solid:shield-halved" width="25" height="25" class="ml-2" /> <strong  class="ml-2">{{ member?.defenseWins }}</strong></span>
               </div>
             </div>
             <div class="text-center mt-4 ">
@@ -87,8 +88,10 @@
 
 <script>
 import apiService from '../apiService';
+import { Icon } from '@iconify/vue'
 
 export default {
+  components: { Icon },
   data() {
     return {
       member: null,
@@ -136,6 +139,7 @@ export default {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}`);
     },
+
   },
 };
 </script>

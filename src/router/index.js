@@ -1,35 +1,35 @@
-// src/router/index.js
-import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../components/HomePage.vue'
-import ClanDetails from '../components/ClanDetails.vue'
-import MemberDetails from '../components/MemberDetails.vue'
-import WarsDetail from '../components/WarsDetail.vue'
-import CapitalDetails from '../components/CapitalDetail.vue'
-
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
-  { path: '/', component: HomePage },
-  { path: '/clan/:clanTag', component: ClanDetails, name: 'ClanDetails' },
+  {
+    path: '/',
+    component: () => import(/* webpackChunkName: "home" */ '../components/HomePage.vue')
+  },
+  {
+    path: '/clan/:clanTag',
+    component: () => import(/* webpackChunkName: "clan-details" */ '../components/ClanDetails.vue'),
+    name: 'ClanDetails'
+  },
   {
     path: '/players/:memberTag',
     name: 'MemberDetails',
-    component: MemberDetails
+    component: () => import(/* webpackChunkName: "member-details" */ '../components/MemberDetails.vue')
   },
   {
     path: '/wars/:clanTag',
     name: 'WarsDetails',
-    component: WarsDetail,
+    component: () => import(/* webpackChunkName: "wars-details" */ '../components/WarsDetail.vue')
   },
   {
     path: '/clan/:clanTag/CapitalRaid',
     name: 'CapitalRaid',
-    component: CapitalDetails
+    component: () => import(/* webpackChunkName: "capital-details" */ '../components/CapitalDetail.vue')
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes
-})
+});
 
-export default router
+export default router;

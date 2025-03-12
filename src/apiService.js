@@ -27,7 +27,6 @@ export default {
   getMemberDetails(memberTag) { // Ajout de la méthode getMemberDetails
     const encodedTag = encodeURIComponent(memberTag);
     const requestUrl = `/players/${encodedTag}`;
-    console.log(`Requête URL : ${requestUrl}`);
     return apiClient.get(requestUrl)
       .then(response => {
         return response.data;
@@ -52,7 +51,6 @@ getWarLog(clanTag) {
   getCapitalDetails(clanTag) { // Ajout de la méthode getMemberDetails
     const encodedTag = encodeURIComponent(`#${clanTag}`);
     const requestUrl = `/clans/${encodedTag}/capitalraidseasons`;
-    console.log(`Requête URL : ${requestUrl}`);
     return apiClient.get(requestUrl)
       .then(response => {
         return response.data;

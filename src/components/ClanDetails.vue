@@ -23,11 +23,15 @@
 
           <!-- Niveau et Trophées -->
           <div class="text-center">
-            <p class="text-lg font-bold">Niveau</p>
-            <p class="text-lg">{{ clan?.clanLevel }}</p>
+            <div class="flex flex-row">
+            <Icon icon="fa6-solid:certificate" width="30" height="30" style="color: dodgerblue"/>
+            <p class="text-lg ml-2">lvl {{ clan?.clanLevel }}</p>
+            </div>
             <hr class="my-2">
-            <p class="text-lg font-bold">Trophées</p>
-            <p class="text-lg">{{ clan?.clanPoints }}</p>
+            <div class="flex flex-row">
+              <Icon icon="fa6-solid:trophy" width="30" height="30" />
+              <p class="text-lg ml-2">{{ clan?.clanPoints }}</p>
+            </div>
           </div>
 
           <!-- Ligue des Raids Capital -->
@@ -42,8 +46,10 @@
       <!-- Bloc du milieu : Autres informations -->
       <div class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/3 mb-4 lg:mb-0">
         <p class="text-lg">{{ clan?.description || "Description indisponible." }}</p>
-
-        <p class="text-lg">Membres : {{ clan?.members }}/50</p>
+        <div class="flex flex-row  mt-2">
+        <Icon icon="fa6-solid:user-group" width="30" height="30" />
+        <p class="text-lg ml-2"> {{ clan?.members }}/50</p>
+        </div>
         <div class="text-center mt-4 ">
           <div class="player-label-holder flex flex-row justify-center">
             <img v-for="label in clan?.labels" :key="label.id" :src="label.iconUrls.small" :title="label.name" class="player-label mx-2">
@@ -93,16 +99,63 @@
           @click="goToMemberDetails(member.tag)"
         class="bg-white p-4 rounded-lg shadow-md cursor-pointer"
         >
-        <div class="flex items-center mb-4">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex flex-row">
           <img :src="member.league?.iconUrls.small" alt="League Badge" class="w-12 h-12 mr-4">
           <div>
             <h3 class="text-xl font-semibold">{{ member.name }}</h3>
             <p class="text-gray-600">{{ translateRole(member.role) }}</p>
           </div>
+          </div>
+          <div class="flex flex-row">
+
+
+            <Icon
+              v-if="(member.previousClanRank) - (member.clanRank) > 0"
+              icon="fa6-solid:arrow-up-long"
+              width="25"
+              height="25"
+              style="color: green"
+            />
+            <Icon
+              v-else-if="(member.previousClanRank) - (member.clanRank) < 0"
+              icon="fa6-solid:arrow-down"
+              width="25"
+              height="25"
+              style="color: red"
+              class="ml-2"
+            />
+            <Icon
+              v-else
+              icon="fa6-solid:equals"
+              width="25"
+              height="25"
+            />
+           <p class="ml-2"> {{ (member.previousClanRank) - (member.clanRank) }}</p>
+          </div>
+          <div class="flex flex-row ">
+            <Icon icon="fa6-solid:certificate" width="25" height="25" style="color: dodgerblue"/>
+            <p class="text-gray-600 ml-2">{{ member.expLevel }}</p>
+          </div>
         </div>
-        <p class="text-gray-600">Niveau : {{ member.expLevel }}</p>
-        <p class="text-gray-600">Trophées : {{ member.trophies }}</p>
-        <p class="text-gray-600">HDV : {{ member.townHallLevel }}</p>
+          <div class="flex flex-row justify-between">
+            <div>
+          <p class="text-gray-600">HDV : {{ member.townHallLevel }}</p>
+          <div class="flex flex-row mt-2">
+          <Icon icon="fa6-solid:trophy" width="25" height="25" />
+          <p class="text-gray-600 ml-2">{{ member.trophies }}</p>
+
+          </div>
+            </div>
+            <div>
+              <p class="text-gray-600">MDO : {{member.builderHallLevel}}</p>
+              <div class="flex flex-row mt-2">
+                <Icon icon="fa6-solid:trophy" width="25" height="25" />
+                <p class="text-gray-600 ml-2">{{ member.builderBaseTrophies }}</p>
+              </div>
+            </div>
+
+</div>
       </div>
     </div>
   </div>
@@ -111,8 +164,15 @@
 
 <script>
 import apiService from '../apiService';
+import { Icon } from '@iconify/vue'
 
 export default {
+  computed: {
+    memberDetails() {
+      return memberDetails
+    }
+  },
+  components: { Icon },
   data() {
     return {
       clan: null,
@@ -134,6 +194,7 @@ export default {
       apiService.getClanDetails(clanTag).then(response => {
         this.clan = response;
         document.title = `Détails du Clan - ${this.clan.name}`;
+        this.fetchMemberDetails();
       }).catch(error => {
         console.error('Erreur lors de la récupération des détails du clan :', error);
       });
@@ -188,6 +249,20 @@ export default {
       const league = this.leagues.find(league => league.name === leagueName);
       return league?.iconUrls?.small || this.unrankedLeagueIcon;
     },
+
+    fetchMemberDetails() {
+      const memberTags = this.clan.memberList.map(member => member.tag);
+      Promise.all(memberTags.map(tag => apiService.getMemberDetails(tag)))
+        .then(responses => {
+          responses.forEach((memberDetails, index) => {
+            this.clan.memberList[index] = { ...this.clan.memberList[index], ...memberDetails };
+          });
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des détails des membres :', error);
+        });
+    },
+
   },
 };
 </script>
