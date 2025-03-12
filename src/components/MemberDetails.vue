@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-gray-100" v-if="member">
     <div class="container mx-auto py-8">
       <!-- Carte Principale en Haut -->
       <div class="bg-white p-8 rounded-lg shadow-md w-full mb-8">
@@ -108,7 +108,6 @@ export default {
       apiService.getMemberDetails(memberTag).then(response => {
         this.member = response;
         document.title = `Détails du clan - ${this.member?.name }`;
-        console.log('Détails du membre :', this.member);
       }).catch(error => {
         console.error('Erreur lors de la récupération des détails du membre :', error);
       });
