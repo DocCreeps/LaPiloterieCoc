@@ -6,6 +6,8 @@ import MemberDetails from '../components/MemberDetails.vue'
 import WarsDetail from '../components/WarsDetail.vue'
 import CapitalDetails from '../components/CapitalDetail.vue'
 
+import { Icon } from "@iconify/vue";
+
 
 const routes = [
   { path: '/', component: HomePage },
