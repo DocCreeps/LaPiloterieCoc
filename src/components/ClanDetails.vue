@@ -14,22 +14,22 @@
           <!-- Ligue de Guerre -->
           <div class="flex flex-col items-center cursor-pointer" @click="goToWarsDetail(clan.tag)" v-if="clan.isWarLogPublic">
             <img :src="getLeagueIcon(clan?.warLeague?.name)" alt="Ligue des Guerres" class="league-icon mb-1">
-            <p class="text-sm text-gray-600">Ligue Guerre</p>
+            <p class="text-sm text-gray-600">Ligue De Clan</p>
           </div>
           <div class="flex flex-col items-center cursor-pointer" v-else>
             <img :src="getLeagueIcon(clan?.warLeague?.name)" alt="Ligue des Guerres" class="league-icon mb-1">
-            <p class="text-sm text-gray-600">Ligue Guerre</p>
+            <p class="text-sm text-gray-600">Ligue De Clan</p>
           </div>
 
           <!-- Niveau et Trophées -->
           <div class="text-center">
             <div class="flex flex-row">
-            <Icon icon="fa6-solid:certificate" width="30" height="30" style="color: dodgerblue"/>
+            <img :src="icons['icon/clanxp']" alt="experience" class="h-10 w-10"/>
             <p class="text-lg ml-2">lvl {{ clan?.clanLevel }}</p>
             </div>
             <hr class="my-2">
             <div class="flex flex-row">
-              <Icon icon="fa6-solid:trophy" width="30" height="30" />
+              <img :src="icons['icon/Trophy']" alt="Trophées de clan" class="h-10 w-10"/>
               <p class="text-lg ml-2">{{ clan?.clanPoints }}</p>
             </div>
           </div>
@@ -37,7 +37,7 @@
           <!-- Ligue des Raids Capital -->
           <div class="flex flex-col items-center cursor-pointer" @click="goToCapitalRaid(clan.tag)">
             <img :src="getLeagueIcon(clan?.capitalLeague?.name)" alt="Ligue des Raids" class="league-icon mb-1">
-            <p class="text-sm text-gray-600">Capital Raids</p>
+            <p class="text-sm text-gray-600">Raids Capital</p>
 <!--            <p class="text-lg">Capital {{ clan?.clanCapital.capitalHallLevel }}</p>-->
           </div>
         </div>
@@ -88,10 +88,26 @@
 
     </div>
 
+    <div class="container mx-auto py-8 flex justify-center gap-4">
+      <!-- Bouton pour Détails de Guerre -->
+      <button v-if="clan.isWarLogPublic"
+              @click="goToWarsDetail(clan.tag)"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+      >
+        Détails des Guerres
+      </button>
 
+      <!-- Bouton pour Raids de Capital -->
+      <button
+        @click="goToCapitalRaid(clan.tag)"
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+      >
+        Raids de Capital
+      </button>
+    </div>
 
     <div class="container mx-auto py-8">
-      <h2 class="text-2xl font-bold mb-4 text-center">Liste des Membres</h2>
+      <h2 class="text-2xl font-bold mb-4 text-center">Membres</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
           v-for="member in clan?.memberList"
@@ -109,48 +125,30 @@
           </div>
           <div class="flex flex-row">
 
+            <img v-if="(member.previousClanRank) - (member.clanRank) > 0" :src="icons['icon/up']" alt="up" class="h-8 w-8"/>
+            <img v-else-if="(member.previousClanRank) - (member.clanRank) < 0" :src="icons['icon/down']" alt="down" class="h-8 w-8"/>
+            <img v-else :src="icons['icon/nomove']" alt="equal" class="h-8 w-8"/>
 
-            <Icon
-              v-if="(member.previousClanRank) - (member.clanRank) > 0"
-              icon="fa6-solid:arrow-up-long"
-              width="25"
-              height="25"
-              style="color: green"
-            />
-            <Icon
-              v-else-if="(member.previousClanRank) - (member.clanRank) < 0"
-              icon="fa6-solid:arrow-down"
-              width="25"
-              height="25"
-              style="color: red"
-              class="ml-2"
-            />
-            <Icon
-              v-else
-              icon="fa6-solid:equals"
-              width="25"
-              height="25"
-            />
            <p class="ml-2"> {{ (member.previousClanRank) - (member.clanRank) }}</p>
           </div>
           <div class="flex flex-row ">
-            <Icon icon="fa6-solid:certificate" width="25" height="25" style="color: dodgerblue"/>
+            <img :src="icons['icon/xp']" alt="experience" class="h-10 w-10"/>
             <p class="text-gray-600 ml-2">{{ member.expLevel }}</p>
           </div>
         </div>
           <div class="flex flex-row justify-between">
             <div>
-          <p class="text-gray-600">HDV : {{ member.townHallLevel }}</p>
+              <img v-if="member && getTownHallImage(member.townHallLevel)" :src="getTownHallImage(member.townHallLevel)" :title="'HDV ' + member.townHallLevel" :alt="'HDV' + member.townHallLevel"  class="w-15 h-15"/>
           <div class="flex flex-row mt-2">
-          <Icon icon="fa6-solid:trophy" width="25" height="25" />
+            <img :src="icons['icon/Trophy']" alt="Trophée" class="h-10 w-10"/>
           <p class="text-gray-600 ml-2">{{ member.trophies }}</p>
 
           </div>
             </div>
             <div>
-              <p class="text-gray-600">MDO : {{member.builderHallLevel}}</p>
+              <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'HDV ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel"  class="w-15 h-15"/>
               <div class="flex flex-row mt-2">
-                <Icon icon="fa6-solid:trophy" width="25" height="25" />
+                <img :src="icons['icon/mdo_trophy']" alt="Trophée MDO" class="h-10 w-10"/>
                 <p class="text-gray-600 ml-2">{{ member.builderBaseTrophies }}</p>
               </div>
             </div>
@@ -165,6 +163,8 @@
 <script>
 import apiService from '../apiService';
 import { Icon } from '@iconify/vue'
+import icons from '@/assets/icons.js';
+
 
 export default {
   computed: {
@@ -178,6 +178,7 @@ export default {
       clan: null,
       leagues: [],
       unrankedLeagueIcon: '',
+      icons : icons,
     };
   },
   created() {
@@ -261,6 +262,20 @@ export default {
         .catch(error => {
           console.error('Erreur lors de la récupération des détails des membres :', error);
         });
+    },
+    getTownHallImage(level) {
+      if (level >= 1 && level <= 17) {
+        const iconName = `HDV/th_${level}`;
+        return this.icons[iconName];
+      }
+      return null; // ou this.icons.default si vous avez une image par défaut
+    },
+    getBuilderHallImage(level) {
+      if (level >= 1 && level <= 10) {
+        const iconName = `HDV/MDO_${level}`;
+        return this.icons[iconName];
+      }
+      return null; // ou this.icons.default si vous avez une image par défaut
     },
 
   },

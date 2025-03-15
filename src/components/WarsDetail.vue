@@ -46,7 +46,11 @@
           </div>
 
           <div class="text-center md:w-1/4">
-            <strong class="font-bold">{{ currentWar.clan.stars }} ⭐ - ⭐{{ currentWar.opponent.stars }}</strong>
+            <strong class="font-bold">{{ currentWar.clan.stars }}</strong>
+            <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block ml-5 mr-2" />
+            <strong> - </strong>
+            <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-5 ml-2" />
+            <strong class="font-bold"> {{ currentWar.opponent.stars }}</strong>
             <p class="text-gray-600">({{ (currentWar.clan.destructionPercentage).toFixed(2) }}%) - ({{ (currentWar.opponent.destructionPercentage).toFixed(2) }}%)</p>
             <p class="text-gray-600">{{ currentWar.teamSize }} vs {{ currentWar.teamSize }}</p>
           </div>
@@ -88,7 +92,13 @@
 
             <div class="text-center md:w-1/4">
               <div class="font-bold">
-                <strong>{{ war.clan.stars }} - {{ war.opponent.stars }}</strong>
+                <strong>
+                  {{ war.clan.stars }}
+                  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block  mx-2"/>
+                  -
+                  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mx-2" />
+                  {{ war.opponent.stars }}
+                </strong>
               </div>
               <p class="text-gray-600">{{ war.teamSize }} vs {{ war.teamSize }}</p>
             </div>
@@ -143,6 +153,7 @@
 
 <script>
 import apiService from '../apiService';
+import icons from '@/assets/icons.js';
 
 export default {
   data() {
@@ -155,7 +166,8 @@ export default {
       showLeague: false,
       currentPage: 1,
       itemsPerPage: 10,
-      currentWar: null
+      currentWar: null,
+      icons : icons,
     };
   },
   created() {
