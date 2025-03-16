@@ -108,9 +108,24 @@
 
     <div class="container mx-auto py-8">
       <h2 class="text-2xl font-bold mb-4 text-center">Membres</h2>
+      <div class="mb-4 flex justify-center">
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Rechercher un membre..."
+          class="w-80 p-2 border rounded"
+        />
+        <select v-model="selectedTownHallLevel" class="p-2 border rounded">
+          <option value="">Tous les HDV</option>
+          <option v-for="level in townHallLevels" :key="level" :value="level">
+            HDV {{ level }}
+          </option>
+        </select>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
-          v-for="member in clan?.memberList"
+          v-for="member in filteredMembers"
           :key="member.tag"
           @click="goToMemberDetails(member.tag)"
         class="bg-white p-4 rounded-lg shadow-md cursor-pointer"
@@ -167,11 +182,6 @@ import icons from '@/assets/icons.js';
 
 
 export default {
-  computed: {
-    memberDetails() {
-      return memberDetails
-    }
-  },
   components: { Icon },
   data() {
     return {
@@ -179,6 +189,10 @@ export default {
       leagues: [],
       unrankedLeagueIcon: '',
       icons : icons,
+      searchQuery: '',
+      selectedTownHallLevel: '',
+      townHallLevels: [],// Génère les niveaux de HDV de 1 à 17
+
     };
   },
   created() {
@@ -186,9 +200,38 @@ export default {
     this.fetchUnrankedLeagueIcon();
     this.fetchLeagues();
   },
+  computed: {
+    memberDetails() {
+      return memberDetails
+    },
+    filteredMembers() {
+      let members = this.clan?.memberList || [];
+
+      // Filtrage par nom ou rôle (indépendant)
+      if (this.searchQuery) {
+        const query = this.searchQuery.toLowerCase();
+        members = members.filter(member => {
+          return member.name.toLowerCase().includes(query) ||
+            this.translateRole(member.role).toLowerCase().includes(query);
+        });
+      }
+
+      // Filtrage par niveau de l'HDV (indépendant)
+      if (this.selectedTownHallLevel && this.selectedTownHallLevel !== '') {
+        members = members.filter(member => {
+          return member.townHallLevel === parseInt(this.selectedTownHallLevel);
+        });
+      }
+
+      return members;
+    },
+
+  },
+
   mounted() {
     document.title = `Détails du clan - ${this.clan?.name }`;
   },
+  // Méthodes
   methods: {
     fetchClanDetails() {
       const clanTag = this.$route.params.clanTag;
@@ -263,6 +306,7 @@ export default {
           console.error('Erreur lors de la récupération des détails des membres :', error);
         });
     },
+
     getTownHallImage(level) {
       if (level >= 1 && level <= 17) {
         const iconName = `HDV/th_${level}`;
@@ -270,12 +314,31 @@ export default {
       }
       return null; // ou this.icons.default si vous avez une image par défaut
     },
+
     getBuilderHallImage(level) {
       if (level >= 1 && level <= 10) {
         const iconName = `HDV/MDO_${level}`;
         return this.icons[iconName];
       }
       return null; // ou this.icons.default si vous avez une image par défaut
+    },
+
+  },
+  //Watchers
+  watch: {
+    clan: {
+      immediate: true,
+      handler(newClan) {
+        if (newClan && newClan.memberList) {
+          this.townHallLevels = [...new Set(newClan.memberList.map(member => member.townHallLevel))].sort((a, b) => a - b);
+        } else {
+          this.townHallLevels = [];
+        }
+      }
+    },
+    selectedTownHallLevel() {
+      // Force la réévaluation de filteredMembers
+      this.filteredMembers;
     },
 
   },
