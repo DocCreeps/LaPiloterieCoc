@@ -23,7 +23,7 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            
+            set -x
             # Vérifier et ajuster les permissions du répertoire parent
             chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats 
             chmod -R 775 /var/www/TrackersStats
@@ -34,7 +34,7 @@ jobs:
             fi
           
             cd /var/www/TrackersStats
-         
+          
           # Réinitialiser les modifications locales
                git reset --hard origin/master
 
@@ -52,10 +52,14 @@ jobs:
 
             # Construire l'application Vue.js
             npm run build
+            ls -l dist
 
             # Copier les fichiers construits vers le répertoire de déploiement
-            rm -rf /var/www/TrackersStats/dist/* # Supprimez le contenu existant
-            cp -r /var/www/TrackersStats/dist/* /var/www/TrackersStats/
+            if [ -d /var/www/TrackersStats/dist ]; then
+              rm -rf /var/www/TrackersStats/dist/* # Supprimez le contenu existant
+            fi
+            cp -r /var/www/TrackersStats/dist/. /var/www/TrackersStats/
+            ls -l /var/www/TrackersStats/
 
             # Définir les permissions appropriées pour www-data
             chown -R www-data:www-data /var/www/TrackersStats
