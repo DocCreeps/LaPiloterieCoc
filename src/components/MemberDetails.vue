@@ -27,28 +27,32 @@
             <div class="grid grid-cols-1 gap-2 player-details">
               <div class="flex justify-between">
                 <span>Expérience:</span>
-                <span class="flex flex-row"><Icon icon="fa6-solid:certificate" width="25" height="25" style="color: dodgerblue"/> <strong class="ml-2">{{ member?.expLevel }}</strong></span>
+                <span class="flex flex-row"> <img :src="icons['icon/xp']" alt="Experience" class="h-6 w-6"/><strong class="ml-2">{{ member?.expLevel }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Trophées:</span>
-                <span class="flex flex-row"><Icon icon="fa6-solid:trophy" width="25" height="25" /> <strong class="ml-2 mr-2">{{ member?.trophies }}</strong> | <Icon icon="iconoir:trophy" width="25" height="25" class="ml-2"/> <strong class="ml-2">{{ member?.builderBaseTrophies }}</strong></span>
+                <span class="flex flex-row"> <img :src="icons['icon/Trophy']" alt="Trophies" class="h-6 w-6"/> <strong class="ml-2 mr-2">{{ member?.trophies }}</strong> |
+                       <img :src="icons['icon/mdo_trophy']" alt="MDO Trophies" class="h-6 w-6 ml-2"/> <strong class="ml-2">{{ member?.builderBaseTrophies }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Meilleurs Trophées:</span>
-                <span class="flex flex-row"><Icon icon="fa6-solid:trophy" width="25" height="25" /> <strong class="ml-2 mr-2">{{ member?.bestTrophies }}</strong> | <Icon icon="iconoir:trophy" width="25" height="25" class="ml-2" /> <strong class="ml-2">{{ member?.bestBuilderBaseTrophies }}</strong></span>
+                <span class="flex flex-row"><img :src="icons['icon/Trophy']" alt="Trophies" class="h-6 w-6"/> <strong class="ml-2 mr-2">{{ member?.bestTrophies }}</strong> |
+                      <img :src="icons['icon/mdo_trophy']" alt="MDO Trophies" class="h-6 w-6 ml-2"/> <strong class="ml-2">{{ member?.bestBuilderBaseTrophies }}</strong></span>
               </div>
 
               <div class="flex justify-between">
                 <span>Dons:</span>
-                <span class="flex flex-row"><Icon icon="fa6-solid:arrow-up-long" width="25" height="25" style="color: green"/> <strong class="ml-2 mr-2">{{ member?.donations }}</strong> | <Icon icon="fa6-solid:arrow-down" width="25" height="25" style="color: red" class="ml-2"/> <strong class="ml-2">{{ member?.donationsReceived }}</strong></span>
+                <span class="flex flex-row"><img :src="icons['icon/up']" alt="Membres" class="h-5 w-5"/> <strong class="ml-2 mr-2">{{ member?.donations }}</strong> |
+                      <img :src="icons['icon/down']" alt="Membres" class="h-5 w-5 ml-2"/> <strong class="ml-2">{{ member?.donationsReceived }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Ratio:</span>
-                <span class="flex flex-row"><Icon icon="fa6-solid:scale-balanced" width="25" height="25" /><strong class="ml-2">{{ (member?.donations / member?.donationsReceived || 0).toFixed(2) }}</strong></span>
+                <span class="flex flex-row"><img :src="icons['icon/cdc']" alt="Sword" class="h-7 w-7"/><strong class="ml-2">{{ (member?.donations / member?.donationsReceived || 0).toFixed(2) }}</strong></span>
               </div>
               <div class="flex justify-between">
                 <span>Activité:</span>
-                <span class="flex flex-row"><Icon icon="mingcute:sword-fill" width="25" height="25" /> <strong class="ml-2 mr-2">{{ member?.attackWins }}</strong> | <Icon icon="fa6-solid:shield-halved" width="25" height="25" class="ml-2" /> <strong  class="ml-2">{{ member?.defenseWins }}</strong></span>
+                <span class="flex flex-row"><img :src="icons['icon/Sword']" alt="Sword" class="h-7 w-7"/> <strong class="ml-2 mr-2">{{ member?.attackWins }}</strong> |
+                    <img :src="icons['icon/Shield']" alt="Shield" class="h-7 w-7 ml-2"/> <strong  class="ml-2">{{ member?.defenseWins }}</strong></span>
               </div>
             </div>
             <div class="text-center mt-4 ">
@@ -88,14 +92,15 @@
 
 <script>
 import apiService from '../apiService';
-import { Icon } from '@iconify/vue'
+import icons from '@/assets/icons.js';
 
 export default {
-  components: { Icon },
+
   data() {
     return {
       member: null,
       unrankedLeagueIcon: "", // Icône "Non classé"
+      icons: icons,
     };
   },
   created() {

@@ -47,7 +47,7 @@
       <div class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/3 mb-4 lg:mb-0">
         <p class="text-lg">{{ clan?.description || "Description indisponible." }}</p>
         <div class="flex flex-row  mt-2">
-        <Icon icon="fa6-solid:user-group" width="30" height="30" />
+          <img :src="icons['icon/member']" alt="Membres" class="h-7 w-7"/>
         <p class="text-lg ml-2"> {{ clan?.members }}/50</p>
         </div>
         <div class="text-center mt-4 ">
@@ -140,14 +140,14 @@
           </div>
           <div class="flex flex-row">
 
-            <img v-if="(member.previousClanRank) - (member.clanRank) > 0" :src="icons['icon/up']" alt="up" class="h-8 w-8"/>
-            <img v-else-if="(member.previousClanRank) - (member.clanRank) < 0" :src="icons['icon/down']" alt="down" class="h-8 w-8"/>
-            <img v-else :src="icons['icon/nomove']" alt="equal" class="h-8 w-8"/>
+            <img v-if="(member.previousClanRank) - (member.clanRank) > 0" :src="icons['icon/up']" alt="up" class="h-7 w-7"/>
+            <img v-else-if="(member.previousClanRank) - (member.clanRank) < 0" :src="icons['icon/down']" alt="down" class="h-7 w-7"/>
+            <img v-else :src="icons['icon/nomove']" alt="equal" class="h-7 w-7"/>
 
            <p class="ml-2"> {{ (member.previousClanRank) - (member.clanRank) }}</p>
           </div>
           <div class="flex flex-row ">
-            <img :src="icons['icon/xp']" alt="experience" class="h-10 w-10"/>
+            <img :src="icons['icon/xp']" alt="experience" class="h-7 w-7"/>
             <p class="text-gray-600 ml-2">{{ member.expLevel }}</p>
           </div>
         </div>
@@ -161,7 +161,7 @@
           </div>
             </div>
             <div>
-              <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'HDV ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel"  class="w-15 h-15"/>
+              <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'MDO ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel"  class="w-15 h-15"/>
               <div class="flex flex-row mt-2">
                 <img :src="icons['icon/mdo_trophy']" alt="Trophée MDO" class="h-10 w-10"/>
                 <p class="text-gray-600 ml-2">{{ member.builderBaseTrophies }}</p>
@@ -177,12 +177,10 @@
 
 <script>
 import apiService from '../apiService';
-import { Icon } from '@iconify/vue'
 import icons from '@/assets/icons.js';
 
 
 export default {
-  components: { Icon },
   data() {
     return {
       clan: null,
