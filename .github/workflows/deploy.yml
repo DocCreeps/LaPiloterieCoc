@@ -23,9 +23,10 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            
             # Vérifier et ajuster les permissions du répertoire parent
-            chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/
-            chmod -R 755 /var/www/
+            chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats 
+            chmod -R 775 /var/www/TrackersStats
 
             # Créer le répertoire de destination s'il n'existe pas
             if [ ! -d /var/www/TrackersStats ]; then
@@ -36,7 +37,7 @@ jobs:
             cd /var/www/TrackersStats
             echo "Current directory: $(pwd)"
           
-          # Créer un répertoire temporaire pour la sauvegarde dans /var/www/html
+          # Créer un répertoire temporaire pour la sauvegarde dans /var/www/
                TEMP_DIR=/var/www/temp_backup
                mkdir -p $TEMP_DIR
 
