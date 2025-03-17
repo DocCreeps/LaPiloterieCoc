@@ -81,7 +81,7 @@
               <div class="mt-2 flex flex-row">
                 <div v-for="hero in heroes" :key="hero.name" class="relative mr-2">
                   <img v-if="getHeroIcon(hero.name)" :src="getHeroIcon(hero.name)" :alt="hero.name" class="h-15 w-15 mx-5" />
-                  <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs', 'px-1', 'rounded-sm', { 'bg-blue-500': hero.level === hero.maxLevel }, { 'bg-black': hero.level !== hero.maxLevel }]">
+                  <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-sm', 'px-1', 'rounded-sm', { 'bg-blue-500': hero.level === hero.maxLevel }, { 'bg-black': hero.level !== hero.maxLevel }]">
                     {{ hero.level }}
                   </div>
                 </div>
@@ -122,7 +122,7 @@
                 <div class="mt-2 flex flex-row ">
                   <div v-for="hero in builderBaseHeroes" :key="hero.name" class="relative mr-2">
                     <img v-if="getHeroIcon(hero.name)" :src="getHeroIcon(hero.name)" :alt="hero.name" class="h-15 w-15 mx-5" />
-                    <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs', 'px-1', 'rounded-sm', { 'bg-blue-500': hero.level === hero.maxLevel }, { 'bg-black': hero.level !== hero.maxLevel }]">
+                    <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': hero.level === hero.maxLevel }, { 'bg-black': hero.level !== hero.maxLevel }]">
                       {{ hero.level }}
                     </div>
                   </div>
