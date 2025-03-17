@@ -20,14 +20,30 @@
           alt="Ligue des Raids"
           class="h-12 w-12 mb-2"
         />
-        <h2 class="text-xl font-bold">Détails des Raids de Capitale</h2>
+        <h2 class="text-xl font-bold">Détails Capitale</h2>
       </div>
-      <p class="text-sm"><strong>Niveau Capitale :</strong> {{ clan?.clanCapital?.capitalHallLevel || "N/A" }}</p>
+
       <div v-if="clan?.clanCapital?.districts && clan.clanCapital.districts.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div v-for="(district, index) in clan.clanCapital.districts" :key="index" class="p-4 border rounded bg-gray-100 text-center">
           <p class="text-sm">
-            <strong>{{ district.name || "N/A" }} :</strong> {{ district.districtHallLevel || "N/A" }}
+            <strong>{{ district.name || "N/A" }} </strong>
           </p>
+          <div class="flex justify-center items-center">
+            <img
+              v-if="district.name === 'Capital Peak' && getCapitalHallImage(district.districtHallLevel)"
+              :src="getCapitalHallImage(district.districtHallLevel)"
+              :title="'Capital ' + district.districtHallLevel "
+              :alt="'Capital' + district.districtHallLevel "
+              class="w-20 h-20"
+            />
+            <img
+              v-else
+              :src="getDistrictHallImage(district.districtHallLevel)"
+              :title="'District ' + district.districtHallLevel "
+              :alt="'District' + district.districtHallLevel "
+              class="w-20 h-20"
+            />
+          </div>
         </div>
       </div>
 
@@ -58,10 +74,10 @@
     <div v-if="selectedRaid" class="bg-white p-6 rounded-lg shadow-lg mx-auto mb-8 max-w-4xl">
       <h2 class="text-lg font-bold">Informations du Raid Sélectionné</h2>
       <p class="text-sm"><strong>Raids du :</strong> {{ formatDate(selectedRaid.startTime) }} au {{ formatDate(selectedRaid.endTime) }}</p>
-      <p class="text-sm"><strong>Loot Total :</strong> {{ selectedRaid.capitalTotalLoot || "N/A" }}</p>
+      <p class="text-sm"><img :src="icons['icon/pillage']" alt="étoiles" class="h-15 w-15 inline-block "/> : {{ selectedRaid.capitalTotalLoot || "N/A" }}</p>
       <p class="text-sm"><strong>Raids Complétés :</strong> {{ selectedRaid.raidsCompleted || "N/A" }}</p>
       <p class="text-sm"><strong>Districts Détruits :</strong> {{ selectedRaid.enemyDistrictsDestroyed || "N/A" }}</p>
-      <p class="text-sm"><strong>Attaques Totales :</strong> {{ selectedRaid.totalAttacks || "N/A" }}</p>
+      <p class="text-sm"><img :src="icons['icon/capital_atk']" alt="étoiles" class="h-10 w-10 inline-block"/> {{ selectedRaid.totalAttacks || "N/A" }}</p>
     </div>
   </div>
   <div v-if="selectedRaid.members" class="flex justify-center py-16 mt-24">
@@ -72,8 +88,8 @@
           <div v-for="member in activeMembers" :key="member.tag" class="bg-gray-100 p-4 rounded-lg text-center">
             <p class="text-lg font-bold">{{ member.name }}</p>
             <div class="flex flex-row justify-between">
-              <p class="text-sm">Attaques : {{ member.attacks }}/6</p>
-              <p class="text-lg">Ressources Lootées : {{ member.capitalResourcesLooted }}</p>
+              <p class="text-sm"><img :src="icons['icon/capital_atk']" alt="étoiles" class="h-10 w-10 inline-block"/> {{ member.attacks }}/6</p>
+              <p class="text-lg"><img :src="icons['icon/Joyaux']" alt="étoiles" class="h-10 w-10 inline-block"/> {{ member.capitalResourcesLooted }}</p>
             </div>
           </div>
         </div>
@@ -94,6 +110,7 @@
 
 <script>
 import apiService from '../apiService';
+import icons from '@/assets/icons.js';
 
 export default {
   data() {
@@ -106,6 +123,7 @@ export default {
       unrankedLeagueIcon: '', // Icône pour "Non classé"
       raidStateClass: 'bg-green-500', // Classe par défaut pour raidStateClass
       clanMembers: [], // Membres du clan
+      icons : icons,
     };
   },
   created() {
@@ -192,13 +210,25 @@ export default {
       const clanTag = this.$route.params.clanTag;
       return apiService.getClanDetails(clanTag).then(response => {
         this.clanMembers = response.memberList;
-      }).catch(error => {
-        console.error("Erreur lors de la récupération des membres du clan :", error);
-      });
+      })
     },
     getClanDetails(clanTag) {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}`);
+    },
+    getCapitalHallImage(level) {
+      if (level >= 1 && level <= 10) {
+        const iconName = `HDV/Capital_${level}`;
+        return this.icons[iconName];
+      }
+      return null; // ou this.icons.default si vous avez une image par défaut
+    },
+    getDistrictHallImage(level) {
+      if (level >= 1 && level <= 5) {
+        const iconName = `HDV/District_${level}`;
+        return this.icons[iconName];
+      }
+      return null; // ou this.icons.default si vous avez une image par défaut
     },
   },
 
