@@ -61,8 +61,5 @@ jobs:
             cp -r /var/www/TrackersStats/dist/. /var/www/TrackersStats/
             ls -l /var/www/TrackersStats/
 
-            # Définir les permissions appropriées pour www-data
-            chown -R www-data:www-data /var/www/TrackersStats
-
             echo "Deployment successful"
           EOF
