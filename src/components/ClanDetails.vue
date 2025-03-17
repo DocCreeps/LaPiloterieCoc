@@ -45,8 +45,8 @@
 
       <!-- Bloc du milieu : Autres informations -->
       <div class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/3 mb-4 lg:mb-0">
-        <p class="text-lg">{{ clan?.description || "Description indisponible." }}</p>
-        <div class="flex flex-row  mt-2">
+        <p class="text-lg text-center">{{ clan?.description || "Description indisponible." }}</p>
+        <div class="flex flex-row  justify-center mt-2">
           <img :src="icons['icon/member']" alt="Membres" class="h-7 w-7"/>
         <p class="text-lg ml-2"> {{ clan?.members }}/50</p>
         </div>
@@ -108,14 +108,15 @@
 
     <div class="container mx-auto py-8">
       <h2 class="text-2xl font-bold mb-4 text-center">Membres</h2>
-      <div class="mb-4 flex justify-center">
+
+      <div class="mb-4 flex flex-col sm:flex-row justify-center items-center">
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Rechercher un membre..."
-          class="w-80 p-2 border rounded"
+          class="w-full sm:w-80 p-2 border rounded mb-2 sm:mb-0 sm:mr-2"
         />
-        <select v-model="selectedTownHallLevel" class="p-2 border rounded">
+        <select v-model="selectedTownHallLevel" class="p-2 border rounded w-full sm:w-auto">
           <option value="">Tous les HDV</option>
           <option v-for="level in townHallLevels" :key="level" :value="level">
             HDV {{ level }}
@@ -128,50 +129,47 @@
           v-for="member in filteredMembers"
           :key="member.tag"
           @click="goToMemberDetails(member.tag)"
-        class="bg-white p-4 rounded-lg shadow-md cursor-pointer"
+          class="bg-white p-4 rounded-lg shadow-md cursor-pointer w-full sm:w-11/12 mx-auto"
         >
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex flex-row">
-          <img :src="member.league?.iconUrls.small" alt="League Badge" class="w-12 h-12 mr-4">
-          <div>
-            <h3 class="text-xl font-semibold">{{ member.name }}</h3>
-            <p class="text-gray-600">{{ translateRole(member.role) }}</p>
-          </div>
-          </div>
-          <div class="flex flex-row">
-
-            <img v-if="(member.previousClanRank) - (member.clanRank) > 0" :src="icons['icon/up']" alt="up" class="h-7 w-7"/>
-            <img v-else-if="(member.previousClanRank) - (member.clanRank) < 0" :src="icons['icon/down']" alt="down" class="h-7 w-7"/>
-            <img v-else :src="icons['icon/nomove']" alt="equal" class="h-7 w-7"/>
-
-           <p class="ml-2"> {{ (member.previousClanRank) - (member.clanRank) }}</p>
-          </div>
-          <div class="flex flex-row ">
-            <img :src="icons['icon/xp']" alt="experience" class="h-7 w-7"/>
-            <p class="text-gray-600 ml-2">{{ member.expLevel }}</p>
-          </div>
-        </div>
-          <div class="flex flex-row justify-between">
-            <div>
-              <img v-if="member && getTownHallImage(member.townHallLevel)" :src="getTownHallImage(member.townHallLevel)" :title="'HDV ' + member.townHallLevel" :alt="'HDV' + member.townHallLevel"  class="w-15 h-15"/>
-          <div class="flex flex-row mt-2">
-            <img :src="icons['icon/Trophy']" alt="Trophée" class="h-10 w-10"/>
-          <p class="text-gray-600 ml-2">{{ member.trophies }}</p>
-
-          </div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex flex-row items-center">
+              <img :src="member.league?.iconUrls.small" alt="League Badge" class="w-12 h-12 mr-4">
+              <div>
+                <h3 class="text-xl font-semibold">{{ member.name }}</h3>
+                <p class="text-gray-600">{{ translateRole(member.role) }}</p>
+              </div>
             </div>
-            <div>
-              <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'MDO ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel"  class="w-15 h-15"/>
-              <div class="flex flex-row mt-2">
+            <div class="flex flex-row items-center">
+              <img v-if="(member.previousClanRank) - (member.clanRank) > 0" :src="icons['icon/up']" alt="up" class="h-7 w-7"/>
+              <img v-else-if="(member.previousClanRank) - (member.clanRank) < 0" :src="icons['icon/down']" alt="down" class="h-7 w-7"/>
+              <img v-else :src="icons['icon/nomove']" alt="equal" class="h-7 w-7"/>
+              <p class="ml-2"> {{ (member.previousClanRank) - (member.clanRank) }}</p>
+            </div>
+            <div class="flex flex-row items-center">
+              <img :src="icons['icon/xp']" alt="experience" class="h-7 w-7"/>
+              <p class="text-gray-600 ml-2">{{ member.expLevel }}</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row justify-between">
+            <div class="text-center sm:text-left">
+              <img v-if="member && getTownHallImage(member.townHallLevel)" :src="getTownHallImage(member.townHallLevel)" :title="'HDV ' + member.townHallLevel" :alt="'HDV' + member.townHallLevel"  class="w-15 h-15 mx-auto sm:mx-0"/>
+              <div class="flex flex-row mt-2 justify-center sm:justify-start">
+                <img :src="icons['icon/Trophy']" alt="Trophée" class="h-10 w-10"/>
+                <p class="text-gray-600 ml-2">{{ member.trophies }}</p>
+              </div>
+            </div>
+            <div class="text-center sm:text-left mt-4 sm:mt-0">
+              <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'MDO ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel"  class="w-15 h-15 mx-auto sm:mx-0"/>
+              <div class="flex flex-row mt-2 justify-center sm:justify-start">
                 <img :src="icons['icon/mdo_trophy']" alt="Trophée MDO" class="h-10 w-10"/>
                 <p class="text-gray-600 ml-2">{{ member.builderBaseTrophies }}</p>
               </div>
             </div>
-
-</div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
