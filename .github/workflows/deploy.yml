@@ -1,0 +1,62 @@
+name: Build and deploy Vue.js app to VPS
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            # Vérifier et ajuster les permissions du répertoire parent
+            sudo chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/html
+            sudo chmod -R 755 /var/www/html
+
+            # Créer le répertoire de destination s'il n'existe pas
+            if [ ! -d /var/www/TrackersStats ]; then
+                git clone git@github.com:DocCreeps/TrackersStats.git /var/www/TrackersStats
+            fi
+
+            cd /var/www/TrackersStats
+
+            # Réinitialiser les modifications locales
+            git reset --hard origin/master
+
+            # Mettre à jour le dépôt
+            git pull origin master
+
+            # Installer les dépendances Node.js
+            if [ -f package.json ]; then
+                npm install
+            else
+                echo "Le fichier package.json n'existe pas."
+                exit 1
+            fi
+
+            # Construire l'application Vue.js
+            npm run build
+
+            # Copier les fichiers construits vers le répertoire de déploiement
+            rm -rf /var/www/TrackersStats/dist/* # Supprimez le contenu existant
+            cp -r /var/www/TrackersStats/dist/* /var/www/TrackersStats/
+
+            # Définir les permissions appropriées pour www-data
+            sudo chown -R www-data:www-data /var/www/TrackersStats
+
+            echo "Deployment successful"
+          EOF
