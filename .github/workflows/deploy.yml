@@ -25,8 +25,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             
             # Vérifier et ajuster les permissions du répertoire parent
-            chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats 
-            chmod -R 775 /var/www/TrackersStats
+            sudo chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats 
+            sudo chmod -R 775 /var/www/TrackersStats
 
             # Créer le répertoire de destination s'il n'existe pas
             if [ ! -d /var/www/TrackersStats ]; then
