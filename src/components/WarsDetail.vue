@@ -170,15 +170,18 @@ export default {
       icons : icons,
     };
   },
+
   created() {
     this.fetchClanDetails();
     this.fetchWarDetails();
     this.fetchCurrentWarDetails();
     this.fetchLeagues();
   },
+
   mounted() {
     document.title = `Détail des 60 dernières GDC du clan - ${this.clan?.name }`;
   },
+
   methods: {
     fetchClanDetails() {
       const clanTag = this.$route.params.clanTag;
@@ -262,6 +265,7 @@ export default {
       }
     },
   },
+  
   computed: {
     filteredWars() {
       return this.wars.filter(war => war.opponent && war.opponent.name);
