@@ -33,32 +33,13 @@ jobs:
                 git clone git@github.com:DocCreeps/TrackersStats.git /var/www/TrackersStats
             fi
           
-            echo "Current directory: $(pwd)"
             cd /var/www/TrackersStats
-            echo "Current directory: $(pwd)"
-          
-          # Créer un répertoire temporaire pour la sauvegarde dans /var/www/
-               TEMP_DIR=/var/www/temp_backup
-               mkdir -p $TEMP_DIR
-
-          # Sauvegarder le fichier .env dans le répertoire temporaire
-               if [ -f .env ]; then
-               cp .env $TEMP_DIR/.env.backup
-               fi
-
+         
           # Réinitialiser les modifications locales
                git reset --hard origin/master
 
           # Mettre à jour le dépôt
                git pull origin master
-
-          # Restaurer le fichier .env depuis le répertoire temporaire
-               if [ -f $TEMP_DIR/.env.backup ]; then
-               cp $TEMP_DIR/.env.backup .env
-               fi
-
-          # Supprimer le répertoire temporaire
-               rm -rf $TEMP_DIR
           
           
             # Installer les dépendances Node.js
