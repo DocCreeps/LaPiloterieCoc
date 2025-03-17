@@ -24,22 +24,42 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             # Vérifier et ajuster les permissions du répertoire parent
-            sudo chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/html
-            sudo chmod -R 755 /var/www/html
+            sudo chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/
+            sudo chmod -R 755 /var/www/
 
             # Créer le répertoire de destination s'il n'existe pas
             if [ ! -d /var/www/TrackersStats ]; then
                 git clone git@github.com:DocCreeps/TrackersStats.git /var/www/TrackersStats
             fi
-
+          
+            echo "Current directory: $(pwd)"
             cd /var/www/TrackersStats
+            echo "Current directory: $(pwd)"
+          
+          # Créer un répertoire temporaire pour la sauvegarde dans /var/www/html
+               TEMP_DIR=/var/www/temp_backup
+               mkdir -p $TEMP_DIR
 
-            # Réinitialiser les modifications locales
-            git reset --hard origin/master
+          # Sauvegarder le fichier .env dans le répertoire temporaire
+               if [ -f .env ]; then
+               cp .env $TEMP_DIR/.env.backup
+               fi
 
-            # Mettre à jour le dépôt
-            git pull origin master
+          # Réinitialiser les modifications locales
+               git reset --hard origin/master
 
+          # Mettre à jour le dépôt
+               git pull origin master
+
+          # Restaurer le fichier .env depuis le répertoire temporaire
+               if [ -f $TEMP_DIR/.env.backup ]; then
+               cp $TEMP_DIR/.env.backup .env
+               fi
+
+          # Supprimer le répertoire temporaire
+               rm -rf $TEMP_DIR
+          
+          
             # Installer les dépendances Node.js
             if [ -f package.json ]; then
                 npm install
