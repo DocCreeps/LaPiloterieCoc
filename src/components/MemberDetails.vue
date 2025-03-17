@@ -21,7 +21,7 @@
             <p class="text-lg">{{ member?.league?.name || "Non classé" }}</p>
             <!-- Points de Trophées -->
             <p class="text-2xl font-bold">{{ member?.trophies || 0 }} <i class="fas fa-trophy"></i></p>
-          </div>
+           </div>
 
           <div class="text-center">
             <div class="grid grid-cols-1 gap-2 player-details">
@@ -73,7 +73,21 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-2">
+        <!-- Stats Base à Gauche -->
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <img v-if="member && getTownHallImage(member.townHallLevel)" :src="getTownHallImage(member.townHallLevel)" :title="'HDV ' + member.townHallLevel" :alt="'HDV' + member.townHallLevel"  class="w-30 h-30 mx-auto mt-2"/>
+
+        </div>
+
+        <!-- stats MDO à Droite -->
+        <div class="bg-white p-8 rounded-lg shadow-md">
+          <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'MDO ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel"  class="w-30 h-30 mx-auto"/>
+
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-5">
         <!-- Stats de Guerre à Gauche -->
         <div class="bg-white p-8 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold mb-4 text-center">Statistiques de Guerre</h2>
@@ -86,6 +100,7 @@
 
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -143,6 +158,20 @@ export default {
     getClanDetails(clanTag) {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}`);
+    },
+    getTownHallImage(level) {
+      if (level >= 1 && level <= 17) {
+        const iconName = `HDV/th_${level}`;
+        return this.icons[iconName];
+      }
+      return null; // ou this.icons.default si vous avez une image par défaut
+    },
+    getBuilderHallImage(level) {
+      if (level >= 1 && level <= 10) {
+        const iconName = `HDV/MDO_${level}`;
+        return this.icons[iconName];
+      }
+      return null; // ou this.icons.default si vous avez une image par défaut
     },
 
   },
