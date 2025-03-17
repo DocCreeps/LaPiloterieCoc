@@ -24,8 +24,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             # Vérifier et ajuster les permissions du répertoire parent
-            sudo chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/
-            sudo chmod -R 755 /var/www/
+            chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/
+            chmod -R 755 /var/www/
 
             # Créer le répertoire de destination s'il n'existe pas
             if [ ! -d /var/www/TrackersStats ]; then
@@ -76,7 +76,7 @@ jobs:
             cp -r /var/www/TrackersStats/dist/* /var/www/TrackersStats/
 
             # Définir les permissions appropriées pour www-data
-            sudo chown -R www-data:www-data /var/www/TrackersStats
+            chown -R www-data:www-data /var/www/TrackersStats
 
             echo "Deployment successful"
           EOF
