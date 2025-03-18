@@ -1,65 +1,16 @@
-name: Build and deploy Vue.js app to VPS
+name: Debug SSH Connection
 
 on:
-  push:
-    branches: [ "master" ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-  deploy:
+  debug:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy to VPS
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            set -x
-            # Vérifier et ajuster les permissions du répertoire parent
-            chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats 
-            chmod -R 775 /var/www/TrackersStats
-
-            # Créer le répertoire de destination s'il n'existe pas
-            if [ ! -d /var/www/TrackersStats ]; then
-                git clone git@github.com:DocCreeps/TrackersStats.git /var/www/TrackersStats
-            fi
-          
-            cd /var/www/TrackersStats
-          
-          # Réinitialiser les modifications locales
-               git reset --hard origin/master
-
-          # Mettre à jour le dépôt
-               git pull origin master
-          
-          
-            # Installer les dépendances Node.js
-            if [ -f package.json ]; then
-                npm install
-            else
-                echo "Le fichier package.json n'existe pas."
-                exit 1
-            fi
-
-            # Construire l'application Vue.js
-            npm run build
-            ls -l dist
-
-            # Copier les fichiers construits vers le répertoire de déploiement
-            if [ -d /var/www/TrackersStats/dist ]; then
-              rm -rf /var/www/TrackersStats/dist/* # Supprimez le contenu existant
-            fi
-            cp -r /var/www/TrackersStats/dist/. /var/www/TrackersStats/
-            ls -l /var/www/TrackersStats/
-
-            echo "Deployment successful"
-          EOF
+      - name: Test SSH Connection
+        run: ssh -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful"'
