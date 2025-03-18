@@ -1,16 +1,74 @@
-name: Debug SSH Connection
+name: Build and deploy Vue.js app to VPS
 
 on:
+  push:
+    branches: [ "master" ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  debug:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
+      - uses: actions/checkout@v4
+
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Test SSH Connection
-        run: ssh -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful"'
+      - name: Deploy to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -x
+            echo "Début du déploiement"
+            # Vérifier et ajuster les permissions du répertoire parent
+            echo "Changement de propriétaire et permissions"
+            chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats
+            chmod -R 775 /var/www/TrackersStats
+
+            # Créer le répertoire de destination s'il n'existe pas
+            echo "Vérification du répertoire"
+            if [ ! -d /var/www/TrackersStats ]; then
+              echo "Clonage du dépôt"
+              git clone git@github.com:DocCreeps/TrackersStats.git /var/www/TrackersStats
+            fi
+
+            cd /var/www/TrackersStats
+
+            # Réinitialiser les modifications locales
+            echo "Réinitialisation et mise à jour du dépôt"
+            git reset --hard origin/master
+
+            # Mettre à jour le dépôt
+            git pull origin master
+
+            # Installer les dépendances Node.js
+            echo "Installation des dépendances"
+            if [ -f package.json ]; then
+              npm install
+            else
+              echo "Le fichier package.json n'existe pas."
+              exit 1
+            fi
+
+            # Construire l'application Vue.js
+            echo "Construction de l'application"
+            npm run build
+            echo "Contenu du répertoire dist:"
+            ls -l dist
+
+            # Copier les fichiers construits vers le répertoire de déploiement
+            echo "Copie des fichiers"
+            if [ -d /var/www/TrackersStats/dist ]; then
+              rm -rf /var/www/TrackersStats/dist/* # Supprimez le contenu existant
+            fi
+            cp -r /var/www/TrackersStats/dist/. /var/www/TrackersStats/
+            echo "Contenu du répertoire de déploiement:"
+            ls -l /var/www/TrackersStats/
+
+            echo "Déploiement réussi"
+          EOF
