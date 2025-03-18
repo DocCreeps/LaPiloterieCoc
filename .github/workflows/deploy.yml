@@ -27,8 +27,8 @@ jobs:
             echo "Début du déploiement"
             # Vérifier et ajuster les permissions du répertoire parent
             echo "Changement de propriétaire et permissions"
-            chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats
-            chmod -R 775 /var/www/TrackersStats
+            sudo chown -R ${{ secrets.SSH_USER }}:${{ secrets.SSH_USER }} /var/www/TrackersStats
+            sudo chmod -R 775 /var/www/TrackersStats
 
             # Créer le répertoire de destination s'il n'existe pas
             echo "Vérification du répertoire"
