@@ -7,7 +7,7 @@
         v-model="searchQuery"
         type="text"
         placeholder="Rechercher un membre..."
-        class="w-full sm:w-80 p-2 border rounded mb-2 sm:mb-0 sm:mr-2"
+        class="w-full sm:w-64 p-2 border rounded mb-2 sm:mb-0 sm:mr-2"
       />
       <select v-model="selectedTownHallLevel" class="p-2 border rounded w-full sm:w-auto">
         <option value="">Tous les HDV</option>
@@ -24,8 +24,8 @@
         @click="goToMemberDetails(member.tag)"
         class="bg-white p-4 rounded-lg shadow-md cursor-pointer w-full sm:w-11/12 mx-auto"
       >
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex flex-row items-center">
+        <div class="flex flex-row items-center justify-between mb-4">
+          <div class="flex flex-row items-center mb-2 sm:mb-0">
             <img :src="member.league?.iconUrls.small" alt="League Badge" class="w-12 h-12 mr-4">
             <div>
               <h3 class="text-xl font-semibold">{{ member.name }}</h3>
@@ -44,19 +44,20 @@
           </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-between">
-          <div class="text-center sm:text-left">
-            <img v-if="member && getTownHallImage(member.townHallLevel)" :src="getTownHallImage(member.townHallLevel)" :title="'HDV ' + member.townHallLevel" :alt="'HDV' + member.townHallLevel"  class="w-15 h-15 mx-auto sm:mx-0"/>
-            <div class="flex flex-row mt-2 justify-center sm:justify-start">
-              <img :src="icons['icon/Trophy']" alt="Trophée" class="h-10 w-10"/>
-              <p class="text-gray-600 ml-2">{{ member.trophies }}</p>
+
+        <div class="flex flex-col justify-center items-center">
+          <div class="flex flex-row items-center mb-4 sm:mb-0">
+            <img v-if="member && getTownHallImage(member.townHallLevel)" :src="getTownHallImage(member.townHallLevel)" :title="'HDV ' + member.townHallLevel" :alt="'HDV' + member.townHallLevel" class="w-15 h-15 mr-4"/>
+            <div class="flex flex-row items-center">
+              <img :src="icons['icon/Trophy']" alt="Trophée" class="h-10 w-10 mr-2"/>
+              <p class="text-gray-600">{{ member.trophies }}</p>
             </div>
           </div>
-          <div class="text-center sm:text-left mt-4 sm:mt-0">
-            <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'MDO ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel"  class="w-15 h-15 mx-auto sm:mx-0"/>
-            <div class="flex flex-row mt-2 justify-center sm:justify-start">
-              <img :src="icons['icon/mdo_trophy']" alt="Trophée MDO" class="h-10 w-10"/>
-              <p class="text-gray-600 ml-2">{{ member.builderBaseTrophies }}</p>
+          <div class="flex flex-row items-center mt-4 sm:mt-5">
+            <img v-if="member && getBuilderHallImage(member.builderHallLevel)" :src="getBuilderHallImage(member.builderHallLevel)" :title="'MDO ' + member.builderHallLevel" :alt="'MDO' + member.builderHallLevel" class="w-15 h-15 mr-4"/>
+            <div class="flex flex-row items-center">
+              <img :src="icons['icon/mdo_trophy']" alt="Trophée MDO" class="h-10 w-10 mr-2"/>
+              <p class="text-gray-600">{{ member.builderBaseTrophies }}</p>
             </div>
           </div>
         </div>
@@ -64,6 +65,10 @@
     </div>
   </div>
 </template>
+
+
+
+
 
 <script>
 export default {
