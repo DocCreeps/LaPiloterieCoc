@@ -58,27 +58,5 @@ jobs:
             # Construire l'application Vue.js
             echo "Construction de l'application"
             npm run build
-            echo "Contenu du répertoire dist:"
-            ls -l dist
-
-            # Copier les fichiers construits vers le répertoire de déploiement
-            echo "Copie des fichiers"
-            if [ -d dist ]; then
-              rm -rf dist/* # Supprimez le contenu existant
-            fi
-            cp -r dist/. /var/www/TrackersStats/
-            # Copier le fichier .htaccess
-            if [ -f .htaccess ]; then
-                cp .htaccess /var/www/TrackersStats/
-            fi
-
-            # Créer le fichier .env
-            echo "Création du fichier .env"
-            echo "API_KEY=${{ secrets.API_KEY }}" >> /var/www/TrackersStats/.env
-            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> /var/www/TrackersStats/.env
-
-            echo "Contenu du répertoire de déploiement:"
-            ls -l /var/www/TrackersStats/
-            
   
           EOF
