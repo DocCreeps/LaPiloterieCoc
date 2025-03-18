@@ -79,6 +79,8 @@ jobs:
 
             echo "Contenu du répertoire de déploiement:"
             ls -l /var/www/TrackersStats/
-
+            
+            echo "Construction de l'application"
+            npm run build
             echo "Déploiement réussi"
           EOF
