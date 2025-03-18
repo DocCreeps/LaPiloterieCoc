@@ -3,27 +3,27 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   {
     path: '/',
-    component: () => import(/* webpackChunkName: "home" */ '../components/HomePage.vue')
+    component: () => import(/* webpackChunkName: "home" */ '../pages/HomePage.vue')
   },
   {
     path: '/clan/:clanTag',
-    component: () => import(/* webpackChunkName: "clan-details" */ '../components/ClanDetails.vue'),
+    component: () => import(/* webpackChunkName: "clan-details" */ '../pages/ClanDetails.vue'),
     name: 'ClanDetails'
   },
   {
     path: '/players/:memberTag',
     name: 'MemberDetails',
-    component: () => import(/* webpackChunkName: "member-details" */ '../components/MemberDetails.vue')
+    component: () => import(/* webpackChunkName: "member-details" */ '../pages/MemberDetails.vue')
   },
   {
     path: '/wars/:clanTag',
     name: 'WarsDetails',
-    component: () => import(/* webpackChunkName: "wars-details" */ '../components/WarsDetail.vue')
+    component: () => import(/* webpackChunkName: "wars-details" */ '../pages/WarsDetail.vue')
   },
   {
     path: '/clan/:clanTag/CapitalRaid',
     name: 'CapitalRaid',
-    component: () => import(/* webpackChunkName: "capital-details" */ '../components/CapitalDetail.vue')
+    component: () => import(/* webpackChunkName: "capital-details" */ '../pages/CapitalDetail.vue')
   }
 ];
 
