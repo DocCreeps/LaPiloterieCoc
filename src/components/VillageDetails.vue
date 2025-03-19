@@ -15,9 +15,10 @@
         </div>
 
         <div class="flex-grow flex flex-col items-center">
+          <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Héros</h3>
           <div class="flex flex-wrap justify-center">
             <div v-for="hero in heroes" :key="hero.name" class="relative mx-1 mb-2 md:mx-2 md:mb-4 cursor-pointer" @click="openEquipmentModal(hero.name)">
-              <img v-if="getHeroIcon(hero.name)" :src="getHeroIcon(hero.name)" :alt="hero.name" :title="`${hero.name} (${hero.level}/${hero.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-10" />
+              <img v-if="getHeroIcon(hero.name)" :src="getHeroIcon(hero.name)" :alt="hero.name" :title="`${hero.name} (${hero.level}/${hero.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-2" />
               <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': hero.level === hero.maxLevel }, { 'bg-black': hero.level !== hero.maxLevel }]">
                 {{ hero.level }}
               </div>
@@ -25,7 +26,7 @@
           </div>
 
 
-            <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Familier</h3>
+            <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Familiers</h3>
           <div class="flex flex-wrap justify-center mt-2">
             <div v-for="pet in heroPets" :key="pet.name" class="relative mx-1 mb-2 md:mx-2 md:mb-4">
               <img v-if="getPetIcon(pet.name)" :src="getPetIcon(pet.name)" :alt="pet.name" :title="`${pet.name} (${pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-2" />
