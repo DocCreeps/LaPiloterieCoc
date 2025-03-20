@@ -25,13 +25,14 @@
             </div>
           </div>
 
-
+          <div v-if="heroPets && heroPets.length > 0">
             <h3 class="text-2xl mb-3 font-bold text-center mt-4">Familiers</h3>
-          <div class="flex flex-wrap justify-center mt-2">
-            <div v-for="pet in heroPets" :key="pet.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 ">
-              <img v-if="getPetIcon(pet.name)" :src="getPetIcon(pet.name)" :alt="pet.name" :title="`${pet.name} (${pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
-              <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': pet.level === pet.maxLevel }, { 'bg-black': pet.level !== pet.maxLevel }]">
-                {{ pet.level }}
+            <div class="flex flex-wrap justify-center mt-2">
+              <div v-for="pet in heroPets" :key="pet.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 ">
+                <img v-if="getPetIcon(pet.name)" :src="getPetIcon(pet.name)" :alt="pet.name" :title="`${pet.name} (${pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+                <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': pet.level === pet.maxLevel }, { 'bg-black': pet.level !== pet.maxLevel }]">
+                  {{ pet.level }}
+                </div>
               </div>
             </div>
           </div>
@@ -64,7 +65,7 @@
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-4" v-if="siegeMachines && siegeMachines.length > 0">
         <h3 class="text-2xl mb-3 font-bold text-center mt-4">Machines de siège</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="siege in siegeMachines" :key="siege.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
