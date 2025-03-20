@@ -1,7 +1,7 @@
 <template >
-  <div class="container mx-auto py-8 px-4">
+  <div class="container mx-auto  px-4">
     <div class="bg-white p-6 md:p-8 rounded-lg shadow-md mt-2 mx-auto">
-      <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6 md:mb-10">Villages Principal</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-10">Villages Principal</h2>
 
       <div class="flex flex-col md:flex-row items-center">
         <div class="mb-4 md:mr-4">
@@ -15,10 +15,10 @@
         </div>
 
         <div class="flex-grow flex flex-col items-center">
-          <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Héros</h3>
+          <h3 class="text-2xl mb-3 font-bold text-center mt-4">Héros</h3>
           <div class="flex flex-wrap justify-center">
-            <div v-for="hero in heroes" :key="hero.name" class="relative mx-1 mb-2 md:mx-2 md:mb-4 cursor-pointer" @click="openEquipmentModal(hero.name)">
-              <img v-if="getHeroIcon(hero.name)" :src="getHeroIcon(hero.name)" :alt="hero.name" :title="`${hero.name} (${hero.level}/${hero.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-2" />
+            <div v-for="hero in heroes" :key="hero.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 cursor-pointer" @click="openEquipmentModal(hero.name)">
+              <img v-if="getHeroIcon(hero.name)" :src="getHeroIcon(hero.name)" :alt="hero.name" :title="`${hero.name} (${hero.level}/${hero.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
               <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': hero.level === hero.maxLevel }, { 'bg-black': hero.level !== hero.maxLevel }]">
                 {{ hero.level }}
               </div>
@@ -26,10 +26,10 @@
           </div>
 
 
-            <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Familiers</h3>
+            <h3 class="text-2xl mb-3 font-bold text-center mt-4">Familiers</h3>
           <div class="flex flex-wrap justify-center mt-2">
-            <div v-for="pet in heroPets" :key="pet.name" class="relative mx-1 mb-2 md:mx-2 md:mb-4">
-              <img v-if="getPetIcon(pet.name)" :src="getPetIcon(pet.name)" :alt="pet.name" :title="`${pet.name} (${pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-2" />
+            <div v-for="pet in heroPets" :key="pet.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 ">
+              <img v-if="getPetIcon(pet.name)" :src="getPetIcon(pet.name)" :alt="pet.name" :title="`${pet.name} (${pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
               <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': pet.level === pet.maxLevel }, { 'bg-black': pet.level !== pet.maxLevel }]">
                 {{ pet.level }}
               </div>
@@ -40,10 +40,10 @@
 
       <div class="mt-4 flex flex-col md:flex-row">
         <div class="w-full md:w-1/2">
-          <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Troupes</h3>
+          <h3 class="text-2xl mb-3 font-bold text-center mt-4">Troupes</h3>
           <div class="mt-2 flex flex-wrap justify-center">
-            <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-1 mb-2 md:mx-2 md:mb-2">
-              <img v-if="getTroopsIcon(troop.name)" :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-3" />
+            <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+              <img v-if="getTroopsIcon(troop.name)" :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
               <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': troop.level === troop.maxLevel }, { 'bg-black': troop.level !== troop.maxLevel }]">
                 {{ troop.level }}
               </div>
@@ -51,11 +51,11 @@
           </div>
         </div>
 
-        <div class="w-full md:w-1/2">
-          <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Sorts</h3>
+        <div class="w-full md:w-1/2 md:mr-4">
+          <h3 class="text-2xl mb-3 font-bold text-center mt-4">Sorts</h3>
           <div class="mt-2 flex flex-wrap justify-center">
-            <div v-for="spell in spells" :key="spell.name" class="relative mx-1 mb-2 md:mx-2 md:mb-2">
-              <img v-if="getSpellIcon(spell.name)" :src="getSpellIcon(spell.name)" :alt="spell.name" :title="`${spell.name} (${spell.level}/${spell.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-3" />
+            <div v-for="spell in spells" :key="spell.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+              <img v-if="getSpellIcon(spell.name)" :src="getSpellIcon(spell.name)" :alt="spell.name" :title="`${spell.name} (${spell.level}/${spell.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
               <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': spell.level === spell.maxLevel }, { 'bg-black': spell.level !== spell.maxLevel }]">
                 {{ spell.level }}
               </div>
@@ -65,10 +65,10 @@
       </div>
 
       <div class="mt-4">
-        <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Machines de siège</h3>
+        <h3 class="text-2xl mb-3 font-bold text-center mt-4">Machines de siège</h3>
         <div class="mt-2 flex flex-wrap justify-center">
-          <div v-for="siege in siegeMachines" :key="siege.name" class="relative mx-1 mb-2 md:mx-2 md:mb-2">
-            <img v-if="getSiegeIcon(siege.name)" :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-3" />
+          <div v-for="siege in siegeMachines" :key="siege.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+            <img v-if="getSiegeIcon(siege.name)" :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
             <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': siege.level === siege.maxLevel }, { 'bg-black': siege.level !== siege.maxLevel }]">
               {{ siege.level }}
             </div>
@@ -79,8 +79,8 @@
 
     </div>
 
-    <div class="bg-white p-6 md:p-8 rounded-lg shadow-md mt-5 mx-auto">
-      <h2 class="text-2xl md:text-3xl font-semibold text-center mb-6 md:mb-10">MDO</h2>
+    <div class="bg-white p-6 md:p-8 rounded-lg shadow-md mt-2 mx-auto">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-10">MDO</h2>
       <div class="flex justify-center flex-col items-center md:flex-row">
         <div class="flex items-center mb-4 md:mb-0">
           <img
@@ -103,7 +103,7 @@
           </div>
         </div>
       </div>
-      <h3 class="text-lg md:text-xl font-semibold text-center mt-4">Troupes MDO</h3>
+      <h3 class="text-2xl mb-3 font-bold text-center mt-4">Troupes MDO</h3>
       <div class="flex flex-wrap justify-center mt-3 md:mt-5">
         <div v-for="troops in builderBaseTroops" :key="troops.name" class="relative mx-1 mb-2 md:mx-2 md:mb-2">
           <img v-if="getMDOTroopsIcon(troops.name)" :src="getMDOTroopsIcon(troops.name)" :alt="troops.name" :title="`${troops.name} (${troops.level}/${troops.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-1" />

@@ -23,6 +23,7 @@
     </div>
     <p v-else class="text-center">Les statistiques de guerre sont privées.</p>
   </div>
+
 </template>
 
 <script>
