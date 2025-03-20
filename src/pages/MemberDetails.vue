@@ -49,7 +49,7 @@ export default {
         .getMemberDetails(memberTag)
         .then((response) => {
           this.member = response;
-          document.title = `Détails du clan - ${this.member?.name}`;
+          document.title = `${this.member?.name}`;
         })
         .catch((error) => {
           console.error("Erreur lors de la récupération des détails du membre :", error);
