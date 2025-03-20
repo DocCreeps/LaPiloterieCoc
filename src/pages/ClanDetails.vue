@@ -7,8 +7,7 @@
         :leagues="leagues"
         :unrankedLeagueIcon="unrankedLeagueIcon"
       />
-      <ClanInfo :clan="clan" :icons="icons" />
-      <ClanWarStats :clan="clan" />
+
     </div>
 
     <div class="container mx-auto py-8 flex justify-center gap-4">
@@ -37,15 +36,11 @@
 import apiService from '../apiService.js';
 import icons from '@/assets/icons.js';
 import ClanHeader from '@/components/ClanHeader.vue';
-import ClanInfo from '@/components/ClanInfo.vue';
-import ClanWarStats from '@/components/ClanWarStats.vue';
 import ClanMemberList from '@/components/ClanMemberList.vue';
 
 export default {
   components: {
     ClanHeader,
-    ClanInfo,
-    ClanWarStats,
     ClanMemberList,
   },
   data() {
