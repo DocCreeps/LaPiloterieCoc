@@ -1,4 +1,5 @@
 <template>
+  <div class="container mx-auto  px-4">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-5">
     <div class="bg-white p-8 rounded-lg shadow-md">
       <h2 class="text-2xl font-bold mb-4 text-center">Statistiques de Guerre</h2>
@@ -7,6 +8,7 @@
     <div class="bg-white p-8 rounded-lg shadow-md">
       <h2 class="text-2xl font-bold mb-4 text-center">Autres Statistiques</h2>
     </div>
+  </div>
   </div>
 </template>
 

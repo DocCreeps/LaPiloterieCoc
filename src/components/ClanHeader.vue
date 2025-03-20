@@ -1,4 +1,5 @@
 <template>
+
   <div class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/3 mb-4 lg:mb-0">
     <div class="flex flex-col items-center mb-4">
       <img :src="clan?.badgeUrls?.medium" alt="Clan Badge" class="h-16 w-16">
@@ -35,6 +36,7 @@
 
     </div>
   </div>
+
 </template>
 
 <script>

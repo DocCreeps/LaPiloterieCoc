@@ -1,5 +1,6 @@
 <template>
-  <div class="bg-white p-8 rounded-lg shadow-md w-full mb-8">
+  <div class="container px-4">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full ">
     <div class="text-center mb-4">
       <h1 class="text-3xl font-bold">{{ member?.name }}</h1>
       <h2 class="text-xl text-gray-600">{{ member?.tag }}</h2>
@@ -121,6 +122,7 @@
         <p class="text-2xl semibold">{{ translateRole(member?.role) }}</p>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
