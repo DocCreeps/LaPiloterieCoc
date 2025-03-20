@@ -49,11 +49,15 @@ export default {
     this.fetchLeagues();
     this.fetchClanMembers();
   },
+  mounted() {
+
+  },
   methods: {
     fetchClanDetails() {
       const clanTag = this.$route.params.clanTag;
       apiService.getClanDetails(clanTag).then(response => {
         this.clan = response;
+        document.title = `Raids capital - ${this.clan?.name}`;
       }).catch(error => {
         console.error('Erreur lors de la récupération des détails du clan :', error);
       });
