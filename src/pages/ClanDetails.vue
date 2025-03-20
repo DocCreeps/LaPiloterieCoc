@@ -27,7 +27,9 @@
       </button>
     </div>
 
-    <ClanMemberList :clan="clan" :icons="icons" />
+
+      <ClanMemberList :clan="clan" :icons="icons" />
+
   </div>
 </template>
 
