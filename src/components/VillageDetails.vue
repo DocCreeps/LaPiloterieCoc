@@ -15,7 +15,7 @@
         </div>
 
         <div class="flex-grow flex flex-col items-center">
-          <h3 class="text-2xl mb-3 font-bold text-center mt-4">Héros</h3>
+          <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Héros</h3>
           <div class="flex flex-wrap justify-center">
             <div v-for="hero in heroes" :key="hero.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 cursor-pointer" @click="openEquipmentModal(hero.name)">
               <img v-if="getHeroIcon(hero.name)" :src="getHeroIcon(hero.name)" :alt="hero.name" :title="`${hero.name} (${hero.level}/${hero.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -26,7 +26,7 @@
           </div>
 
           <div v-if="heroPets && heroPets.length > 0">
-            <h3 class="text-2xl mb-3 font-bold text-center mt-4">Familiers</h3>
+            <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Familiers</h3>
             <div class="flex flex-wrap justify-center mt-2">
               <div v-for="pet in heroPets" :key="pet.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 ">
                 <img v-if="getPetIcon(pet.name)" :src="getPetIcon(pet.name)" :alt="pet.name" :title="`${pet.name} (${pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -41,7 +41,7 @@
 
       <div class="mt-4 flex flex-col md:flex-row">
         <div class="w-full md:w-1/2">
-          <h3 class="text-2xl mb-3 font-bold text-center mt-4">Troupes</h3>
+          <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
           <div class="mt-2 flex flex-wrap justify-center">
             <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
               <img v-if="getTroopsIcon(troop.name)" :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -53,7 +53,7 @@
         </div>
 
         <div class="w-full md:w-1/2 md:mr-4">
-          <h3 class="text-2xl mb-3 font-bold text-center mt-4">Sorts</h3>
+          <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Sorts</h3>
           <div class="mt-2 flex flex-wrap justify-center">
             <div v-for="spell in spells" :key="spell.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
               <img v-if="getSpellIcon(spell.name)" :src="getSpellIcon(spell.name)" :alt="spell.name" :title="`${spell.name} (${spell.level}/${spell.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -66,7 +66,7 @@
       </div>
 
       <div class="mt-4" v-if="siegeMachines && siegeMachines.length > 0">
-        <h3 class="text-2xl mb-3 font-bold text-center mt-4">Machines de siège</h3>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Machines de siège</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="siege in siegeMachines" :key="siege.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
             <img v-if="getSiegeIcon(siege.name)" :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />

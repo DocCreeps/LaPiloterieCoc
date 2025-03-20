@@ -47,7 +47,7 @@
             </span>
           </div>
           <div class="flex justify-between">
-            <span>Meilleurs Trophées:</span>
+            <span>Record :</span>
             <span class="flex flex-row">
               <img :src="icons['icon/Trophy']" alt="Trophies" class="h-6 w-6" /><strong
               class="ml-2 mr-2"
