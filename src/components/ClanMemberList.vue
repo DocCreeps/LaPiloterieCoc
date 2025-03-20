@@ -24,7 +24,7 @@
         @click="goToMemberDetails(member.tag)"
         class="bg-white p-4 rounded-lg shadow-md cursor-pointer w-full flex flex-col"
       >
-        <div class="flex flex-col sm:flex-row items-start justify-between mb-4">
+        <div class="flex flex-col sm:flex-row items-center sm:items-start sm:justify-between mb-4">
           <div class="flex items-center mb-2 sm:mb-0">
             <img :src="member.league?.iconUrls.small" alt="League Badge" class="w-12 h-12 mr-4" />
             <div>
@@ -33,18 +33,19 @@
             </div>
           </div>
 
-          <div class="flex flex-col items-end mt-2">
-            <div class="flex items-center">
+
+            <div class="flex items-center mr-4  mt-4 sm:mt-2 sm:mr-2 mb-2 sm:mb-0">
               <img v-if="member.previousClanRank - member.clanRank > 0" :src="icons['icon/up']" alt="up" class="h-7 w-7" />
               <img v-else-if="member.previousClanRank - member.clanRank < 0" :src="icons['icon/down']" alt="down" class="h-7 w-7" />
               <img v-else :src="icons['icon/nomove']" alt="equal" class="h-7 w-7" />
               <p class="ml-2">{{ member.previousClanRank - member.clanRank }}</p>
             </div>
-            <div class="flex items-center mt-2">
+
+            <div class="flex items-center mt-4 sm:mt-2">
               <img :src="icons['icon/xp']" alt="experience" class="h-7 w-7" />
               <p class="text-gray-600 ml-2">{{ member.expLevel }}</p>
             </div>
-          </div>
+
         </div>
 
         <div class="flex flex-col sm:flex-row justify-around items-center flex-grow">
