@@ -41,7 +41,10 @@
         :icons="icons"
         @clanClicked="getClanDetails"
       />
-      <CWLDetails :leagues="leagues" />
+      <CWLDetails :leagues="leagues"
+                  :wars="wars"
+                  :icons="icons"
+                  @clanClicked="getClanDetails"/>
     </div>
   </div>
 </template>

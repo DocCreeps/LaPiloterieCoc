@@ -118,10 +118,43 @@ export default {
       };
     },
     formatDate(endTime) {
-      const date = new Date(endTime);
-      const now = new Date();
-      const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-      return `${diff}d ago`;
+      if (!endTime) {
+        return "Date inconnue";
+      }
+
+      try {
+        // Conversion de la chaîne de date en objet Date
+        const year = parseInt(endTime.substring(0, 4));
+        const month = parseInt(endTime.substring(4, 6)) - 1; // Mois indexés à partir de 0
+        const day = parseInt(endTime.substring(6, 8));
+        const hours = parseInt(endTime.substring(9, 11));
+        const minutes = parseInt(endTime.substring(11, 13));
+        const seconds = parseInt(endTime.substring(13, 15));
+
+        const date = new Date(year, month, day, hours, minutes, seconds);
+        const now = new Date();
+        const diffMilliseconds = now - date;
+
+        if (diffMilliseconds < 0) {
+          return "Date future";
+        }
+
+        const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24)); // Différence en jours
+        const diffHours = Math.floor(diffMilliseconds / (1000 * 60 * 60)); // Différence en heures
+
+        if (isNaN(diffMilliseconds)) {
+          return "Date invalide";
+        }
+
+        if (diffDays > 0) {
+          return `${diffDays} jour(s) passé(s)`;
+        } else {
+          return `${diffHours} heure(s) passé(s)`;
+        }
+      } catch (error) {
+        console.error("Erreur lors du traitement de la date :", endTime, error);
+        return "Date inconnue";
+      }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
