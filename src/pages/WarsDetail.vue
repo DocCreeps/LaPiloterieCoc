@@ -1,40 +1,12 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <div class="bg-blue-500 text-white p-4 fixed top-0 left-0 right-0 z-10">
-      <div class="container mx-auto flex flex-col md:flex-row md:items-center justify-between">
-        <div>
-          <h1 class="text-2xl font-bold mb-4 md:mb-0">Statistiques de Guerre</h1>
-        </div>
-
-        <div>
-          <img
-            :src="getLeagueIcon(clan?.warLeague?.name)"
-            alt="Ligue de Guerre"
-            class="h-20 w-20 mb-2"
-          />
-        </div>
-        <div class="flex flex-wrap justify-center">
-          <div class="flex flex-col items-center bg-green-600 p-2 rounded-lg m-1">
-            <p class="text-lg font-bold">Gagné</p>
-            <p class="text-lg">{{ clan?.warWins }}</p>
-          </div>
-          <div class="flex flex-col items-center bg-red-500 p-2 rounded-lg m-1">
-            <p class="text-lg font-bold">Perdu</p>
-            <p class="text-lg">{{ clan?.warLosses }}</p>
-          </div>
-          <div class="flex flex-col items-center bg-gray-500 p-2 rounded-lg m-1">
-            <p class="text-lg font-bold">Égalité</p>
-            <p class="text-lg">{{ clan?.warTies }}</p>
-          </div>
-          <div class="flex flex-col items-center bg-black p-2 rounded-lg m-1 mt-4 md:mt-0">
-            <p class="text-lg font-bold text-white">Total</p>
-            <p class="text-lg text-white">{{ totalWars }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container mx-auto py-16 mt-24">
+    <clan-header
+      :clan="clan"
+      :icons="icons"
+      :leagues="leagues"
+      :unrankedLeagueIcon="unrankedLeagueIcon"/>
+      <h1 class="font-bold text-3xl leading-tight text-center mt-10">Statisitque GDC et LDC</h1>
+    <div class="container mx-auto py-16">
       <WarList
         :wars="wars"
         :currentWar="currentWar"
@@ -54,9 +26,13 @@ import apiService from "../apiService.js";
 import icons from "@/assets/icons.js";
 import WarList from "@/components/WarList.vue";
 import CWLDetails from "@/components/CWLDetails.vue";
+import ClanWarStats from '@/components/ClanWarStats.vue'
+import ClanHeader from '@/components/ClanHeader.vue'
 
 export default {
   components: {
+    ClanHeader,
+    ClanWarStats,
     WarList,
     CWLDetails,
   },
