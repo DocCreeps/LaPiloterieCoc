@@ -34,10 +34,8 @@
           <div class="flex justify-between">
             <span>Trophées:</span>
             <span class="flex flex-row">
-              <img :src="icons['icon/Trophy']" alt="Trophies" class="h-6 w-6" /><strong
-              class="ml-2 mr-2"
-            >{{ member?.trophies }}</strong
-            >
+              <img :src="icons['icon/Trophy']" alt="Trophies" class="h-6 w-6" />
+              <strong class="ml-2 mr-2">{{ member?.trophies }}</strong>
               |
               <img
                 :src="icons['icon/mdo_trophy']"

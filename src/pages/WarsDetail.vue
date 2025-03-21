@@ -32,7 +32,6 @@ import ClanHeader from '@/components/ClanHeader.vue'
 export default {
   components: {
     ClanHeader,
-    ClanWarStats,
     WarList,
     CWLDetails,
   },

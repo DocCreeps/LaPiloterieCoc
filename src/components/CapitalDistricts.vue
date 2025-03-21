@@ -1,8 +1,7 @@
 <template>
   <div class="bg-white p-6 rounded-lg shadow-lg mx-auto mb-8 max-w-4xl text-center">
     <div class="flex flex-col items-center mb-4">
-      <img :src="getLeagueIcon(clan?.capitalLeague?.name)" alt="Ligue des Raids" class="h-12 w-12 mb-2" />
-      <h2 class="text-xl font-bold">Détails Capitale</h2>
+       <h2 class="text-xl font-bold">Détails Capitale</h2>
     </div>
     <div v-if="clan?.clanCapital?.districts && clan.clanCapital.districts.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div v-for="(district, index) in clan.clanCapital.districts" :key="index" class="p-4 border rounded bg-gray-100 text-center">
@@ -27,10 +26,7 @@ export default {
     icons: Object,
   },
   methods: {
-    getLeagueIcon(leagueName) {
-      const league = this.leagues.find(league => league.name === leagueName);
-      return league?.iconUrls?.small || this.unrankedLeagueIcon;
-    },
+
     getCapitalHallImage(level) {
       if (level >= 1 && level <= 10) {
         const iconName = `HDV/Capital_${level}`;
