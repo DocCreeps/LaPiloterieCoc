@@ -1,14 +1,6 @@
 <template>
-  <div v-if="clan" :class="['p-4 fixed top-0 left-0 right-0 z-10', raidStateClass]">
-    <div class="container mx-auto flex justify-center text-white cursor-pointer" :key="clan.tag"
-         @click="getClanDetails(clan.tag)">
-      <img :src="clan.badgeUrls?.medium" alt="Clan Badge" class="h-16 w-16 mr-4">
-      <div>
-        <h2 class="text-2xl font-bold">{{ clan.name || "Nom du Clan" }}</h2>
-        <h1 class="text-2xl font-bold">Capital de clan</h1>
-      </div>
-    </div>
-  </div>
+
+  <capital-header :clan="clan" :leagues="leagues" :unrankedLeagueIcon="unrankedLeagueIcon" :icons="icons"/>
 
   <div class="container mx-auto py-16 mt-24">
     <CapitalDistricts :clan="clan" :leagues="leagues" :unrankedLeagueIcon="unrankedLeagueIcon" :icons="icons"/>
@@ -23,9 +15,11 @@ import icons from '@/assets/icons.js';
 import CapitalDistricts from '@/components/CapitalDistricts.vue';
 import CapitalRaidInfo from '@/components/CapitalRaidInfo.vue';
 import CapitalRaidMembers from '@/components/CapitalRaidMembers.vue';
+import CapitalHeader from '@/components/CapitalHeader.vue'
 
 export default {
   components: {
+    CapitalHeader,
     CapitalDistricts,
     CapitalRaidInfo,
     CapitalRaidMembers,
@@ -38,7 +32,6 @@ export default {
       selectedRaid: {},
       leagues: [],
       unrankedLeagueIcon: '',
-      raidStateClass: 'bg-green-500',
       clanMembers: [],
       icons: icons,
     };

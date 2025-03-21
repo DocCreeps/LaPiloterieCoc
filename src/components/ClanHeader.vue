@@ -2,7 +2,7 @@
   <div class="flex flex-col lg:flex-row w-full mb-4 lg:mb-0">
     <div class="bg-white p-4 rounded-lg shadow-md w-full lg:w-1/3 lg:mr-4 mb-4 lg:mb-0">
       <div class="flex flex-col items-center mb-4">
-        <img :src="clan?.badgeUrls?.medium" alt="Clan Badge" class="h-16 w-16" />
+        <img :src="clan?.badgeUrls?.medium" alt="Clan Badge" class="h-25 w-25" />
         <h1 class="text-2xl font-bold mt-2">{{ clan?.name || "Nom du Clan" }}</h1>
       </div>
 

@@ -1,72 +1,79 @@
 <template>
   <div>
     <div v-if="currentWar" :class="getWarResultClass(currentWar)" class="p-2 mb-2 rounded-lg flex flex-col md:flex-row gap-4 items-center justify-center">
-      <div class="text-center  cursor-pointer" @click="getClanDetails(currentWar.clan.tag)">
-        <img :src="currentWar.clan.badgeUrls.medium" alt="Badge" class="mx-auto md:mx-0">
-        <h4 class="text-lg font-semibold">{{ currentWar.clan.name }}</h4>
+      <div class="flex items-center cursor-pointer" @click="getClanDetails(currentWar.clan.tag)">
+        <img :src="currentWar.clan.badgeUrls.medium" alt="Badge" class="mr-2">
+        <span class="font-bold mr-2 text-lg">{{ currentWar.clan.name }}</span>
       </div>
 
-      <div class="text-center md:w-1/4">
-        <strong class="font-bold">{{ currentWar.clan.stars }}</strong>
-        <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block ml-5 mr-2" />
-        <strong> - </strong>
-        <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-5 ml-2" />
-        <strong class="font-bold"> {{ currentWar.opponent.stars }}</strong>
-        <p class="text-gray-600">({{ (currentWar.clan.destructionPercentage).toFixed(2) }}%) - ({{ (currentWar.opponent.destructionPercentage).toFixed(2) }}%)</p>
-        <p class="text-gray-600">{{ currentWar.teamSize }} vs {{ currentWar.teamSize }}</p>
+      <div class="flex flex-row items-center justify-between">
+        <div class="flex flex-col items-center">
+          <div class="flex flex-row mr-4">
+            <span class="text-xl font-bold mr-2">{{ currentWar.clan.stars }}</span>
+            <img :src="icons['icon/stars']" alt="étoiles" class="h-8 w-8 inline-block mr-2" />
+          </div>
+          <span class="text-sm text-gray-600">({{ (currentWar.clan.destructionPercentage).toFixed(2) }}%)</span>
+        </div>
+
+        <span class="text-3xl font-extrabold">-</span>
+
+        <div class="flex flex-col items-center">
+          <div class="flex flex-row ml-4">
+            <img :src="icons['icon/stars']" alt="étoiles" class="h-8 w-8 inline-block mr-2" />
+            <span class="text-xl font-bold mr-2">{{ currentWar.opponent.stars }}</span>
+          </div>
+          <span class="text-sm text-gray-600">({{ (currentWar.opponent.destructionPercentage).toFixed(2) }}%)</span>
+        </div>
       </div>
 
-      <div class="text-center cursor-pointer" @click="getClanDetails(currentWar.opponent.tag)">
-        <img :src="currentWar.opponent.badgeUrls.medium" alt="Badge" class=" mx-auto md:mx-0">
-        <h4 class="text-lg font-semibold">{{ currentWar.opponent.name }}</h4>
+      <div class="flex items-center cursor-pointer" @click="getClanDetails(currentWar.opponent.tag)">
+        <span class="font-bold text-lg mr-2">{{ currentWar.opponent.name }}</span>
+        <img :src="currentWar.opponent.badgeUrls.medium" alt="Badge" class="">
       </div>
     </div>
 
-    <div class="mb-8">
+    <div class="mb-8 mt-4">
       <div class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleGdc">
-        <h2 class="text-xl font-bold">60 dernière Guerres de Clans </h2>
+        <h2 class="text-xl font-bold text-center">60 dernières Guerres de Clans </h2>
       </div>
       <div v-show="showGdc" class="bg-white p-4 rounded-lg shadow-md">
-        <div v-for="war in paginatedWars" :key="war.endTime" :class="getResultClass(war.result)" class="p-2 mb-2 rounded-lg flex flex-col md:flex-row gap-4 ">
-          <div class="flex items-center justify-center md:justify-start md:w-1/4">
-            <div class="hidden md:block">
-              <div class="text-gray-500">{{ formatDate(war.endTime) }}</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div v-for="war in paginatedWars" :key="war.endTime" :class="getResultClass(war.result)" class="p-4 rounded-lg flex flex-col gap-2">
+
+            <div class="text-center text-sm font-bold text-gray-500">{{ formatDate(war.endTime) }}</div>
+
+            <div class="flex flex-col md:flex-row items-center justify-between">
+              <div class="flex items-center cursor-pointer" @click="getClanDetails(war.clan.tag)">
+                <img :src="war.clan.badgeUrls.small" alt="Badge" class="mr-2">
+                <span class="font-bold mr-2 text-lg">{{ war.clan.name }}</span>
+              </div>
+
+              <div class="flex flex-row items-center justify-between">
+              <div class="flex flex-col items-center">
+                <div class="flex flex-row mr-4">
+                  <span class="text-xl font-bold mr-2">{{ war.clan.stars }}</span>
+                  <img :src="icons['icon/stars']" alt="étoiles" class="h-8 w-8 inline-block mr-2" />
+                </div>
+                <span class="text-sm text-gray-600 ">({{ (war.clan.destructionPercentage).toFixed(2) }}%)</span>
+              </div>
+
+                  <span class="text-3xl font-extrabold ">-</span>
+
+              <div class="flex flex-col items-center">
+                <div class="flex flex-row ml-4">
+                  <img :src="icons['icon/stars']" alt="étoiles" class="h-8 w-8 inline-block mr-2" />
+                  <span class="text-xl font-bold mr-2">{{ war.opponent.stars }}</span>
+                </div>
+                <span class="text-sm text-gray-600">({{ (war.opponent.destructionPercentage).toFixed(2) }}%)</span>
+              </div>
+              </div>
+              <div class="flex items-center cursor-pointer" @click="getClanDetails(war.opponent.tag)">
+                <span class="font-bold text-lg mr-2">{{ war.opponent.name }}</span>
+                <img :src="war.opponent.badgeUrls.small" alt="Badge" class="">
+              </div>
             </div>
-          </div>
 
-          <div class="text-center md:text-right md:w-1/4">
-            <h4 class="text-lg font-semibold">{{ war.clan.name }}</h4>
-            <p class="text-gray-600">({{ (war.clan.destructionPercentage).toFixed(2) }}%)</p>
-          </div>
-
-          <div class="hidden md:flex items-center justify-center md:w-1/4 cursor-pointer"
-               :key="war.clan.tag"
-               @click="getClanDetails(war.clan.tag)">
-            <img :src="war.clan.badgeUrls.small" alt="Badge" class="w-16 h-16">
-          </div>
-
-          <div class="text-center md:w-1/4">
-            <div class="font-bold">
-              <strong>
-                {{ war.clan.stars }}
-                <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block  mx-2"/>
-                -
-                <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mx-2" />
-                {{ war.opponent.stars }}
-              </strong>
-            </div>
-            <p class="text-gray-600">{{ war.teamSize }} vs {{ war.teamSize }}</p>
-          </div>
-
-          <div class="hidden md:flex items-center justify-center md:w-1/4 cursor-pointer"
-               :key="war.opponent.tag"
-               @click="getClanDetails(war.opponent.tag)">
-            <img :src="war.opponent.badgeUrls.small" alt="Badge" class="w-16 h-16">
-          </div>
-
-          <div class="text-center md:text-left md:w-1/4">
-            <h4 class="text-lg font-semibold"> {{ war.opponent.name }}</h4>
-            <p class="text-gray-600">({{ (war.opponent.destructionPercentage).toFixed(2) }}%)</p>
+            <div class="text-center text-xs text-gray-600">{{ war.teamSize }} vs {{ war.teamSize }}</div>
           </div>
         </div>
 
@@ -118,10 +125,43 @@ export default {
       };
     },
     formatDate(endTime) {
-      const date = new Date(endTime);
-      const now = new Date();
-      const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-      return `${diff}d ago`;
+      if (!endTime) {
+        return "Date inconnue";
+      }
+
+      try {
+        // Conversion de la chaîne de date en objet Date
+        const year = parseInt(endTime.substring(0, 4));
+        const month = parseInt(endTime.substring(4, 6)) - 1; // Mois indexés à partir de 0
+        const day = parseInt(endTime.substring(6, 8));
+        const hours = parseInt(endTime.substring(9, 11));
+        const minutes = parseInt(endTime.substring(11, 13));
+        const seconds = parseInt(endTime.substring(13, 15));
+
+        const date = new Date(year, month, day, hours, minutes, seconds);
+        const now = new Date();
+        const diffMilliseconds = now - date;
+
+        if (diffMilliseconds < 0) {
+          return "Date future";
+        }
+
+        const diffDays = Math.floor(diffMilliseconds / (1000 * 60 * 60 * 24)); // Différence en jours
+        const diffHours = Math.floor(diffMilliseconds / (1000 * 60 * 60)); // Différence en heures
+
+        if (isNaN(diffMilliseconds)) {
+          return "Date invalide";
+        }
+
+        if (diffDays > 0) {
+          return `${diffDays} jour(s) passé(s)`;
+        } else {
+          return `${diffHours} heure(s) passé(s)`;
+        }
+      } catch (error) {
+        console.error("Erreur lors du traitement de la date :", endTime, error);
+        return "Date inconnue";
+      }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
