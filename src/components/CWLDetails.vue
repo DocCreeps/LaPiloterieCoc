@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <h2 class="text-xl text-center font-bold">Résultats des Ligues de Clans</h2>
+    <h2 class="text-xl text-center font-bold mb-4">Résultats des Ligues de Clans</h2>
 
     <div class="bg-white p-4 rounded-lg shadow-md">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

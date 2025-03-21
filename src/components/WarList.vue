@@ -32,9 +32,9 @@
       </div>
     </div>
 
-    <div class="mb-8">
+    <div class="mb-8 mt-4">
       <div class="bg-gray-300 w-full p-4 rounded-lg text-left" @click="toggleGdc">
-        <h2 class="text-xl font-bold">60 dernières Guerres de Clans </h2>
+        <h2 class="text-xl font-bold text-center">60 dernières Guerres de Clans </h2>
       </div>
       <div v-show="showGdc" class="bg-white p-4 rounded-lg shadow-md">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
