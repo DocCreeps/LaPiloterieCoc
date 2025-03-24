@@ -200,7 +200,7 @@ export default {
     },
     isSuperTroop(troopName) {
       const superTroopNames = ["Super Barbarian", "Super Archer", "Super Giant", "Super Wall Breaker", "Sneaky Goblin", "Super Witch", "Super Minion",
-      "Super Valkyrie", "Super Dragon", "Super Bowler", "Super Wizard", "Super Pekka", "Super Miner", "Super Hog Rider", "Rocket Balloon", "Inferno Dragon", "Ice Hound"];
+      "Super Valkyrie", "Super Dragon", "Super Bowler", "Super Wizard", "Super Pekka", "Super Miner", "Super Hog Rider", "Rocket Balloon", "Inferno Dragon", "Ice Hound", "Super Yeti"];
       return superTroopNames.includes(troopName);
     },
     isSiege(troopName) {
@@ -208,7 +208,7 @@ export default {
       return siegeNames.includes(troopName);
       },
     isHeroPet(troopName) {
-      const heroPetNames = ["L.A.S.S.I", "Electro Owl", "Mighty Yak", "Unicorn", "Phoenix", "Poison Lizard", "Diggy", "Frosty", "Spirit Fox", "Angry Jelly"];
+      const heroPetNames = ["L.A.S.S.I", "Electro Owl", "Mighty Yak", "Unicorn", "Phoenix", "Poison Lizard", "Diggy", "Frosty", "Spirit Fox", "Angry Jelly","Sneezy"];
       return heroPetNames.includes(troopName);
     },
     openEquipmentModal(heroName) {
@@ -237,7 +237,7 @@ export default {
             "Rocket Spear", "Electro Boots", "Seeking Shield", "Royal Gem", "Hog Rider Puppet", "Haste Vial"
           ],
           "Minion Prince": [
-            "Dark Orb", "Metal Pants", "Henchmen Puppet"
+            "Dark Orb", "Metal Pants", "Henchmen Puppet", "Noble Iron"
           ],
         };
 
