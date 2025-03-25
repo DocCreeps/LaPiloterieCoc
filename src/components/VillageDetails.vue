@@ -16,7 +16,7 @@
 
 <script>
 import HomeVillage from './MemberComponent/HomeVillage.vue';
-import BuilderBaseVillage from './BuilderBaseVillage.vue';
+import BuilderBaseVillage from './MemberComponent/BuilderBaseVillage.vue';
 import EquipmentModal from './MemberComponent/EquipmentModal.vue';
 
 export default {

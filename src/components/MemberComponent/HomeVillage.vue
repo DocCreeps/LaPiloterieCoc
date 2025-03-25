@@ -8,7 +8,7 @@
       <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Héros</h3>
       <div class="flex flex-wrap justify-center">
         <div v-for="hero in heroes" :key="hero.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 cursor-pointer" @click="$emit('openEquipmentModal', hero.name)">
-          <img :src="getHeroIcon(hero.name)" :alt="hero.name" :title="`{hero.name} ({hero.level}/${hero.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+          <img :src="getHeroIcon(hero.name)" :alt="hero.name" :title="`${hero.name} (${hero.level}/${hero.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
           <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': hero.level === hero.maxLevel }, { 'bg-black': hero.level !== hero.maxLevel }]">
             {{ hero.level }}
           </div>
@@ -19,7 +19,7 @@
         <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Familiers</h3>
         <div class="flex flex-wrap justify-center mt-2">
           <div v-for="pet in heroPets" :key="pet.name" class="relative mx-1 mb-2 md:mx-4 md:mb-4 ">
-            <img :src="getPetIcon(pet.name)" :alt="pet.name" :title="`{pet.name} ({pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+            <img :src="getPetIcon(pet.name)" :alt="pet.name" :title="`${pet.name} (${pet.level}/${pet.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
             <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': pet.level === pet.maxLevel }, { 'bg-black': pet.level !== pet.maxLevel }]">
               {{ pet.level }}
             </div>
@@ -34,7 +34,7 @@
       <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
       <div class="mt-2 flex flex-wrap justify-center">
         <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
-          <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`{troop.name} ({troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+          <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
           <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': troop.level === troop.maxLevel }, { 'bg-black': troop.level !== troop.maxLevel }]">
             {{ troop.level }}
           </div>
@@ -46,7 +46,7 @@
       <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Sorts</h3>
       <div class="mt-2 flex flex-wrap justify-center">
         <div v-for="spell in spells" :key="spell.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
-          <img :src="getSpellIcon(spell.name)" :alt="spell.name" :title="`{spell.name} ({spell.level}/${spell.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+          <img :src="getSpellIcon(spell.name)" :alt="spell.name" :title="`${spell.name} (${spell.level}/${spell.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
           <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': spell.level === spell.maxLevel }, { 'bg-black': spell.level !== spell.maxLevel }]">
             {{ spell.level }}
           </div>
@@ -59,7 +59,7 @@
     <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Machines de siège</h3>
     <div class="mt-2 flex flex-wrap justify-center">
       <div v-for="siege in siegeMachines" :key="siege.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
-        <img :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`{siege.name} ({siege.level}/${siege.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+        <img :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
         <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': siege.level === siege.maxLevel }, { 'bg-black': siege.level !== siege.maxLevel }]">
           {{ siege.level }}
         </div>
