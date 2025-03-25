@@ -7,7 +7,7 @@
     </div>
     <div class="text-center mt-4">
       <div class="player-label-holder flex flex-row justify-center">
-        <img v-for="label in clan?.labels" :key="label.id" :src="label.iconUrls.small" :title="label.name" class="player-label mx-2" />
+        <img v-for="label in clan?.labels" :key="label.id" :src="label.iconUrls.small" :title="label.name" class="h-10 w-10 player-label mx-2" />
       </div>
     </div>
   </div>

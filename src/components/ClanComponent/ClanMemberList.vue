@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import MemberCard from '../MemberComponent/MemberCard.vue';
+import MemberCard from './MemberCard.vue';
 
 export default {
   components: {

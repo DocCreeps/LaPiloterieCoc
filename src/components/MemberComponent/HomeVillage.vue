@@ -74,6 +74,7 @@ export default {
     member: Object,
     icons: Object,
   },
+  emits: ['openEquipmentModal'],
   computed: {
     townHallImage() {
       const level = this.member.townHallLevel;

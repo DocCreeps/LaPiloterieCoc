@@ -66,8 +66,20 @@ export default {
   methods: {
     async fetchData() {
       try {
-        await this.fetchClanDetails();
-        await this.fetchLeagues();
+        const clanTag = this.$route.params.clanTag;
+        const [clanResponse, leaguesResponse] = await Promise.all([
+          apiService.getClanDetails(clanTag),
+          apiService.getLeagues(),
+        ]);
+        this.clan = clanResponse;
+        this.leagues = leaguesResponse.items;
+        const unrankedLeague = this.leagues.find(
+          (league) => league.name === 'Unranked'
+        );
+        if (unrankedLeague) {
+          this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
+        }
+        document.title = `Détails du Clan - ${this.clan.name}`;
         await this.fetchMemberDetails();
       } catch (err) {
         this.error = 'Erreur lors de la récupération des données. Veuillez réessayer.';
@@ -75,11 +87,6 @@ export default {
       } finally {
         this.loading = false;
       }
-    },
-    async fetchClanDetails() {
-      const clanTag = this.$route.params.clanTag;
-      this.clan = await apiService.getClanDetails(clanTag);
-      document.title = `Détails du Clan - ${this.clan.name}`;
     },
     goToWarsDetail(clanTag) {
       const cleanedClanTag = clanTag.replace('#', '');
@@ -89,27 +96,22 @@ export default {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}/CapitalRaid`);
     },
-    async fetchLeagues() {
-      const response = await apiService.getLeagues();
-      this.leagues = response.items;
-      const unrankedLeague = this.leagues.find(
-        (league) => league.name === 'Unranked'
-      );
-      if (unrankedLeague) {
-        this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
-      }
-    },
     async fetchMemberDetails() {
+      if (!this.clan || !this.clan.memberList) {
+        return;
+      }
       const memberTags = this.clan.memberList.map((member) => member.tag);
-      const responses = await Promise.all(
-        memberTags.map((tag) => apiService.getMemberDetails(tag))
-      );
-      responses.forEach((memberDetails, index) => {
-        this.clan.memberList[index] = {
-          ...this.clan.memberList[index],
-          ...memberDetails,
-        };
-      });
+      try {
+        const responses = await Promise.all(
+          memberTags.map((tag) => apiService.getMemberDetails(tag))
+        );
+        this.clan.memberList = this.clan.memberList.map((member, index) => ({
+          ...member,
+          ...responses[index],
+        }));
+      } catch (error) {
+        console.error('Erreur lors de la récupération des détails des membres :', error);
+      }
     },
   },
 };
