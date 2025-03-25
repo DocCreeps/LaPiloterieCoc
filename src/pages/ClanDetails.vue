@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-100" v-if="clan">
+  <div class="min-h-screen bg-gray-100" v-if="!loading && clan">
     <div class="container mx-auto py-8 flex flex-col lg:flex-row lg:justify-between">
       <ClanHeader
         :clan="clan"
@@ -7,7 +7,6 @@
         :leagues="leagues"
         :unrankedLeagueIcon="unrankedLeagueIcon"
       />
-
     </div>
 
     <div class="container mx-auto py-8 flex justify-center gap-4">
@@ -24,11 +23,16 @@
       >
         Raids de Capital
       </button>
+      <p v-if="!clan.isWarLogPublic">Les guerres de ce clan ne sont pas publiques.</p>
     </div>
 
-
-      <ClanMemberList :clan="clan" :icons="icons" />
-
+    <ClanMemberList :clan="clan" :icons="icons" />
+  </div>
+  <div v-else-if="loading" class="min-h-screen flex justify-center items-center">
+    Chargement des détails du clan...
+  </div>
+  <div v-else-if="error" class="min-h-screen flex justify-center items-center text-red-500">
+    {{ error }}
   </div>
 </template>
 
@@ -36,7 +40,7 @@
 import apiService from '../apiService.js';
 import icons from '@/assets/icons.js';
 import ClanHeader from '@/components/ClanHeader.vue';
-import ClanMemberList from '@/components/ClanMemberList.vue';
+import ClanMemberList from '@/components/ClanComponent/ClanMemberList.vue';
 
 export default {
   components: {
@@ -49,29 +53,40 @@ export default {
       leagues: [],
       unrankedLeagueIcon: '',
       icons: icons,
+      loading: true,
+      error: null,
     };
   },
   created() {
-    this.fetchClanDetails();
-    this.fetchUnrankedLeagueIcon();
-    this.fetchLeagues();
+    this.fetchData();
   },
   mounted() {
     document.title = `Détails du clan - ${this.clan?.name}`;
   },
   methods: {
-    fetchClanDetails() {
-      const clanTag = this.$route.params.clanTag;
-      apiService
-        .getClanDetails(clanTag)
-        .then((response) => {
-          this.clan = response;
-          document.title = `Détails du Clan - ${this.clan.name}`;
-          this.fetchMemberDetails();
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la récupération des détails du clan :', error);
-        });
+    async fetchData() {
+      try {
+        const clanTag = this.$route.params.clanTag;
+        const [clanResponse, leaguesResponse] = await Promise.all([
+          apiService.getClanDetails(clanTag),
+          apiService.getLeagues(),
+        ]);
+        this.clan = clanResponse;
+        this.leagues = leaguesResponse.items;
+        const unrankedLeague = this.leagues.find(
+          (league) => league.name === 'Unranked'
+        );
+        if (unrankedLeague) {
+          this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
+        }
+        document.title = `Détails du Clan - ${this.clan.name}`;
+        await this.fetchMemberDetails();
+      } catch (err) {
+        this.error = 'Erreur lors de la récupération des données. Veuillez réessayer.';
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
     },
     goToWarsDetail(clanTag) {
       const cleanedClanTag = clanTag.replace('#', '');
@@ -81,44 +96,22 @@ export default {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}/CapitalRaid`);
     },
-    fetchUnrankedLeagueIcon() {
-      apiService
-        .getLeagues()
-        .then((response) => {
-          const unrankedLeague = response.items.find((league) => league.name === 'Unranked');
-          if (unrankedLeague) {
-            this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
-          }
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la récupération des ligues :', error);
-        });
-    },
-    fetchLeagues() {
-      apiService
-        .getLeagues()
-        .then((response) => {
-          this.leagues = response.items;
-          const unrankedLeague = this.leagues.find((league) => league.name === 'Unranked');
-          if (unrankedLeague) {
-            this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
-          }
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la récupération des ligues :', error);
-        });
-    },
-    fetchMemberDetails() {
+    async fetchMemberDetails() {
+      if (!this.clan || !this.clan.memberList) {
+        return;
+      }
       const memberTags = this.clan.memberList.map((member) => member.tag);
-      Promise.all(memberTags.map((tag) => apiService.getMemberDetails(tag)))
-        .then((responses) => {
-          responses.forEach((memberDetails, index) => {
-            this.clan.memberList[index] = { ...this.clan.memberList[index], ...memberDetails };
-          });
-        })
-        .catch((error) => {
-          console.error('Erreur lors de la récupération des détails des membres :', error);
-        });
+      try {
+        const responses = await Promise.all(
+          memberTags.map((tag) => apiService.getMemberDetails(tag))
+        );
+        this.clan.memberList = this.clan.memberList.map((member, index) => ({
+          ...member,
+          ...responses[index],
+        }));
+      } catch (error) {
+        console.error('Erreur lors de la récupération des détails des membres :', error);
+      }
     },
   },
 };

@@ -1,8 +1,12 @@
 <template>
   <div class="flex flex-col lg:flex-row w-full mb-4 lg:mb-0 gap-4">
-    <div class="bg-white p-4 rounded-lg shadow-md w-full flex flex-col items-center cursor-pointer" @click="getClanDetails(clan.tag)">
-      <img :src="clan?.badgeUrls?.medium" alt="Clan Badge" class="w-25 h-25 mb-2"  />
-      <h1 class="text-xl font-bold">{{ clan?.name || "Nom du Clan" }}</h1>
+    <div
+      class="bg-white p-4 rounded-lg shadow-md w-full flex flex-col items-center cursor-pointer"
+      @click="getClanDetails(clan?.tag)"
+    >
+      <img v-if="clan?.badgeUrls?.medium" :src="clan.badgeUrls.medium" alt="Clan Badge" class="w-25 h-25 mb-2" />
+      <p v-else>Badge non disponible</p>
+      <h1 class="text-xl font-bold">{{ clan?.name || 'Nom du Clan' }}</h1>
     </div>
 
     <div class="bg-white p-4 rounded-lg shadow-md w-full flex items-center justify-between">
@@ -17,9 +21,18 @@
       </div>
     </div>
 
-    <div v-if="clan?.clanCapital?.capitalHallLevel" class="bg-white p-4 rounded-lg shadow-md w-full flex flex-col items-center justify-center">
-      <strong class="mb-2">Capital Peak</strong>
-      <img v-if="getCapitalHallImage(clan.clanCapital.capitalHallLevel)" :src="getCapitalHallImage(clan.clanCapital.capitalHallLevel)" :title="'Capital ' + clan.clanCapital.capitalHallLevel" :alt="'Capital ' + clan.clanCapital.capitalHallLevel" class="w-35 h-35" />
+    <div
+      v-if="clan?.clanCapital?.capitalHallLevel"
+      class="bg-white p-4 rounded-lg shadow-md w-full flex flex-col items-center justify-center"
+    >
+      <img
+        v-if="getCapitalHallImage(clan.clanCapital.capitalHallLevel)"
+        :src="getCapitalHallImage(clan.clanCapital.capitalHallLevel)"
+        :title="'Capital ' + clan.clanCapital.capitalHallLevel"
+        :alt="'Capital ' + clan.clanCapital.capitalHallLevel"
+        class="w-35 h-35"
+      />
+      <p v-else>Image non disponible</p>
     </div>
   </div>
 </template>
@@ -33,9 +46,8 @@ export default {
     unrankedLeagueIcon: String,
   },
   methods: {
-
     getLeagueIcon(leagueName) {
-      const league = this.leagues.find(league => league.name === leagueName);
+      const league = this.leagues.find((league) => league.name === leagueName);
       return league?.iconUrls?.small || this.unrankedLeagueIcon;
     },
     getCapitalHallImage(level) {
@@ -46,7 +58,7 @@ export default {
       return null;
     },
     getClanDetails(clanTag) {
-      const cleanedClanTag = clanTag.replace("#", "");
+      const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}`);
     },
   },
