@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = import.meta.env.VITE_API_KEY; // Remplace par ta clé API
+const API_KEY = import.meta.env.VITE_API_KEY;
 const API_URL = import.meta.env.VITE_API_URL;
 
 const apiClient = axios.create({
@@ -24,7 +24,7 @@ export default {
       });
   },
 
-  getMemberDetails(memberTag) { // Ajout de la méthode getMemberDetails
+  getMemberDetails(memberTag) {
     const encodedTag = encodeURIComponent(memberTag);
     const requestUrl = `/players/${encodedTag}`;
     return apiClient.get(requestUrl)
@@ -48,7 +48,7 @@ getWarLog(clanTag) {
       throw error;
     });
 },
-  getCapitalDetails(clanTag) { // Ajout de la méthode getMemberDetails
+  getCapitalDetails(clanTag) {
     const encodedTag = encodeURIComponent(`#${clanTag}`);
     const requestUrl = `/clans/${encodedTag}/capitalraidseasons`;
     return apiClient.get(requestUrl)
@@ -82,6 +82,4 @@ getWarLog(clanTag) {
       });
   },
 
-
-  // Ajoute d'autres méthodes pour interagir avec l'API selon tes besoins
 };

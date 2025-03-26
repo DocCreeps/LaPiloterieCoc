@@ -1,14 +1,13 @@
 <template>
   <div class="flex flex-col lg:flex-row w-full mb-4 lg:mb-0" v-if="clan">
-    <ClanInfo :clan="clan" :icons="icons" :leagues="leagues" :unrankedLeagueIcon="unrankedLeagueIcon" @goToWarsDetail="goToWarsDetail" @goToCapitalRaid="goToCapitalRaid" />
-    <ClanDescription :clan="clan" :icons="icons" />
-    <WarStats :clan="clan" />
+    <ClanInfo :clan="clan" :icons="icons" :leagues="leagues" :unrankedLeagueIcon="unrankedLeagueIcon" @goToWarsDetail="goToWarsDetail" @goToCapitalRaid="goToCapitalRaid" class="w-10/12 lg:w-1/3 mb-4 lg:mb-0"/>
+    <ClanDescription :clan="clan" :icons="icons" class="w-10/12 lg:w-1/3 mb-4 lg:mb-0"/>
+    <WarStats :clan="clan" class="w-10/12 lg:w-1/3"/>
   </div>
   <div v-else>
     <p>Chargement des informations du clan...</p>
   </div>
 </template>
-
 <script>
 import ClanInfo from './ClanComponent/ClanInfo.vue';
 import ClanDescription from './ClanComponent/ClanDescription.vue';

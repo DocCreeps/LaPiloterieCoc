@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-    <h1 class="text-3xl font-bold mb-8 text-center">Quel Clan Analyser</h1>
+    <h1 class="text-2xl sm:text-4xl font-bold mb-8 text-center">Quel Clan Analyser</h1>
     <div v-if="loading" class="text-center">Chargement des clans...</div>
     <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
     <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -14,7 +14,7 @@
             v-if="clan?.badgeUrls?.medium"
             :src="clan?.badgeUrls?.medium"
             :alt="`Badge du clan ${clan?.name}`"
-            class="mx-auto"
+            class="mx-auto h-20 w-20 sm:h-50 sm:w-50"
           />
           <div v-else class="text-center">Image non disponible</div>
           <h2 class="mt-4 text-xl font-semibold text-center">
