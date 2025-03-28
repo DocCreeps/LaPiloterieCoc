@@ -1,33 +1,36 @@
 <template>
-  <div class="bg-gray-50 p-4 rounded-lg shadow-md mx-auto mb-8 max-w-4xl">
-    <label for="raidSelect" class="block text-lg font-bold mb-2">Sélectionnez un Raid :</label>
+  <div class="bg-gray-50 p-6 rounded-lg shadow-lg mx-auto mb-8 max-w-4xl">
+    <label for="raidSelect" class="block text-lg font-semibold text-gray-800 mb-4">Sélectionnez un Raid :</label>
     <select
       id="raidSelect"
-      :value="selectedRaidIndex"
+      :value="adjustedSelectedRaidIndex"
       @change="handleSelectChange"
-      class="w-full p-2 border rounded-md"
+      class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
     >
-      <option v-for="(raid, index) in raids" :key="index" :value="index">
+      <option v-for="(raid, index) in displayedRaids" :key="index" :value="index">
         Raids du {{ formatDate(raid.startTime) }} au {{ formatDate(raid.endTime) }}
       </option>
     </select>
-    <div v-if="selectedRaid" class="mt-4 bg-white p-6 rounded-lg shadow-lg">
-      <h2 class="text-lg font-bold">Informations du Raid Sélectionné</h2>
-      <p class="text-sm">
-        <strong>Raids du :</strong> {{ formatDate(selectedRaid.startTime) }} au {{ formatDate(selectedRaid.endTime) }}
-      </p>
-      <p class="text-sm">
-        <img :src="icons['icon/pillage']" alt="étoiles" class="h-15 w-15 inline-block" /> :
-        {{ selectedRaid.capitalTotalLoot || 'N/A' }}
-      </p>
-      <p class="text-sm"><strong>Raids Complétés :</strong> {{ selectedRaid.raidsCompleted || 'N/A' }}</p>
-      <p class="text-sm"><strong>Districts Détruits :</strong> {{ selectedRaid.enemyDistrictsDestroyed || 'N/A' }}</p>
-      <p class="text-sm">
-        <img :src="icons['icon/capital_atk']" alt="étoiles" class="h-10 w-10 inline-block" />
-        {{ selectedRaid.totalAttacks || 'N/A' }}
-      </p>
+    <div v-if="selectedRaid" class="mt-8 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-bold text-gray-800 mb-6">Informations du Raid</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <div class="flex items-center mb-4">
+            <img :src="icons['icon/pillage']" alt="étoiles" class="h-10 w-10 sm:h-12 sm:w-12 mr-3" />
+            <p class="text-base text-gray-700">Butin total de la capitale : <span class="font-semibold">{{ selectedRaid.capitalTotalLoot || 'Non disponible' }}</span></p>
+          </div>
+          <p class="text-base text-gray-700">Raids complétés : <span class="font-semibold">{{ selectedRaid.raidsCompleted || 'Non disponible' }}</span></p>
+        </div>
+        <div>
+          <div class="flex items-center mb-4">
+            <img :src="icons['icon/capital_atk']" alt="attaques" class="h-10 w-10 sm:h-12 sm:w-12 mr-3" />
+            <p class="text-base text-gray-700">Total des attaques : <span class="font-semibold">{{ selectedRaid.totalAttacks || 'Non disponible' }}</span></p>
+          </div>
+          <p class="text-base text-gray-700">Districts détruits : <span class="font-semibold">{{ selectedRaid.enemyDistrictsDestroyed || 'Non disponible' }}</span></p>
+        </div>
+      </div>
     </div>
-    <p v-else>Aucun raid sélectionné.</p>
+    <p v-else class="mt-8 text-center text-gray-600">Aucun raid sélectionné.</p>
   </div>
 </template>
 
@@ -39,8 +42,21 @@ export default {
     icons: Object,
   },
   computed: {
+    displayedRaids() {
+      if (this.raids.length <= 5) {
+        return this.raids;
+      } else {
+        return this.raids.slice(this.raids.length - 5);
+      }
+    },
     selectedRaid() {
-      return this.raids[this.selectedRaidIndex] || null;
+      return this.displayedRaids[this.adjustedSelectedRaidIndex] || null;
+    },
+    adjustedSelectedRaidIndex() {
+      if (this.displayedRaids.length === 0) {
+        return 0;
+      }
+      return Math.min(this.selectedRaidIndex, this.displayedRaids.length - 1);
     },
   },
   methods: {
@@ -63,7 +79,7 @@ export default {
         }
         return new Intl.DateTimeFormat('fr-FR', {
           year: 'numeric',
-          month: 'long',
+          month: 'numeric',
           day: 'numeric',
         }).format(date);
       } catch (error) {
