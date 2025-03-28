@@ -7,29 +7,35 @@
       @change="handleSelectChange"
       class="w-full p-2 border rounded-md"
     >
-      <option v-for="(raid, index) in raids" :key="index" :value="index">
+      <option v-for="(raid, index) in raids" :key="index" :value="index" >
         Raids du {{ formatDate(raid.startTime) }} au {{ formatDate(raid.endTime) }}
       </option>
     </select>
     <div v-if="selectedRaid" class="mt-4 bg-white p-6 rounded-lg shadow-lg">
-      <h2 class="text-lg font-bold">Informations du Raid Sélectionné</h2>
-      <p class="text-sm">
-        <strong>Raids du :</strong> {{ formatDate(selectedRaid.startTime) }} au {{ formatDate(selectedRaid.endTime) }}
-      </p>
-      <p class="text-sm">
-        <img :src="icons['icon/pillage']" alt="étoiles" class="h-15 w-15 inline-block" /> :
-        {{ selectedRaid.capitalTotalLoot || 'N/A' }}
-      </p>
-      <p class="text-sm"><strong>Raids Complétés :</strong> {{ selectedRaid.raidsCompleted || 'N/A' }}</p>
-      <p class="text-sm"><strong>Districts Détruits :</strong> {{ selectedRaid.enemyDistrictsDestroyed || 'N/A' }}</p>
-      <p class="text-sm">
-        <img :src="icons['icon/capital_atk']" alt="étoiles" class="h-10 w-10 inline-block" />
-        {{ selectedRaid.totalAttacks || 'N/A' }}
-      </p>
+      <h2 class="text-lg font-bold mb-4">Informations du Raid</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <p class="text-sm flex items-center mb-4">
+            <img :src="icons['icon/pillage']" alt="étoiles" class="h-8 w-8 sm:h-12 sm:w-12 mr-2" />
+            Capital Total Loot : {{ selectedRaid.capitalTotalLoot || 'N/A' }}
+          </p>
+          <p class="text-sm">Raids Complétés : {{ selectedRaid.raidsCompleted || 'N/A' }}</p>
+        </div>
+        <div>
+
+          <p class="text-sm flex items-center mb-4">
+            <img :src="icons['icon/capital_atk']" alt="étoiles" class="h-8 w-8 sm:h-12 sm:w-12 mr-2" />
+            Total Attaques : {{ selectedRaid.totalAttacks || 'N/A' }}
+          </p>
+          <p class="text-sm">Districts Détruits : {{ selectedRaid.enemyDistrictsDestroyed || 'N/A' }}</p>
+        </div>
+      </div>
     </div>
     <p v-else>Aucun raid sélectionné.</p>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -63,7 +69,7 @@ export default {
         }
         return new Intl.DateTimeFormat('fr-FR', {
           year: 'numeric',
-          month: 'long',
+          month: 'numeric',
           day: 'numeric',
         }).format(date);
       } catch (error) {

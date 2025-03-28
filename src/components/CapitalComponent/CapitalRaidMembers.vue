@@ -1,10 +1,10 @@
 <template>
-  <div v-if="selectedRaid" class="flex justify-center py-16 mt-24">
+  <div v-if="selectedRaid" class="flex justify-center py-16 mt-12">
     <div v-if="loadingMembers" class="text-center">Chargement des membres...</div>
-    <div v-else class="w-full max-w-4xl bg-white p-4 rounded-lg shadow-md flex space-x-8">
-      <div class="w-1/2">
+    <div v-else class="w-full max-w-4xl bg-white p-4 rounded-lg shadow-md">
+      <div>
         <h2 class="text-xl font-bold mb-4 text-center">Membres avec Attaques</h2>
-        <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div v-for="member in activeMembers" :key="member.tag" class="bg-gray-100 p-4 rounded-lg text-center">
             <p class="text-lg font-bold">{{ member.name }}</p>
             <div class="flex flex-row justify-between">
@@ -21,9 +21,9 @@
         </div>
       </div>
 
-      <div class="w-1/2">
+      <div class="mt-8">
         <h2 class="text-xl font-bold mb-4 text-center">Membres sans Attaques</h2>
-        <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div v-for="member in zeroAttackMembers" :key="member.tag" class="bg-gray-100 p-4 rounded-lg text-center">
             <p class="text-lg font-bold">{{ member.name }}</p>
           </div>
