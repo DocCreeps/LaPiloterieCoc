@@ -3,7 +3,7 @@
 
     <div class="mb-8 mt-4">
       <div class="bg-gray-300 w-10/12 sm:w-full mx-auto p-4 rounded-lg text-left" @click="toggleGdc">
-        <h2 class="text-xl font-bold text-center">60 dernières GDC</h2>
+        <h2 class="text-xl font-bold text-center cursor-pointer">60 dernières GDC</h2>
       </div>
       <div v-show="showGdc" class="bg-white p-4 rounded-lg shadow-md">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
