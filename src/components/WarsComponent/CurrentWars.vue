@@ -62,7 +62,7 @@
                 <div class="flex flex-wrap">
                   <div v-for="attack in member.attacks" :key="attack.order" :class="getAttackClass(attack.destructionPercentage, attack.stars)" class="border p-2 rounded-md mb-2 mr-2">
                     <p>
-                      <b>{{ getAttackerMapPosition(attack.attackerTag) }}</b> : {{ getDefenderName(attack.defenderTag) }}
+                      <b>{{ getDefenderMapPosition(attack.defenderTag) }}</b> : {{ getDefenderName(attack.defenderTag) }}
                     </p>
                     <p>
                       {{ attack.stars }} <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" /> ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
@@ -104,7 +104,7 @@
                 <div class="flex flex-wrap">
                   <div v-for="attack in member.attacks" :key="attack.order" :class="getAttackClass(attack.destructionPercentage, attack.stars)" class="border p-2 rounded-md mb-2 mr-2">
                     <p>
-                      <b>{{ getAttackerMapPosition(attack.attackerTag) }}</b> : {{ getOurAttackerName(attack.defenderTag) }}
+                      <b>{{ getDefenderMapPosition(attack.defenderTag) }}</b> : {{ getOurAttackerName(attack.defenderTag) }}
                     </p>
                     <p>
                       {{ attack.stars }} <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" /> ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
@@ -299,6 +299,23 @@ export default {
       }
 
       const opponentMember = this.currentWar.opponent.members.find(member => member.tag === attackerTag);
+      if (opponentMember) {
+        return opponentMember.mapPosition;
+      }
+
+      return '';
+    },
+    getDefenderMapPosition(defenderTag) {
+      if (!this.currentWar) {
+        return '';
+      }
+
+      const clanMember = this.currentWar.clan.members.find(member => member.tag === defenderTag);
+      if (clanMember) {
+        return clanMember.mapPosition;
+      }
+
+      const opponentMember = this.currentWar.opponent.members.find(member => member.tag === defenderTag);
       if (opponentMember) {
         return opponentMember.mapPosition;
       }
