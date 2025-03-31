@@ -1,6 +1,6 @@
 <template>
   <div class="w-10/12 sm:w-full mx-auto">
-    <h2 class="text-2xl font-bold text-center mb-6 ">Résultats des Ligues de Clans</h2>
+    <h2 class="text-2xl font-bold text-center mb-6 ">Résultats des dernières Ligues de Clans</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div v-for="war in filteredWars" :key="war.endTime" class="bg-white rounded-lg shadow-md p-6">
         <p class="text-lg font-semibold text-center mb-4">{{ formatDate(war.endTime) }}</p>

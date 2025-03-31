@@ -36,10 +36,10 @@
         </span>
       </div>
       <div class="flex justify-between">
-        <span>Ratio:</span>
+        <span>Ratio dons:</span>
         <span class="flex flex-row">
           <img :src="icons['icon/cdc']" alt="Ratio dons/reçus" class="h-7 w-7" />
-          <strong class="ml-2">{{ (member?.donations / member?.donationsReceived || 0).toFixed(2) }}</strong>
+          <strong class="ml-2">{{ formatDonationsRatio(member?.donations, member?.donationsReceived) }}</strong>
         </span>
       </div>
       <div class="flex justify-between">
@@ -65,6 +65,23 @@ export default {
   props: {
     member: Object,
     icons: Object,
+  },
+  methods: {
+    formatDonationsRatio(donations, donationsReceived) {
+      if (!donations && !donationsReceived) {
+        return '0'; // Les deux sont nuls
+      }
+
+      if (!donationsReceived) {
+        return donations?.toString() || '0'; // Pas de dons reçus, affiche les dons
+      }
+
+      if (!donations) {
+        return '-' + (donationsReceived?.toString() || '0'); // Pas de dons, affiche les dons reçus avec un signe négatif
+      }
+
+      return (donations / donationsReceived).toFixed(2); // Ratio normal
+    },
   },
 };
 </script>
