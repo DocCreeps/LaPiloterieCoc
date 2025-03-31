@@ -40,7 +40,8 @@
       </div>
 
       <button @click="showDetails = !showDetails" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {{ showDetails ? 'Masquer les détails' : 'Voir les détails' }}
+        <img v-if="showDetails" :src="icons['icon/unview']" alt="Masquer les détails" class="h-6 w-6 inline-block" />
+        <img v-else :src="icons['icon/View']" alt="Voir les détails" class="h-6 w-6 inline-block" />
       </button>
     </div>
 
