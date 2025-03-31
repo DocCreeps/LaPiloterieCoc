@@ -48,15 +48,15 @@
     <div v-if="showDetails" class="w-10/12 sm:w-full mx-auto mt-4 bg-white p-4 rounded-lg shadow-md">
       <h2 class="text-center text-3xl font-bold mb-2">Détails de la guerre en cours</h2>
 
-      <div class="flex">
-        <div class="w-1/2 pr-2">
+      <div class="flex flex-col sm:flex-row">
+        <div class="w-full sm:w-1/2 pr-2">
           <h3 class="text-center text-2xl font-bold">{{ currentWar.clan.name }}</h3>
           <div v-for="member in sortedClanMembers" :key="member.tag">
             <div class="mb-4 p-4 rounded-lg shadow-md">
               <h3 class="text-center text-xl" > <b>{{ member.name }}</b> ({{ member.tag }})</h3>
               <div v-if="member.attacks && member.attacks.length > 0">
                 <h4 class="font-bold">Attaques:</h4>
-                <div class="flex">
+                <div class="flex flex-wrap">
                   <div v-for="attack in member.attacks" :key="attack.order" :class="getAttackClass(attack.destructionPercentage, attack.stars)" class="border p-2 rounded-md mb-2 mr-2">
 
                     <p>
@@ -71,7 +71,7 @@
               <p v-else>Aucune attaque.</p>
               <div v-if="getOpponentAttacks(member.tag).length > 0">
                 <h4 class="font-bold">Défenses:</h4>
-                <div class="flex">
+                <div class="flex flex-wrap">
                   <div v-for="defense in getOpponentAttacks(member.tag)" :key="defense.attackerTag" :class="getAttackClass(defense.destructionPercentage, defense.stars)" class="border p-2 rounded-md mb-2 mr-2">
                     <p>
                       <b>{{ getAttackerMapPosition(defense.attackerTag) }}</b> : {{ getEnemyAttackerName(defense.attackerTag) }}
@@ -96,7 +96,7 @@
               <h3 class="text-center text-xl"> <b>{{ member.name }}</b> ({{ member.tag }})</h3>
               <div v-if="member.attacks && member.attacks.length > 0">
                 <h4 class="font-bold">Attaques:</h4>
-                <div class="flex">
+                <div class="flex flex-wrap">
                   <div v-for="attack in member.attacks" :key="attack.order" :class="getAttackClass(attack.destructionPercentage, attack.stars)" class="border p-2 rounded-md mb-2 mr-2">
                     <p>
                       <b>{{ getAttackerMapPosition(attack.attackerTag) }} </b>: {{ getOurAttackerName(attack.defenderTag) }}
@@ -110,7 +110,7 @@
               <p v-else>Aucune attaque.</p>
               <div v-if="getClanAttacks(member.tag).length > 0">
                 <h4 class="font-bold" >Défenses:</h4>
-                <div class="flex">
+                <div class="flex flex-wrap">
                   <div v-for="defense in getClanAttacks(member.tag)" :key="defense.attackerTag" :class="getAttackClass(defense.destructionPercentage, defense.stars)" class="border p-2 rounded-md mb-2 mr-2">
 
                     <p>
