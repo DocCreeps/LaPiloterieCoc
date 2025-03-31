@@ -53,24 +53,26 @@
           <h3 class="text-center text-2xl font-bold">{{ currentWar.clan.name }}</h3>
           <div v-for="member in sortedClanMembers" :key="member.tag">
             <div class="mb-4 p-4 rounded-lg shadow-md">
-              <h3 class="text-center text-xl" > <b>{{ member.name }}</b> ({{ member.tag }})</h3>
+              <h3 class="text-center text-xl"><b>{{ member.name }}</b> ({{ member.tag }})</h3>
+              <p>
+                Ratio étoiles (Attaque/Défense) : <b>{{ calculateAttackDefenseRatio(member.attacks, getOpponentAttacks(member.tag)) }}</b>
+              </p>
               <div v-if="member.attacks && member.attacks.length > 0">
-                <h4 class="font-bold">Attaques:</h4>
+                <h4 class="font-bold">Attaques: ({{ calculateAttackStars(member.attacks) }} étoiles)</h4>
                 <div class="flex flex-wrap">
                   <div v-for="attack in member.attacks" :key="attack.order" :class="getAttackClass(attack.destructionPercentage, attack.stars)" class="border p-2 rounded-md mb-2 mr-2">
-
                     <p>
                       <b>{{ getAttackerMapPosition(attack.attackerTag) }}</b> : {{ getDefenderName(attack.defenderTag) }}
                     </p>
                     <p>
-                      {{ attack.stars }}  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />  ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
+                      {{ attack.stars }} <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" /> ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
                     </p>
                   </div>
                 </div>
               </div>
               <p v-else>Aucune attaque.</p>
               <div v-if="getOpponentAttacks(member.tag).length > 0">
-                <h4 class="font-bold">Défenses:</h4>
+                <h4 class="font-bold">Défenses: ({{ calculateDefenseStars(getOpponentAttacks(member.tag)) }} étoiles)</h4>
                 <div class="flex flex-wrap">
                   <div v-for="defense in getOpponentAttacks(member.tag)" :key="defense.attackerTag" :class="getAttackClass(defense.destructionPercentage, defense.stars)" class="border p-2 rounded-md mb-2 mr-2">
                     <p>
@@ -89,30 +91,32 @@
           </div>
         </div>
 
-        <div class="w-1/2 pl-2">
+        <div class="w-full sm:w-1/2 pl-2">
           <h3 class="text-center text-2xl font-bold">{{ currentWar.opponent.name }}</h3>
           <div v-for="member in sortedOpponentMembers" :key="member.tag">
             <div class="mb-4 p-4 rounded-lg shadow-md">
-              <h3 class="text-center text-xl"> <b>{{ member.name }}</b> ({{ member.tag }})</h3>
+              <h3 class="text-center text-xl"><b>{{ member.name }}</b> ({{ member.tag }})</h3>
+              <p>
+                Ratio étoiles (Attaque/Défense) : <b>{{ calculateAttackDefenseRatio(member.attacks, getClanAttacks(member.tag)) }}</b>
+              </p>
               <div v-if="member.attacks && member.attacks.length > 0">
-                <h4 class="font-bold">Attaques:</h4>
+                <h4 class="font-bold">Attaques: ({{ calculateAttackStars(member.attacks) }} étoiles)</h4>
                 <div class="flex flex-wrap">
                   <div v-for="attack in member.attacks" :key="attack.order" :class="getAttackClass(attack.destructionPercentage, attack.stars)" class="border p-2 rounded-md mb-2 mr-2">
                     <p>
-                      <b>{{ getAttackerMapPosition(attack.attackerTag) }} </b>: {{ getOurAttackerName(attack.defenderTag) }}
+                      <b>{{ getAttackerMapPosition(attack.attackerTag) }}</b> : {{ getOurAttackerName(attack.defenderTag) }}
                     </p>
                     <p>
-                      {{ attack.stars }}  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />  ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
+                      {{ attack.stars }} <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" /> ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
                     </p>
                   </div>
                 </div>
               </div>
               <p v-else>Aucune attaque.</p>
               <div v-if="getClanAttacks(member.tag).length > 0">
-                <h4 class="font-bold" >Défenses:</h4>
+                <h4 class="font-bold">Défenses: ({{ calculateDefenseStars(getClanAttacks(member.tag)) }} étoiles)</h4>
                 <div class="flex flex-wrap">
                   <div v-for="defense in getClanAttacks(member.tag)" :key="defense.attackerTag" :class="getAttackClass(defense.destructionPercentage, defense.stars)" class="border p-2 rounded-md mb-2 mr-2">
-
                     <p>
                       <b>{{ getAttackerMapPosition(defense.attackerTag) }}</b> : {{ getOurAttackerName(defense.attackerTag) }}
                     </p>
@@ -305,6 +309,30 @@ export default {
       const minutes = Math.floor(durationInSeconds / 60);
       const seconds = durationInSeconds % 60;
       return `${minutes}m ${seconds}s`;
+    },
+    calculateAttackDefenseRatio(attacks, defenses) {
+      const attackStars = attacks ? attacks.reduce((sum, attack) => sum + attack.stars, 0) : 0;
+      const defenseStars = defenses ? defenses.reduce((sum, defense) => sum + defense.stars, 0) : 0;
+
+      if (attackStars === 0 && defenseStars === 0) {
+        return '0'; // Les deux sont nuls, ratio 0
+      }
+
+      if (defenseStars === 0) {
+        return attackStars.toString(); // Pas de défenses, affiche les étoiles d'attaque
+      }
+
+      if (attackStars === 0) {
+        return '-' + defenseStars.toString(); // Pas d'attaques, affiche les étoiles de défense
+      }
+
+      return (attackStars / defenseStars).toFixed(2); // Ratio normal
+    },
+    calculateAttackStars(attacks) {
+      return attacks ? attacks.reduce((sum, attack) => sum + attack.stars, 0) : 0;
+    },
+    calculateDefenseStars(defenses) {
+      return defenses ? defenses.reduce((sum, defense) => sum + defense.stars, 0) : 0;
     },
   },
   computed: {

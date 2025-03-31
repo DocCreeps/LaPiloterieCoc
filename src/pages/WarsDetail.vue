@@ -76,7 +76,7 @@ export default {
       if (unrankedLeague) {
         this.unrankedLeagueIcon = unrankedLeague.iconUrls.medium;
       }
-      document.title = `Détail des 60 dernières GDC du clan - ${this.clan?.name}`;
+      document.title = `GDC/LDC - ${this.clan?.name}`;
     } catch (err) {
       console.error("Erreur lors de la récupération des données :", err);
       this.error = err.message;
