@@ -7,7 +7,7 @@
       :icons="icons"
     />
 
-    <div class="container mx-auto py-16 mt-12">
+    <div class="container mx-auto  mt-12">
       <div v-if="loading">Chargement des données...</div>
       <div v-else-if="error">Une erreur est survenue : {{ error }}</div>
       <div v-else>

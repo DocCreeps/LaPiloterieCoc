@@ -1,44 +1,5 @@
 <template>
   <div>
-    <div
-      v-if="currentWar && currentWar.state !== 'notInWar'"
-      :class="getWarResultClass(currentWar)"
-      class="p-2 mb-2 rounded-lg flex flex-col w-10/12 sm:w-full md:flex-row gap-4 items-center justify-center mx-auto"
-    >
-      <div class="flex flex-col sm:flex-row items-center cursor-pointer" @click="getClanDetails(currentWar.clan.tag)">
-        <div class="flex flex-col items-center sm:flex-row">
-          <img :src="currentWar.clan.badgeUrls.medium" alt="Badge" class=" sm:mb-0 sm:mr-2" />
-          <span class="font-bold text-lg">{{ currentWar.clan.name }}</span>
-        </div>
-      </div>
-
-      <div class="flex flex-row items-center justify-between">
-        <div class="flex flex-col items-center">
-          <div class="flex flex-row mr-4">
-            <span class="text-xl font-bold mr-2 mb-4">{{ currentWar.clan.stars }}</span>
-            <img :src="icons['icon/stars']" alt="étoiles" class="h-8 w-8 inline-block mr-2" />
-          </div>
-          <span class="text-sm text-gray-600">({{ currentWar.clan.destructionPercentage.toFixed(2) }}%)</span>
-        </div>
-
-        <span class="text-3xl font-extrabold">-</span>
-
-        <div class="flex flex-col items-center">
-          <div class="flex flex-row ml-4">
-            <img :src="icons['icon/stars']" alt="étoiles" class="h-8 w-8 inline-block mr-2" />
-            <span class="text-xl font-bold mr-2 mb-4">{{ currentWar.opponent.stars }}</span>
-          </div>
-          <span class="text-sm text-gray-600">({{ currentWar.opponent.destructionPercentage.toFixed(2) }}%)</span>
-        </div>
-      </div>
-
-      <div class="flex flex-col sm:flex-row items-center cursor-pointer" @click="getClanDetails(currentWar.opponent.tag)">
-        <div class="flex flex-col items-center sm:flex-row">
-          <span class="font-bold text-lg mb-2 sm:mb-0 sm:mr-2">{{ currentWar.opponent.name }}</span>
-          <img :src="currentWar.opponent.badgeUrls.medium" alt="Badge" />
-        </div>
-      </div>
-    </div>
 
     <div class="mb-8 mt-4">
       <div class="bg-gray-300 w-10/12 sm:w-full mx-auto p-4 rounded-lg text-left" @click="toggleGdc">
