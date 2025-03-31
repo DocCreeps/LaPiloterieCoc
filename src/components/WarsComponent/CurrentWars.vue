@@ -62,7 +62,7 @@
                       <b>{{ getAttackerMapPosition(attack.attackerTag) }}</b> : {{ getDefenderName(attack.defenderTag) }}
                     </p>
                     <p>
-                      {{ attack.stars }}  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />  ({{ attack.destructionPercentage }}%) - {{ attack.duration }}s
+                      {{ attack.stars }}  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />  ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
                     </p>
                   </div>
                 </div>
@@ -78,7 +78,7 @@
                     <p>
                       {{ defense.stars }}
                       <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />
-                      ({{ defense.destructionPercentage }}%) - {{ defense.duration }}s
+                      ({{ defense.destructionPercentage }}%) - {{ formatDuration(defense.duration) }}
                     </p>
                   </div>
                 </div>
@@ -101,7 +101,7 @@
                       <b>{{ getAttackerMapPosition(attack.attackerTag) }} </b>: {{ getOurAttackerName(attack.defenderTag) }}
                     </p>
                     <p>
-                      {{ attack.stars }}  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />  ({{ attack.destructionPercentage }}%) - {{ attack.duration }}s
+                      {{ attack.stars }}  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />  ({{ attack.destructionPercentage }}%) - {{ formatDuration(attack.duration) }}
                     </p>
                   </div>
                 </div>
@@ -118,7 +118,7 @@
                     <p>
                       {{ defense.stars }}
                       <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 inline-block mr-2" />
-                      ({{ defense.destructionPercentage }}%) - {{ defense.duration }}s
+                      ({{ defense.destructionPercentage }}%) - {{ formatDuration(defense.duration) }}
                     </p>
                   </div>
                 </div>
@@ -299,6 +299,11 @@ export default {
       }
 
       return '';
+    },
+    formatDuration(durationInSeconds) {
+      const minutes = Math.floor(durationInSeconds / 60);
+      const seconds = durationInSeconds % 60;
+      return `${minutes}m ${seconds}s`;
     },
   },
   computed: {
