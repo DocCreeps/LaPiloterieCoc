@@ -13,6 +13,12 @@
       <div v-if="loading">Chargement des données...</div>
       <div v-else-if="error">Une erreur est survenue : {{ error }}</div>
       <div v-else>
+        <CurrentWars
+          :wars="wars"
+          :currentWar="currentWar"
+          :icons="icons"
+          @clanClicked="getClanDetails"
+        />
         <WarList
           :wars="wars"
           :currentWar="currentWar"
@@ -33,12 +39,14 @@
 <script>
 import apiService from "../apiService.js";
 import icons from "@/assets/icons.js";
+import CurrentWars from '@/components/WarsComponent/CurrentWars.vue'
 import WarList from "@/components/WarsComponent/WarList.vue";
 import CWLDetails from "@/components/WarsComponent/CWLDetails.vue";
 import ClanHeader from "@/components/ClanHeader.vue";
 
 export default {
   components: {
+    CurrentWars,
     ClanHeader,
     WarList,
     CWLDetails,
