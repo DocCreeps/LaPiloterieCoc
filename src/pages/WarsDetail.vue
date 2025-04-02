@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100">
+    <div class="container mx-auto py-8">
     <clan-header
       :clan="clan"
       :icons="icons"
@@ -13,6 +14,7 @@
       <div v-if="loading">Chargement des données...</div>
       <div v-else-if="error">Une erreur est survenue : {{ error }}</div>
       <div v-else>
+        <CurrentCWL :warLeagueGroup="warLeagueGroup" @clanClicked="getClanDetails" :icons="icons"/>
         <CurrentWars
           :wars="wars"
           :currentWar="currentWar"
@@ -34,6 +36,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -43,6 +46,7 @@ import CurrentWars from '@/components/WarsComponent/CurrentWars.vue'
 import WarList from "@/components/WarsComponent/WarList.vue";
 import CWLDetails from "@/components/WarsComponent/CWLDetails.vue";
 import ClanHeader from "@/components/ClanHeader.vue";
+import CurrentCWL from "@/components/WarsComponent/CurrentCWL.vue"; // Importez le composant CurrentCWL
 
 export default {
   components: {
@@ -50,6 +54,7 @@ export default {
     ClanHeader,
     WarList,
     CWLDetails,
+    CurrentCWL, // Ajoutez CurrentCWL aux composants
   },
   data() {
     return {
@@ -61,6 +66,7 @@ export default {
       icons: icons,
       loading: true,
       error: null,
+      warLeagueGroup: null, // Ajoutez warLeagueGroup
     };
   },
 
@@ -76,6 +82,7 @@ export default {
       if (unrankedLeague) {
         this.unrankedLeagueIcon = unrankedLeague.iconUrls.medium;
       }
+      this.warLeagueGroup = await apiService.getCurrentWarLeague(clanTag); // Récupérez les données de la ligue de guerre
       document.title = `GDC/LDC - ${this.clan?.name}`;
     } catch (err) {
       console.error("Erreur lors de la récupération des données :", err);

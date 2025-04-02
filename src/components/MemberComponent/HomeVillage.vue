@@ -31,7 +31,9 @@
 
   <div class="mt-4 flex flex-col md:flex-row">
     <div class="w-full md:w-1/2">
-      <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
+
+     <div class="flex flex-col justify-center mt-2">
+       <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
       <div class="mt-2 flex flex-wrap justify-center">
         <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
           <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -40,6 +42,16 @@
           </div>
         </div>
       </div>
+       <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes Noire</h3>
+       <div class="mt-2 flex flex-wrap justify-center">
+         <div v-for="troop in darkTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+           <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+           <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': troop.level === troop.maxLevel }, { 'bg-black': troop.level !== troop.maxLevel }]">
+             {{ troop.level }}
+           </div>
+         </div>
+       </div>
+    </div>
     </div>
 
     <div class="w-full md:w-1/2 md:mr-4">
@@ -86,10 +98,14 @@ export default {
     heroes() {
       return this.member.heroes.filter((hero) => hero.village === "home");
     },
+    darkTroops() {
+      return this.member.troops.filter((troop) => troop.village === "home" && this.isDarkTroop(troop.name));
+    },
     regularTroops() {
-      return this.member.troops.filter(
-        (troop) => troop.village === "home" && !this.isSuperTroop(troop.name) && !this.isHeroPet(troop.name) && !this.isSiege(troop.name)
-      );
+      return this.member.troops.filter((troop) => troop.village === "home" && this.isTroop(troop.name));
+    },
+    superTroops() {
+      return this.member.troops.filter((troop) => troop.village === "home" && this.isSuperTroop(troop.name));
     },
     heroPets() {
       return this.member.troops.filter((troop) => troop.village === "home" && this.isHeroPet(troop.name));
@@ -121,6 +137,14 @@ export default {
     getSiegeIcon(siegeName){
       const siegeIcons = `Siege/${siegeName}`;
       return this.icons[siegeIcons];
+    },
+    isDarkTroop(troopName) {
+      const darkTroopNames = ["Minion","Hog Rider", "Valkyrie", "Golem", "Witch", "Lava Hound", "Bowler", "Ice Golem",  "Headhunter", "Apprentice Warden", "Druid", "Furnace" ]
+      return darkTroopNames.includes(troopName);
+    },
+    isTroop(troopName) {
+      const lightTroopNames = ["Barbarian", "Archer", "Giant", "Goblin", "Wall Breaker", "Balloon", "Wizard", "Healer", "Dragon", "Baby Dragon","Miner", "Electro Dragon", "Yeti", "Dragon Rider","Electro Titan", "Root Rider", "Thrower" ];
+      return lightTroopNames.includes(troopName);
     },
     isSuperTroop(troopName) {
       const superTroopNames = ["Super Barbarian", "Super Archer", "Super Giant", "Super Wall Breaker", "Sneaky Goblin", "Super Witch", "Super Minion",
