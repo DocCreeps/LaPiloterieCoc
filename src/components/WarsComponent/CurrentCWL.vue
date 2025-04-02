@@ -1,7 +1,7 @@
 <template>
   <div v-if="warLeagueGroup && warLeagueGroup.rounds">
-    <h2 class="font-bold text-3xl mb-4 text-center">Roster des clans (LDC)</h2>
-    <div class="flex flex-wrap -mx-4">
+    <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Roster des clans (LDC)</h2>
+    <div class="flex flex-wrap mx-4">
       <div v-for="clan in warLeagueGroup.clans" :key="clan.tag" class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4">
         <div class="border rounded p-4 h-full">
           <div class="text-center">
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div class="flex justify-center space-x-4 mb-4">
+    <div class="flex sm:flex-row flex-wrap justify-center space-x-4 space-y-4 sm:space-y-0 mb-4 mt-4">
       <button
         v-for="(round, index) in warLeagueGroup.rounds"
         :key="index"
@@ -53,7 +53,7 @@
     </div>
 
     <div v-if="selectedRound !== null && warLeagueGroup.rounds[selectedRound]">
-      <div class="flex flex-wrap -mx-4">
+      <div class="flex flex-wrap mx-4">
         <div v-for="warTag in warLeagueGroup.rounds[selectedRound].warTags" :key="warTag" class="w-full md:w-1/2 p-4">
           <div class="mb-4 p-4 border rounded">
             <div v-if="warDetails[warTag]" class="flex items-center justify-between">
