@@ -29,7 +29,7 @@
                 </svg>
               </button>
               <ul v-if="isTownHallLevelExpanded(clan.tag, level.townHallLevel)" class="mt-2 grid grid-cols-1 gap-2">
-                <li v-for="member in getMembersByTownHallLevel(clan.members, level.townHallLevel)" :key="member.tag" class="flex items-center mr-4 py-2">
+                <li v-for="member in getMembersByTownHallLevel(clan.members, level.townHallLevel)" :key="member.tag" class="flex items-center mr-4 py-2 cursor-pointer" @click="goToMemberDetails(member.tag)">
                   <img :src="townHallImage(member.townHallLevel)" :alt="`Hôtel de ville niveau ${member.townHallLevel}`" class="w-10 h-10 mr-2" />
                   <span>{{ member.name }}</span>
                 </li>
@@ -57,14 +57,44 @@
         <div v-for="warTag in warLeagueGroup.rounds[selectedRound].warTags" :key="warTag" class="w-full md:w-1/2 p-4">
           <div class="mb-4 p-4 border rounded">
             <div v-if="warDetails[warTag]" class="flex items-center justify-between">
-              <div class="flex items-center">
-                <img :src="warDetails[warTag].clan.badgeUrls.small" alt="Badge du Clan" class="w-12 h-12 mr-2" />
-                <h3 class="font-semibold">{{ warDetails[warTag].clan.name }}</h3>
+              <div class="flex flex-col items-center">
+                <div class="flex flex-row items-center">
+                  <img :src="warDetails[warTag].clan.badgeUrls.small" alt="Badge du Clan" class="mr-2" />
+                  <h3 class="font-bold text-xl">{{ warDetails[warTag].clan.name }}</h3>
+                </div>
+                <div class="flex flex-row items-center justify-center">
+                  <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-2" />
+                  <span class="text-lg text-gray-600">{{ warDetails[warTag].clan.stars }}</span>
+                </div>
+                <div class="flex flex-row items-center justify-center">
+                  <img :src="icons['icon/destruction']" alt="destruction" class="h-5 w-5 mr-2" />
+                  <span class="text-lg text-gray-600">{{ warDetails[warTag].clan.destructionPercentage.toFixed(2) }}%</span>
+                </div>
+                <div class="flex flex-row items-center justify-center">
+                  <img :src="icons['icon/Sword']" alt="attaques" class="h-5 w-5 mr-2" />
+                  <span class="text-lg text-gray-600">{{ warDetails[warTag].clan.attacks }}</span>
+                </div>
               </div>
-              <span class="mx-2">vs</span>
-              <div class="flex items-center">
-                <h3 class="font-semibold">{{ warDetails[warTag].opponent.name }}</h3>
-                <img :src="warDetails[warTag].opponent.badgeUrls.small" alt="Badge de l'Opposant" class="w-12 h-12 ml-2" />
+              <span class="mx-2 text-2xl font-bold">vs</span>
+              <div class="flex flex-col items-center">
+                <div class="flex flex-row items-center">
+                  <img :src="warDetails[warTag].opponent.badgeUrls.small" alt="Badge du Clan" class="mr-2" />
+                  <h3 class="font-bold text-xl">{{ warDetails[warTag].opponent.name }}</h3>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                  <div class="flex flex-row items-center">
+                    <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-2" />
+                    <span class="text-lg text-gray-600">{{ warDetails[warTag].opponent.stars }}</span>
+                  </div>
+                  <div class="flex flex-row items-center justify-center">
+                    <img :src="icons['icon/destruction']" alt="destruction" class="h-5 w-5 mr-2" />
+                    <span class="text-lg text-gray-600">{{ warDetails[warTag].opponent.destructionPercentage.toFixed(2) }}%</span>
+                  </div>
+                  <div class="flex flex-row items-center justify-center">
+                    <img :src="icons['icon/Sword']" alt="attaques" class="h-5 w-5 mr-2" />
+                    <span class="text-lg text-gray-600">{{ warDetails[warTag].opponent.attacks }}</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div v-else>
@@ -98,13 +128,16 @@ export default {
   data() {
     return {
       icons: icons,
-      selectedRound: null, // Round sélectionné (null par défaut)
+      selectedRound: 0, // Round sélectionné (null par défaut)
     };
   },
   methods: {
     getClanDetails(clanTag) {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$emit('clanClicked', cleanedClanTag);
+    },
+    goToMemberDetails(memberTag) {
+      this.$router.push(`/players/${encodeURIComponent(memberTag)}`);
     },
     townHallImage(level) {
       if (level >= 1 && level <= 17) {
