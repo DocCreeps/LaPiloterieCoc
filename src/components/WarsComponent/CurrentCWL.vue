@@ -22,7 +22,7 @@
           <div class="mb-4 p-4 border rounded">
             <div v-if="warDetails[warTag]" class="flex items-center justify-between">
               <div class="flex flex-col items-center">
-                <div class="flex flex-row items-center">
+                <div class="flex flex-col sm:flex-row text-center items-center">
                   <img :src="warDetails[warTag].clan.badgeUrls.small" alt="Badge du Clan" class="mr-2" />
                   <h3 class="font-bold text-xl">{{ warDetails[warTag].clan.name }}</h3>
                 </div>
@@ -41,9 +41,10 @@
               </div>
               <span class="mx-2 text-2xl font-bold">vs</span>
               <div class="flex flex-col items-center">
-                <div class="flex flex-row items-center">
-                  <img :src="warDetails[warTag].opponent.badgeUrls.small" alt="Badge du Clan" class="mr-2" />
+                <div class="flex flex-col sm:flex-row text-center items-center">
+
                   <h3 class="font-bold text-xl">{{ warDetails[warTag].opponent.name }}</h3>
+                  <img :src="warDetails[warTag].opponent.badgeUrls.small" alt="Badge du Clan" class="ml-2" />
                 </div>
                 <div class="flex flex-col items-center justify-center">
                   <div class="flex flex-row items-center">
