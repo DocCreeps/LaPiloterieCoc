@@ -77,7 +77,7 @@ export default {
   },
   data() {
     return {
-      showGdc: false,
+      showGdc: true,
       currentPage: 1,
       itemsPerPage: 10,
     };

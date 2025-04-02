@@ -44,7 +44,6 @@
         <img v-else :src="icons['icon/View']" alt="Voir les détails" class="h-6 w-6 inline-block" />
       </button>
     </div>
-
     <div v-if="showDetails" class="w-10/12 sm:w-full mx-auto mt-4 bg-white p-4 rounded-lg shadow-md">
       <h2 class="text-center text-3xl font-bold mb-2">Détails de la guerre en cours</h2>
 

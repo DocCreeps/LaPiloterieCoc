@@ -8,7 +8,7 @@
         :unrankedLeagueIcon="unrankedLeagueIcon"
       />
 
-      <h1 class="font-bold text-3xl leading-tight text-center mt-10">Statistique GDC et LDC</h1>
+      <h1 class="font-bold text-3xl leading-tight text-center mt-10">GDC/LDC</h1>
 
       <div class="container mx-auto py-16">
         <div v-if="loading">Chargement des données...</div>
@@ -26,6 +26,7 @@
             :icons="icons"
             @clanClicked="getClanDetails"
           />
+          <h2 class="font-bold text-3xl leading-tight text-center mt-10">Statistique GDC et LDC</h2>
           <WarList
             :wars="wars"
             :currentWar="currentWar"
