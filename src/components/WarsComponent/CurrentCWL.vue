@@ -1,5 +1,5 @@
 <template>
-  <div v-if="warLeagueGroup">
+  <div v-if="warLeagueGroup && warLeagueGroup.rounds">
     <h2 class="font-bold text-3xl mb-4 text-center">Roster des clans (LDC)</h2>
     <div class="flex flex-wrap -mx-4">
       <div v-for="clan in warLeagueGroup.clans" :key="clan.tag" class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4">
@@ -7,7 +7,6 @@
           <div class="text-center">
             <div class="flex flex-col items-center cursor-pointer" @click="getClanDetails(clan.tag)">
               <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="  " />
-
               <h2 class="text-xl font-bold mt-2">{{ clan.name }}</h2>
             </div>
           </div>
@@ -40,6 +39,41 @@
         </div>
       </div>
     </div>
+
+    <div class="flex justify-center space-x-4 mb-4">
+      <button
+        v-for="(round, index) in warLeagueGroup.rounds"
+        :key="index"
+        @click="selectedRound = index"
+        :class="{ 'bg-blue-500 text-white': selectedRound === index, 'bg-gray-200': selectedRound !== index }"
+        class="px-4 py-2 rounded"
+      >
+        Round {{ index + 1 }}
+      </button>
+    </div>
+
+    <div v-if="selectedRound !== null && warLeagueGroup.rounds[selectedRound]">
+      <div class="flex flex-wrap -mx-4">
+        <div v-for="warTag in warLeagueGroup.rounds[selectedRound].warTags" :key="warTag" class="w-full md:w-1/2 p-4">
+          <div class="mb-4 p-4 border rounded">
+            <div v-if="warDetails[warTag]" class="flex items-center justify-between">
+              <div class="flex items-center">
+                <img :src="warDetails[warTag].clan.badgeUrls.small" alt="Badge du Clan" class="w-12 h-12 mr-2" />
+                <h3 class="font-semibold">{{ warDetails[warTag].clan.name }}</h3>
+              </div>
+              <span class="mx-2">vs</span>
+              <div class="flex items-center">
+                <h3 class="font-semibold">{{ warDetails[warTag].opponent.name }}</h3>
+                <img :src="warDetails[warTag].opponent.badgeUrls.small" alt="Badge de l'Opposant" class="w-12 h-12 ml-2" />
+              </div>
+            </div>
+            <div v-else>
+              {{ warTag }} (Chargement...)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div v-else>
     <p>Chargement des données de la LDC...</p>
@@ -48,7 +82,7 @@
 
 <script>
 import { ref } from 'vue';
-import icons from '@/assets/icons.js'; // Importez vos icônes ici
+import icons from '@/assets/icons.js';
 
 export default {
   props: {
@@ -56,17 +90,18 @@ export default {
       type: Object,
       required: true,
     },
+    warDetails: {
+      type: Object,
+      required: true,
+    },
   },
   data() {
     return {
-      icons: icons, // Assurez-vous que vos icônes sont disponibles ici
+      icons: icons,
+      selectedRound: null, // Round sélectionné (null par défaut)
     };
   },
   methods: {
-    copyToClipboard(text) {
-      navigator.clipboard.writeText(text);
-      alert('Tag Copied');
-    },
     getClanDetails(clanTag) {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$emit('clanClicked', cleanedClanTag);
@@ -77,8 +112,14 @@ export default {
       }
       return null;
     },
+    isRoundEmpty(round) {
+      if (round && round.warTags) {
+        return round.warTags.every(tag => tag === '#0');
+      }
+      return true; // Retourner true si round ou round.warTags est undefined
+    },
   },
-  setup() {
+  setup(props, { emit }) {
     const expandedTownHallLevels = ref({});
 
     const getTownHallLevels = (members) => {

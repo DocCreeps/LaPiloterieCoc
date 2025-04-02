@@ -93,5 +93,17 @@ getWarLog(clanTag) {
         throw error;
       });
   },
+  getWarDetails(warTag){
+    const encodedTag = encodeURIComponent(warTag);
+    const requestUrl=`/clanwarleagues/wars/${encodedTag}`;
+    return apiClient.get(requestUrl)
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        console.error('Erreur lors de la requête API :', error);
+        throw error;
+      });
+  }
 
 };
