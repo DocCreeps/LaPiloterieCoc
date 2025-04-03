@@ -1,35 +1,35 @@
 <template>
   <div v-if="warLeagueGroup && warLeagueGroup.rounds">
-<!--    <div class="mb-8">-->
-<!--      <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement des Clans (LDC)</h2>-->
-<!--      <div class="overflow-x-auto">-->
-<!--        <table class="min-w-full bg-white border border-gray-200 shadow-md rounded">-->
-<!--          <thead>-->
-<!--          <tr>-->
-<!--            <th class="px-4 py-2 border-b">Clan</th>-->
-<!--            <th class="px-4 py-2 border-b">Étoiles</th>-->
-<!--            <th class="px-4 py-2 border-b">Destruction</th>-->
-<!--            <th class="px-4 py-2 border-b">Attaques (3★/2★/1★/0★)</th>-->
-<!--          </tr>-->
-<!--          </thead>-->
-<!--          <tbody>-->
-<!--          <tr v-for="clan in sortedClans" :key="clan.tag">-->
-<!--            <td class="px-4 py-2 border-b flex items-center">-->
-<!--              <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="w-8 h-8 mr-2" />-->
-<!--              <span>{{ clan.name }}</span>-->
-<!--            </td>-->
-<!--            <td class="px-4 py-2 border-b text-center">{{ getClanStars(clan.tag) }}</td>-->
-<!--            <td class="px-4 py-2 border-b text-center">-->
-<!--              {{ getClanDestruction(clan.tag) }}-->
-<!--            </td>-->
-<!--            <td class="px-4 py-2 border-b text-center">-->
-<!--              {{ getClanAttackDistribution(clan.tag) }}-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--          </tbody>-->
-<!--        </table>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="mb-8">
+      <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement des Clans (LDC)</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 shadow-md rounded">
+          <thead>
+          <tr>
+            <th class="px-4 py-2 border-b">Clan</th>
+            <th class="px-4 py-2 border-b">Étoiles</th>
+            <th class="px-4 py-2 border-b">Destruction</th>
+            <th class="px-4 py-2 border-b">Attaques (3★/2★/1★/0★)</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="clan in sortedClans" :key="clan.tag">
+            <td class="px-4 py-2 border-b flex items-center">
+              <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="w-8 h-8 mr-2" />
+              <span>{{ clan.name }}</span>
+            </td>
+            <td class="px-4 py-2 border-b text-center">{{ getClanStars(clan.tag) }}</td>
+            <td class="px-4 py-2 border-b text-center">
+              {{ getClanDestruction(clan.tag) }}
+            </td>
+            <td class="px-4 py-2 border-b text-center">
+              {{ getClanAttackDistribution(clan.tag) }}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Résultat Round (LDC)</h2>
     <div class="flex sm:flex-row flex-wrap justify-center space-x-4 space-y-4 sm:space-y-0 mb-4 mt-4">
