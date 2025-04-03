@@ -49,6 +49,7 @@ export default {
       required: true,
     },
   },
+  emits: ['clanClicked'], // Ajout de l'option emits
   data() {
     return {
       icons: icons,

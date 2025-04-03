@@ -1,64 +1,63 @@
 <template>
   <div class="mb-8">
     <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement des Clans (LDC)</h2>
-    <div class="overflow-x-auto">
-      <table class="min-w-full shadow-md rounded text-sm">
-        <thead>
-        <tr>
-          <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
-          <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
-          <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            <div class="flex items-center">
-              <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-1" />
-              <span class="font-bold text-xl">Étoiles</span>
-            </div>
-          </th>
-          <th class="px-6 py-3 bg-gray-50 text-left text-gray-500 uppercase tracking-wider font-bold text-xl">
-            <div class="flex items-center">
-              <span class="mr-1">%</span>
-              <span class="">Destruction</span>
-            </div>
-          </th>
-          <th class="px-6 py-3 bg-gray-50 text-left text-xl font-bold text-gray-500 uppercase tracking-wider">
-            <span class="">Attaques</span>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(clan, index) in sortedClans" :key="clan.tag">
-          <td class="px-6 py-4 whitespace-nowrap">
-            <span class="font-bold text-2xl">{{ index + 1 }}</span>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="flex items-center">
-              <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="mr-2" />
-              <span class="text-xl font-bold">{{ clan.name }}</span>
-            </div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="flex items-center">
-              <span class="mr-2 font-bold text-xl">{{ getClanStars(clan.tag).split(' ')[0] }}</span>
-              <span class="text-sm text-gray-500 font-bold">({{ getClanStars(clan.tag).split('(')[1] }} </span>
-            </div>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-center">
-            <span class="font-bold text-xl">{{ getClanDestruction(clan.tag) }}</span>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <div class="flex justify-around items-center font-bold text-xl">
-              <span>{{ getTotalAttack(clan.tag) }}</span>
-              <img :src="icons['icon/Sword']" alt="Total Atk" class="h-10 w-10" />
-              <div v-for="star in sortAttackCountsKeys(getAttackCounts(clan.tag))" :key="star">
-                <div class="flex flex-col">
-                  <span class="text-center">{{ getAttackCounts(clan.tag)[star] }}</span>
+    <div class="flex flex-col">
+      <div class="flex-col hidden sm:flex sm:flex-row justify-between bg-gray-50 font-bold text-xl text-gray-500 border-b border-gray-200">
+        <div class="px-4 py-3 w-full sm:w-12">#</div>
+        <div class="px-4 py-3 w-full sm:w-1/4">Clan</div>
+        <div class="px-4 py-3 w-full sm:w-32">
+          <div class="flex items-center justify-center">
+            <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-2" />
+            <span>Étoiles</span>
+          </div>
+        </div>
+        <div class="px-4 py-3 w-full sm:w-32">
+          <div class="flex items-center justify-center">
+            <span class="mr-2">%</span>
+            <span>Destruction</span>
+          </div>
+        </div>
+        <div class="px-4 py-3 w-full sm:w-64">
+          <div class="flex items-center justify-center">Attaques</div>
+        </div>
+      </div>
+      <div v-for="(clan, index) in sortedClans" :key="clan.tag" class="flex flex-col sm:flex-row justify-between border-b border-gray-200">
+        <div class="px-4 py-4 w-full sm:w-12 flex items-center justify-center">
+          <span class="font-bold text-2xl">{{ index + 1 }}</span>
+        </div>
+        <div class="px-4 py-4 w-full sm:w-1/4 flex items-center justify-center sm:justify-start">
+          <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="mr-2 h-8 w-8" />
+          <span class="text-xl font-bold">{{ clan.name }}</span>
+        </div>
+        <div class="px-4 py-4 w-full sm:w-50">
+          <div class="flex items-center justify-center">
+            <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-2" />
+            <span class="mr-2 font-bold text-lg">{{ getClanStars(clan.tag).split(' ')[0] }}</span>
+            <span class="text-sm text-gray-500 font-bold">({{ getClanStars(clan.tag).split('(')[1] }}</span>
+          </div>
+        </div>
+        <div class="px-4 py-4 w-full sm:w-25">
+          <div class="flex items-center justify-center">
+            <span class="font-bold text-lg">{{ getClanDestruction(clan.tag) }}</span>
+          </div>
+        </div>
+        <div class="px-4 py-4 w-full sm:w-64">
+          <div class="flex items-center justify-around">
+            <div class="flex flex-col">
+              <div class="flex flex-row justify-center mb-2">
+                <img :src="icons['icon/Sword']" alt="Total Atk" class="h-8 w-8 mr-2" />
+                <span class="font-bold text-xl">{{ getTotalAttack(clan.tag) }}</span>
+              </div>
+              <div class="flex flex-row">
+                <div v-for="star in sortAttackCountsKeys(getAttackCounts(clan.tag))" :key="star" class="flex flex-col items-center mx-2">
+                  <span class="text-center font-bold text-xl">{{ getAttackCounts(clan.tag)[star] }}</span>
                   <img :src="icons[`icon/stars-${star}`]" alt="étoiles" class="h-5 w-10" />
                 </div>
               </div>
             </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -137,7 +136,7 @@ export default {
           }
         });
       });
-      return (totalDestruction).toFixed(2) + '%';
+      return (totalDestruction).toFixed(2) + ' %';
     },
     getClanAttackDistribution(clanTag) {
       const attackCounts = {
