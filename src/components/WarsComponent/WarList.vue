@@ -15,7 +15,7 @@
           >
             <div class="text-center text-sm font-bold text-gray-500">{{ formatDate(war.endTime) }}</div>
 
-            <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="flex flex-col lg:flex-row items-center justify-between">
               <div class="flex items-center cursor-pointer" @click="getClanDetails(war.clan.tag)">
                 <img :src="war.clan.badgeUrls.small" alt="Badge" class="mr-2" />
                 <span class="font-bold mr-2 text-lg">{{ war.clan.name }}</span>
