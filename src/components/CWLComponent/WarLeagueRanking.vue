@@ -26,7 +26,7 @@
           <span class="font-bold text-2xl">{{ index + 1 }}</span>
         </div>
         <div class="px-4 py-4 w-full sm:w-1/4 flex items-center justify-center sm:justify-start">
-          <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="mr-2 h-8 w-8" />
+          <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="mr-2 " />
           <span class="text-xl font-bold">{{ clan.name }}</span>
         </div>
 
