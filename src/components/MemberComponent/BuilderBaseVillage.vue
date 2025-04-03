@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <h3 class="text-2xl mb-3 font-bold text-center mt-4">Troupes MDO</h3>
+  <h3 class="text-xl md:text-2xl mb-3 font-bold text-center mt-4">Troupes MDO</h3>
   <div class="flex flex-wrap justify-center mt-3 md:mt-5">
     <div v-for="troops in builderBaseTroops" :key="troops.name" class="relative mx-1 mb-2 md:mx-2 md:mb-2">
       <img :src="getMDOTroopsIcon(troops.name)" :alt="troops.name" :title="`${troops.name} (${troops.level}/${troops.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 mx-1" />

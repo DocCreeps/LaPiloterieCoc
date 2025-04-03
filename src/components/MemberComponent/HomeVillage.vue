@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col md:flex-row items-center">
+  <div class="flex flex-col lg:flex-row items-center">
     <div class="mb-4 md:mr-4">
       <img :src="townHallImage" :alt="`Hôtel de ville niveau ${member.townHallLevel}`" class="w-24 h-24 md:w-40 md:h-40 mb-2 md:mb-4 mx-auto" />
     </div>

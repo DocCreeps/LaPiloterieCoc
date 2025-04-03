@@ -18,7 +18,7 @@
 
     <div v-if="selectedRound !== null && warLeagueGroup.rounds[selectedRound]">
       <div class="flex flex-wrap mx-4">
-        <div v-for="warTag in warLeagueGroup.rounds[selectedRound].warTags" :key="warTag" class="w-full md:w-1/2 p-4">
+        <div v-for="warTag in warLeagueGroup.rounds[selectedRound].warTags" :key="warTag" class="w-full lg:w-1/2 p-4">
           <div class="mb-4 p-4 border rounded" :class="getWarCardGradient(warDetails[warTag])">
             <div v-if="warDetails[warTag]" class="flex items-center justify-between">
               <div class="flex flex-col items-center">
