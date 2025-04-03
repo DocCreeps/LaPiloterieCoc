@@ -29,20 +29,18 @@
           <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="mr-2 h-8 w-8" />
           <span class="text-xl font-bold">{{ clan.name }}</span>
         </div>
-        <div class="px-4 py-4 w-full sm:w-50">
-          <div class="flex items-center justify-center">
+
+          <div class="flex items-center justify-center px-4 py-4 w-full sm:w-50">
             <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-2" />
             <span class="mr-2 font-bold text-lg">{{ getClanStars(clan.tag).split(' ')[0] }}</span>
             <span class="text-sm text-gray-500 font-bold">({{ getClanStars(clan.tag).split('(')[1] }}</span>
           </div>
-        </div>
-        <div class="px-4 py-4 w-full sm:w-25">
-          <div class="flex items-center justify-center">
+
+          <div class="flex items-center justify-center px-4 py-4 w-full sm:w-25">
             <span class="font-bold text-lg">{{ getClanDestruction(clan.tag) }}</span>
           </div>
-        </div>
-        <div class="px-4 py-4 w-full sm:w-64">
-          <div class="flex items-center justify-around">
+
+          <div class="flex items-center justify-around px-4 py-4 w-full sm:w-64">
             <div class="flex flex-col">
               <div class="flex flex-row justify-center mb-2">
                 <img :src="icons['icon/Sword']" alt="Total Atk" class="h-8 w-8 mr-2" />
@@ -56,7 +54,6 @@
               </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
   </div>
