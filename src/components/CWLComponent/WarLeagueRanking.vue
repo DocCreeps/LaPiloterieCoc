@@ -25,7 +25,7 @@
         <div class="px-4 py-4 w-full sm:w-12 flex items-center justify-center">
           <span class="font-bold text-2xl">{{ index + 1 }}</span>
         </div>
-        <div class="px-4 py-4 w-full sm:w-1/4 flex items-center justify-center sm:justify-start">
+        <div class="px-4 py-4 w-full sm:w-1/4 flex items-center justify-center sm:justify-start cursor-pointer" @click="getClanDetails(clan.tag)">
           <img :src="clan.badgeUrls.small" alt="Badge du Clan" class="mr-2 " />
           <span class="text-xl font-bold">{{ clan.name }}</span>
         </div>
@@ -73,6 +73,7 @@ export default {
       required: true,
     },
   },
+  emits: ['clanClicked'],
   data() {
     return {
       icons: icons,
@@ -91,6 +92,10 @@ export default {
     },
   },
   methods: {
+    getClanDetails(clanTag) {
+      const cleanedClanTag = clanTag.replace('#', '');
+      this.$emit('clanClicked', cleanedClanTag);
+    },
     getClanStars(clanTag) {
       let totalStars = 0;
       let bonusStars = 0;
