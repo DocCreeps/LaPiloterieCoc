@@ -15,7 +15,7 @@
               <div class="mb-4 p-4 rounded-lg shadow-md">
                 <h3 class="text-center text-xl"><b>{{ member.name }}</b> ({{ member.tag }})</h3>
                 <p>
-                  Ratio étoiles (Attaque/Défense) :
+                  Ratio (Attaque/Défense) :
                   <b>{{ calculateAttackDefenseRatio(member.attacks, getOpponentAttacks(member.tag)) }}</b>
                 </p>
                 <div class="flex items-center justify-between">
@@ -80,7 +80,7 @@
               <div class="mb-4 p-4 rounded-lg shadow-md">
                 <h3 class="text-center text-xl"><b>{{ member.name }}</b> ({{ member.tag }})</h3>
                 <p>
-                  Ratio étoiles (Attaque/Défense) :
+                  Ratio (Attaque/Défense) :
                   <b>{{ calculateAttackDefenseRatio(member.attacks, getClanAttacks(member.tag)) }}</b>
                 </p>
                 <div class="flex items-center justify-between">
