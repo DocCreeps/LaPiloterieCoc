@@ -39,6 +39,7 @@
                 </div>
               </div>
               <span class="mx-2 text-2xl font-bold">vs</span>
+
               <div class="flex flex-col items-center">
                 <div class="flex flex-col sm:flex-row text-center items-center">
                   <h3 class="font-bold text-xl order-2 sm:order-none">
@@ -63,13 +64,15 @@
               </div>
             </div>
             <div v-else>(Round en attente de préparation)</div>
-            <button
-              v-if="warDetails[warTag]"
-              @click="openAttackDetailsModal(warTag)"
-              class="absolute bottom-2 right-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm"
-            >
-              <img  :src="icons['icon/View']" alt="voir les détails" class="h-6 w-6 inline-block" />
-            </button>
+            <div class="w-full  flex justify-center sm:block">
+              <button
+                v-if="warDetails[warTag]"
+                @click="openAttackDetailsModal(warTag)"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm sm:absolute sm:bottom-2 sm:right-2"
+              >
+                <img  :src="icons['icon/View']" alt="voir les détails" class="h-6 w-6 inline-block" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -103,7 +106,7 @@
 
 <script>
 import icons from '@/assets/icons.js';
-import CWLRoundAtkModal from '@/components/CWLComponent/CWLAttaqueDetaile.vue';
+import CwlRoundAtkModal from '@/components/CWLComponent/CWLRoundAtkModal.vue';
 
 export default {
   props: {
@@ -118,7 +121,7 @@ export default {
   },
   components: {
     icons: icons,
-    CWLRoundAtkModal, // Enregistrez le composant
+    CWLRoundAtkModal: CwlRoundAtkModal, // Enregistrez le composant
   },
   data() {
     return {
