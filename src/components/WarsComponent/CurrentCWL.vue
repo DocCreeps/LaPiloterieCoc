@@ -1,6 +1,6 @@
 <template>
   <div v-if="warLeagueGroup && warLeagueGroup.rounds">
-    <WarLeagueRanking :warLeagueGroup="warLeagueGroup" :warDetails="warDetails" />
+    <WarLeagueRanking :warLeagueGroup="warLeagueGroup" :warDetails="warDetails"  @clanClicked="handleClanClicked"/>
     <WarLeagueRoundResults :warLeagueGroup="warLeagueGroup" :warDetails="warDetails" />
     <WarLeagueRoster :warLeagueGroup="warLeagueGroup" @clanClicked="handleClanClicked" />
   </div>
