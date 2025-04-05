@@ -1,5 +1,4 @@
 <template>
-  <div>
     <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Résultat Round (LDC)</h2>
     <div class="flex sm:flex-row flex-wrap justify-center space-x-4 space-y-4 sm:space-y-0 mb-4 mt-4">
       <button
@@ -19,7 +18,7 @@
     <div v-if="selectedRound !== null && warLeagueGroup.rounds[selectedRound]">
       <div class="flex flex-wrap mx-4">
         <div v-for="warTag in warLeagueGroup.rounds[selectedRound].warTags" :key="warTag" class="w-full lg:w-1/2 p-4">
-          <div class="mb-4 p-4 border rounded" :class="getWarCardGradient(warDetails[warTag])">
+          <div class="mb-4 p-4 border rounded relative" :class="getWarCardGradient(warDetails[warTag])">
             <div v-if="warDetails[warTag]" class="flex items-center justify-between">
               <div class="flex flex-col items-center">
                 <div class="flex flex-col sm:flex-row text-center items-center">
@@ -64,15 +63,47 @@
               </div>
             </div>
             <div v-else>(Round en attente de préparation)</div>
+            <button
+              v-if="warDetails[warTag]"
+              @click="openAttackDetailsModal(warTag)"
+              class="absolute bottom-2 right-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm"
+            >
+              <img  :src="icons['icon/View']" alt="voir les détails" class="h-6 w-6 inline-block" />
+            </button>
           </div>
         </div>
       </div>
+
+      <CWLRoundAtkModal
+        v-if="showAttackDetailsModal"
+        :warDetails="getWarDetailsForModal()"
+        :icons="icons"
+        @close="closeAttackDetailsModal"
+      />
     </div>
-  </div>
 </template>
+
+<style scoped>
+.modal-open {
+  overflow: hidden;
+}
+
+.bg-green-200 {
+  background-color: #c6f6d5;
+}
+
+.bg-orange-200 {
+  background-color: #fde68a;
+}
+
+.bg-red-200 {
+  background-color: #fecaca;
+}
+</style>
 
 <script>
 import icons from '@/assets/icons.js';
+import CWLRoundAtkModal from '@/components/CWLComponent/CWLAttaqueDetaile.vue';
 
 export default {
   props: {
@@ -85,10 +116,16 @@ export default {
       required: true,
     },
   },
+  components: {
+    icons: icons,
+    CWLRoundAtkModal, // Enregistrez le composant
+  },
   data() {
     return {
       icons: icons,
       selectedRound: 0,
+      showAttackDetailsModal: false, // Indique si la modal des détails d'attaque est visible
+      selectedWarTagForDetails: null, // Stocke le warTag de la guerre dont on affiche les détails
     };
   },
   methods: {
@@ -104,6 +141,19 @@ export default {
       } else {
         return 'bg-white';
       }
+    },
+    openAttackDetailsModal(warTag) {
+      this.selectedWarTagForDetails = warTag;
+      this.showAttackDetailsModal = true;
+      document.body.classList.add('modal-open'); // Ajoute la classe pour empêcher le défilement de l'arrière-plan
+    },
+    closeAttackDetailsModal() {
+      this.selectedWarTagForDetails = null;
+      this.showAttackDetailsModal = false;
+      document.body.classList.remove('modal-open'); // Retire la classe pour réactiver le défilement de l'arrière-plan
+    },
+    getWarDetailsForModal() {
+      return this.warDetails[this.selectedWarTagForDetails] || null;
     },
   },
 };
