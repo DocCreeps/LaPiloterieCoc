@@ -41,37 +41,52 @@
     </div>
 
     <div class="flex flex-col">
-      <div class="grid grid-cols-4 sm:grid-cols-4 gap-2 bg-gray-50 font-bold text-sm sm:text-xl text-gray-500 border-b border-gray-200 py-3 px-2">
-        <div class="text-center sm:text-left">#</div>
-        <div class="sm:text-left cursor-pointer" @click="sortColumn = 'name'">Joueur</div>
-        <div class="flex items-center justify-center cursor-pointer" @click="sortColumn = 'stars'">
+      <div class="flex flex-row justify-between bg-gray-50 font-bold text-sm sm:text-xl text-gray-500 border-b border-gray-200 py-3 px-2">
+        <div class="w-1/6 sm:w-12 text-center sm:text-left">#</div>
+        <div class="w-1/4 sm:text-left cursor-pointer" @click="sortColumn = 'name'">Joueur</div>
+        <div class="w-1/6 flex items-center justify-center cursor-pointer" @click="sortColumn = 'stars'">
           <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-1 sm:mr-2" />
           <span>Étoiles</span>
         </div>
-        <div class="flex items-center justify-center cursor-pointer" @click="sortColumn = 'destruction'">
+        <div class="w-1/6 flex items-center justify-center cursor-pointer" @click="sortColumn = 'destruction'">
           <span class="mr-1 sm:mr-2">%</span>
           <span>Destruction</span>
         </div>
+        <div class="w-1/6 flex items-center justify-center">Attaques</div>
       </div>
-      <div v-for="(player, index) in searchName ? filteredByNamePlayers : filteredAndSortedPlayers" :key="player.tag" class="grid grid-cols-4 sm:grid-cols-4 gap-2 border-b border-gray-200 py-4 px-2 items-center">
-        <div class="text-center sm:text-left">
+      <div v-for="(player, index) in searchName ? filteredByNamePlayers : filteredAndSortedPlayers" :key="player.tag" class="flex flex-row justify-between border-b border-gray-200 py-4 px-2 items-center">
+        <div class="w-1/6 sm:w-12 text-center sm:text-left">
           <span class="font-bold text-lg sm:text-2xl">
             {{ player.globalPosition }}
           </span>
         </div>
-        <div class="flex items-center sm:block">
+        <div class="w-1/4 flex items-center sm:block">
           <span class="font-bold mr-2 text-xl">{{ player.name }}</span>
           <div class="flex items-center mt-1 sm:mt-0">
             <img v-if="player.clanBadgeUrl" :src="player.clanBadgeUrl" alt="Badge du Clan" class="h-8 w-8 mr-2" />
             <span class="text-xs sm:text-lg text-gray-600">{{ getPlayerClanName(player.tag) }}</span>
           </div>
         </div>
-        <div class="flex items-center justify-center">
+        <div class="w-1/6 flex items-center justify-center">
           <img :src="icons['icon/stars']" alt="étoiles" class="h-4 w-4 mr-1 sm:mr-2" />
           <span class="font-bold text-lg sm:text-xl">{{ player.totalStars }}</span>
         </div>
-        <div class="flex items-center justify-center">
+        <div class="w-1/6 flex items-center justify-center">
           <span class="font-bold text-sm sm:text-lg">{{ player.totalDestruction }}%</span>
+        </div>
+        <div class="w-1/6 flex items-center justify-around px-2">
+          <div class="flex flex-col items-center">
+            <div class="flex flex-row justify-center mb-1 sm:mb-2">
+              <img :src="icons['icon/Sword']" alt="Total Atk" class="h-8 w-8 mr-1 sm:mr-2" />
+              <span class="font-bold text-lg sm:text-xl">{{ getPlayerTotalAttacks(player.tag) }}</span>
+            </div>
+            <div class="flex flex-row">
+              <div v-for="star in sortAttackCountsKeys([3, 2, 1, 0])" :key="star" class="flex flex-col items-center mx-0.5 sm:mx-1">
+                <span class="text-center font-bold text-lg sm:text-xl">{{ getPlayerAttackCounts(player.tag)[star] || 0 }}</span>
+                <img :src="icons[`icon/stars-${star}`]" :alt="`${star} étoiles`" class="h-5 w-10" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <p v-if="filteredAndSortedPlayers.length === 0 && selectedClan" class="text-center py-4 text-gray-500">Aucun joueur trouvé pour le clan "{{ selectedClan }}".</p>
@@ -92,7 +107,7 @@
         <button
           :disabled="currentPage === totalPages"
           @click="currentPage++"
-          class="px-3 py-1 border rounded text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:text-gray-400 disabled:bg-gray-50"
+          class="px-3 py-1 border rounded text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50"
         >
           Suivant
         </button>
@@ -100,7 +115,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import icons from '@/assets/icons.js';
@@ -274,11 +288,32 @@ export default {
       const player = this.allPlayers.find(p => p.tag === playerTag);
       return player ? this.clanNames[player.clanTag] || 'Inconnu' : 'Inconnu';
     },
+    getPlayerAttackCounts(playerTag) {
+      const player = this.allPlayers.find(p => p.tag === playerTag);
+      if (!player || !player.attacks) {
+        return { 3: 0, 2: 0, 1: 0, 0: 0 };
+      }
+      const attackCounts = { 3: 0, 2: 0, 1: 0, 0: 0 };
+      player.attacks.forEach(attack => {
+        if (attack.stars === 3) {
+          attackCounts[3]++;
+        } else if (attack.stars === 2) {
+          attackCounts[2]++;
+        } else if (attack.stars === 1) {
+          attackCounts[1]++;
+        } else {
+          attackCounts[0]++;
+        }
+      });
+      return attackCounts;
+    },
+    getPlayerTotalAttacks(playerTag) {
+      const player = this.allPlayers.find(p => p.tag === playerTag);
+      return player?.attacks?.length || 0;
+    },
+    sortAttackCountsKeys(keys) {
+      return keys.sort((a, b) => parseInt(b) - parseInt(a));
+    },
   },
 };
 </script>
-
-
-
-
-
