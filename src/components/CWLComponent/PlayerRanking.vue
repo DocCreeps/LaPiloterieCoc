@@ -26,16 +26,29 @@
         </select>
       </div>
 
+      <div class="mb-2 sm:mb-0 sm:mr-4">
+        <label for="sortByThreeStars" class="block text-gray-700 text-sm font-bold mb-2">Trier par 3 Étoiles :</label>
+        <select
+          id="sortByThreeStars"
+          v-model="sortByThreeStars"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+          <option value="">Par défaut</option>
+          <option value="desc">Décroissant</option>
+          <option value="asc">Croissant</option>
+        </select>
+      </div>
+
       <div>
-        <label for="sortDestruction" class="block text-gray-700 text-sm font-bold mb-2">Trier :</label>
+        <label for="sortDestruction" class="block text-gray-700 text-sm font-bold mb-2">Trier par % Destr. :</label>
         <select
           id="sortDestruction"
           v-model="sortDirectionDestruction"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         >
-          <option value="desc">% Décroissant</option>
-          <option value="asc">% Croissant</option>
-          <option value="">Par étoiles</option>
+          <option value="">Par défaut</option>
+          <option value="desc">Décroissant</option>
+          <option value="asc">Croissant</option>
         </select>
       </div>
     </div>
@@ -44,14 +57,11 @@
       <div class="flex flex-row justify-between bg-gray-50 font-bold text-sm sm:text-xl text-gray-500 border-b border-gray-200 py-3 px-2">
         <div class="w-1/6 sm:w-12 text-center sm:text-left">#</div>
         <div class="w-1/4 sm:text-left cursor-pointer" @click="sortColumn = 'name'">Joueur</div>
-        <div class="w-1/6 flex items-center justify-center cursor-pointer" @click="sortColumn = 'stars'">
+        <div class="w-1/6 flex items-center justify-center cursor-pointer" @click="sortColumn = 'totalStars'">
           <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-1 sm:mr-2" />
           <span>Étoiles</span>
         </div>
-        <div class="w-1/6 flex items-center justify-center cursor-pointer" @click="sortColumn = 'destruction'">
-          <span class="mr-1 sm:mr-2">%</span>
-          <span>Destruction</span>
-        </div>
+        <div class="w-1/6 flex items-center justify-center">Destruction</div>
         <div class="w-1/6 flex items-center justify-center">Attaques</div>
       </div>
       <div v-for="(player, index) in searchName ? filteredByNamePlayers : filteredAndSortedPlayers" :key="player.tag" class="flex flex-row justify-between border-b border-gray-200 py-4 px-2 items-center">
@@ -144,6 +154,7 @@ export default {
       previousSortColumn: '',
       searchName: '',
       playersWithGlobalPosition: [],
+      sortByThreeStars: '', // Nouveau pour le tri par 3 étoiles
     };
   },
   computed: {
@@ -195,22 +206,30 @@ export default {
     sortedPlayers() {
       let sortedPlayers = [...this.filteredPlayers];
 
-      if (this.sortColumn) {
+      // Tri par nombre de 3 étoiles
+      if (this.sortByThreeStars) {
+        sortedPlayers.sort((a, b) => {
+          const threeStarsA = this.getPlayerAttackCounts(a.tag)[3] || 0;
+          const threeStarsB = this.getPlayerAttackCounts(b.tag)[3] || 0;
+          return this.sortByThreeStars === 'asc' ? threeStarsA - threeStarsB : threeStarsB - threeStarsA;
+        });
+      }
+      // Tri par pourcentage de destruction
+      else if (this.sortDirectionDestruction) {
+        sortedPlayers.sort((a, b) => {
+          return this.sortDirectionDestruction === 'asc' ? a.totalDestruction - b.totalDestruction : b.totalDestruction - a.totalDestruction;
+        });
+      }
+      // Tri par colonne (nom, étoiles)
+      else if (this.sortColumn) {
         sortedPlayers.sort((a, b) => {
           let comparison = 0;
           if (this.sortColumn === 'name') {
             comparison = a.name.localeCompare(b.name);
-          } else if (this.sortColumn === 'stars') {
+          } else if (this.sortColumn === 'totalStars') {
             comparison = b.totalStars - a.totalStars;
-          } else if (this.sortColumn === 'destruction') {
-            comparison = b.totalDestruction - a.totalDestruction;
           }
-
           return this.sortDirection === 'asc' ? comparison : -comparison;
-        });
-      } else if (this.sortDirectionDestruction) {
-        sortedPlayers.sort((a, b) => {
-          return this.sortDirectionDestruction === 'asc' ? a.totalDestruction - b.totalDestruction : b.totalDestruction - a.totalDestruction;
         });
       }
 
@@ -243,16 +262,25 @@ export default {
       this.currentPage = 1;
     },
     sortDirectionDestruction() {
-      this.sortColumn = '';
+      this.sortColumn = ''; // Reset autre tri
+      this.sortByThreeStars = ''; // Reset autre tri
+      this.currentPage = 1;
     },
     sortColumn() {
-      this.sortDirectionDestruction = '';
+      this.sortDirectionDestruction = ''; // Reset autre tri
+      this.sortByThreeStars = ''; // Reset autre tri
+      this.currentPage = 1;
       if (this.sortColumn !== '#') {
-        this.sortDirection = this.sortColumn === this.previousSortColumn ? (this.sortDirection === 'asc' ? 'desc' : 'asc') : 'asc';
+        this.sortDirection = this.sortColumn === this.previousSortColumn ? (this.sortDirection === 'asc' ? 'desc' : 'asc') : 'desc';
         this.previousSortColumn = this.sortColumn;
       }
     },
     searchName() {
+      this.currentPage = 1;
+    },
+    sortByThreeStars() {
+      this.sortColumn = ''; // Reset autre tri
+      this.sortDirectionDestruction = ''; // Reset autre tri
       this.currentPage = 1;
     },
   },
