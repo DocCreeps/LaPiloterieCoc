@@ -36,7 +36,7 @@
             <span class="text-sm text-gray-500 font-bold">({{ getClanStars(clan.tag).split('(')[1] }}</span>
           </div>
 
-          <div class="flex items-center justify-center px-4 py-4 w-full sm:w-25">
+          <div class="flex items-center justify-center px-4 py-4 w-full sm:w-30">
             <span class="font-bold text-lg">{{ getClanDestruction(clan.tag) }}</span>
           </div>
 
@@ -57,12 +57,20 @@
       </div>
     </div>
   </div>
+  <PlayerRanking
+    :warDetails="warDetails"
+    :warLeagueGroup="warLeagueGroup"
+  />
 </template>
 
 <script>
 import icons from '@/assets/icons.js';
+import PlayerRanking from '@/components/CWLComponent/PlayerRanking.vue'
 
 export default {
+  components: {
+    PlayerRanking,
+  },
   props: {
     warLeagueGroup: {
       type: Object,
