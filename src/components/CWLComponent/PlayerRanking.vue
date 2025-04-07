@@ -2,7 +2,7 @@
   <div class="py-4">
     <h3 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement Général des Joueurs (LDC)</h3>
 
-    <div class="flex flex-col sm:flex-row items-center  mb-4">
+    <div class="flex flex-col sm:flex-row items-center mb-4">
       <div class="mb-2 sm:mb-0 sm:mr-4">
         <label for="playerNameFilter" class="block text-gray-700 text-sm font-bold mb-2">Rechercher un joueur :</label>
         <input
@@ -42,7 +42,7 @@
 
     <div class="flex flex-col">
       <div class="grid grid-cols-4 sm:grid-cols-4 gap-2 bg-gray-50 font-bold text-sm sm:text-xl text-gray-500 border-b border-gray-200 py-3 px-2">
-        <div class="text-center sm:text-left cursor-pointer" @click="sortColumn = '#'">#</div>
+        <div class="text-center sm:text-left">#</div>
         <div class="sm:text-left cursor-pointer" @click="sortColumn = 'name'">Joueur</div>
         <div class="flex items-center justify-center cursor-pointer" @click="sortColumn = 'stars'">
           <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-1 sm:mr-2" />
@@ -53,9 +53,11 @@
           <span>Destruction</span>
         </div>
       </div>
-      <div v-for="(player, index) in filteredAndSortedPlayers" :key="player.tag" class="grid grid-cols-4 sm:grid-cols-4 gap-2 border-b border-gray-200 py-4 px-2 items-center">
+      <div v-for="(player, index) in searchName ? filteredByNamePlayers : filteredAndSortedPlayers" :key="player.tag" class="grid grid-cols-4 sm:grid-cols-4 gap-2 border-b border-gray-200 py-4 px-2 items-center">
         <div class="text-center sm:text-left">
-          <span class="font-bold text-lg sm:text-2xl">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</span>
+          <span class="font-bold text-lg sm:text-2xl">
+            {{ player.globalPosition }}
+          </span>
         </div>
         <div class="flex items-center sm:block">
           <span class="font-bold mr-2 text-xl">{{ player.name }}</span>
@@ -66,16 +68,17 @@
         </div>
         <div class="flex items-center justify-center">
           <img :src="icons['icon/stars']" alt="étoiles" class="h-4 w-4 mr-1 sm:mr-2" />
-          <span class="font-bold text-lg sm:text-xl">{{ getPlayerTotalStars(player.tag) }}</span>
+          <span class="font-bold text-lg sm:text-xl">{{ player.totalStars }}</span>
         </div>
         <div class="flex items-center justify-center">
-          <span class="font-bold text-sm sm:text-lg">{{ getPlayerAverageDestruction(player.tag) }}%</span>
+          <span class="font-bold text-sm sm:text-lg">{{ player.totalDestruction }}%</span>
         </div>
       </div>
       <p v-if="filteredAndSortedPlayers.length === 0 && selectedClan" class="text-center py-4 text-gray-500">Aucun joueur trouvé pour le clan "{{ selectedClan }}".</p>
       <p v-if="filteredAndSortedPlayers.length === 0 && searchName" class="text-center py-4 text-gray-500">Aucun joueur trouvé avec le nom "{{ searchName }}".</p>
       <p v-if="allPlayers.length === 0" class="text-center py-4 text-gray-500">Aucun joueur trouvé dans les données de guerre.</p>
     </div>
+
     <div v-if="totalPages > 1" class="flex justify-center mt-4">
       <div class="flex items-center space-x-2">
         <button
@@ -97,6 +100,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import icons from '@/assets/icons.js';
@@ -125,11 +129,12 @@ export default {
       sortDirectionDestruction: '',
       previousSortColumn: '',
       searchName: '',
+      playersWithGlobalPosition: [],
     };
   },
   computed: {
     allPlayers() {
-      const players = {};
+      const playersObject = {};
       for (const warTag in this.warDetails) {
         const war = this.warDetails[warTag];
         [war.clan, war.opponent].forEach(side => {
@@ -141,8 +146,8 @@ export default {
               this.clanBadges[side.tag] = side.badgeUrls.small;
             }
             side.members.forEach(member => {
-              if (!players[member.tag]) {
-                players[member.tag] = {
+              if (!playersObject[member.tag]) {
+                playersObject[member.tag] = {
                   tag: member.tag,
                   name: member.name,
                   clanTag: side.tag,
@@ -151,37 +156,30 @@ export default {
                 };
               }
               if (member.attacks) {
-                players[member.tag].attacks.push(...member.attacks);
+                playersObject[member.tag].attacks.push(...member.attacks);
               }
             });
           }
         });
       }
-      return Object.values(players);
+      return Object.values(playersObject);
     },
     availableClans() {
       return [...new Set(this.allPlayers.map(player => this.getPlayerClanName(player.tag))).values()].sort();
     },
     filteredPlayers() {
-      let players = this.allPlayers;
-
-      if (this.searchName) {
-        const searchTerm = this.searchName.toLowerCase();
-        players = players.filter(player => player.name.toLowerCase().includes(searchTerm));
-      }
+      let players = this.playersWithGlobalPosition;
 
       if (this.selectedClan) {
         players = players.filter(player => this.getPlayerClanName(player.tag) === this.selectedClan);
       }
 
+      players = players.filter(player => player.totalStars > 0 || player.totalDestruction > 0);
+
       return players;
     },
     sortedPlayers() {
-      let sortedPlayers = [...this.filteredPlayers].filter(player => {
-        const totalStars = this.getPlayerTotalStars(player.tag);
-        const averageDestruction = parseFloat(this.getPlayerAverageDestruction(player.tag));
-        return totalStars > 0 || averageDestruction > 0;
-      });
+      let sortedPlayers = [...this.filteredPlayers];
 
       if (this.sortColumn) {
         sortedPlayers.sort((a, b) => {
@@ -189,25 +187,17 @@ export default {
           if (this.sortColumn === 'name') {
             comparison = a.name.localeCompare(b.name);
           } else if (this.sortColumn === 'stars') {
-            comparison = this.getPlayerTotalStars(b.tag) - this.getPlayerTotalStars(a.tag);
+            comparison = b.totalStars - a.totalStars;
           } else if (this.sortColumn === 'destruction') {
-            const destructionA = parseFloat(this.getPlayerAverageDestruction(a.tag));
-            const destructionB = parseFloat(this.getPlayerAverageDestruction(b.tag));
-            comparison = destructionB - destructionA;
-          } else if (this.sortColumn === '#') {
-            comparison = 0;
+            comparison = b.totalDestruction - a.totalDestruction;
           }
 
           return this.sortDirection === 'asc' ? comparison : -comparison;
         });
       } else if (this.sortDirectionDestruction) {
         sortedPlayers.sort((a, b) => {
-          const destructionA = parseFloat(this.getPlayerAverageDestruction(a.tag));
-          const destructionB = parseFloat(this.getPlayerAverageDestruction(b.tag));
-          return this.sortDirectionDestruction === 'asc' ? destructionA - destructionB : destructionB - destructionA;
+          return this.sortDirectionDestruction === 'asc' ? a.totalDestruction - b.totalDestruction : b.totalDestruction - a.totalDestruction;
         });
-      } else {
-        sortedPlayers.sort((a, b) => this.getPlayerTotalStars(b.tag) - this.getPlayerTotalStars(a.tag));
       }
 
       return sortedPlayers;
@@ -215,21 +205,28 @@ export default {
     totalPages() {
       return Math.ceil(this.sortedPlayers.length / this.itemsPerPage);
     },
-    paginatedPlayers() {
+    filteredAndSortedPlayers() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.sortedPlayers.slice(startIndex, endIndex);
     },
-    filteredAndSortedPlayers() {
-      this.currentPage = 1;
-      return this.paginatedPlayers;
+    filteredByNamePlayers() {
+      if (this.searchName) {
+        const searchTerm = this.searchName.toLowerCase();
+        return this.playersWithGlobalPosition.filter(player => player.name.toLowerCase().includes(searchTerm) && (player.totalStars > 0 || player.totalDestruction > 0));
+      }
+      return [];
     },
   },
   watch: {
+    allPlayers: {
+      handler(newPlayers) {
+        this.calculateGlobalPositions(newPlayers);
+      },
+      immediate: true,
+    },
     selectedClan() {
       this.currentPage = 1;
-      this.sortColumn = '';
-      this.sortDirectionDestruction = '';
     },
     sortDirectionDestruction() {
       this.sortColumn = '';
@@ -246,20 +243,32 @@ export default {
     },
   },
   methods: {
+    calculateGlobalPositions(players) {
+      const playersWithStats = players.map(player => ({
+        ...player,
+        totalStars: this.getPlayerTotalStars(player.tag),
+        totalDestruction: this.getPlayerTotalDestruction(player.tag),
+      }));
+
+      const sortedPlayers = [...playersWithStats].sort((a, b) => {
+        if (b.totalStars !== a.totalStars) {
+          return b.totalStars - a.totalStars; // Tri par étoiles décroissant
+        }
+        return b.totalDestruction - a.totalDestruction; // Si égalité, tri par destruction décroissante
+      });
+
+      this.playersWithGlobalPosition = sortedPlayers.map((player, index) => ({
+        ...player,
+        globalPosition: index + 1,
+      }));
+    },
     getPlayerTotalStars(playerTag) {
       const player = this.allPlayers.find(p => p.tag === playerTag);
-      if (player && player.attacks) {
-        return player.attacks.reduce((sum, attack) => sum + attack.stars, 0);
-      }
-      return 0;
+      return player?.attacks?.reduce((sum, attack) => sum + attack.stars, 0) || 0;
     },
-    getPlayerAverageDestruction(playerTag) {
+    getPlayerTotalDestruction(playerTag) {
       const player = this.allPlayers.find(p => p.tag === playerTag);
-      if (player && player.attacks && player.attacks.length > 0) {
-        const totalDestruction = player.attacks.reduce((sum, attack) => sum + attack.destructionPercentage, 0);
-        return (totalDestruction).toFixed(2);
-      }
-      return '0';
+      return player?.attacks?.reduce((sum, attack) => sum + attack.destructionPercentage, 0) || 0;
     },
     getPlayerClanName(playerTag) {
       const player = this.allPlayers.find(p => p.tag === playerTag);
@@ -268,3 +277,8 @@ export default {
   },
 };
 </script>
+
+
+
+
+
