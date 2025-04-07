@@ -1,6 +1,6 @@
 <template>
   <div class="mb-8">
-    <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement des Clans (LDC)</h2>
+<!--    <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement des Clans (LDC)</h2>-->
     <div class="flex flex-col">
       <div class="flex-col hidden sm:flex sm:flex-row justify-between bg-gray-50 font-bold text-xl text-gray-500 border-b border-gray-200">
         <div class="px-4 py-3 w-full sm:w-12">#</div>
@@ -57,19 +57,14 @@
       </div>
     </div>
   </div>
-  <PlayerRanking
-    :warDetails="warDetails"
-    :warLeagueGroup="warLeagueGroup"
-  />
+
 </template>
 
 <script>
 import icons from '@/assets/icons.js';
-import PlayerRanking from '@/components/CWLComponent/PlayerRanking.vue'
 
 export default {
   components: {
-    PlayerRanking,
   },
   props: {
     warLeagueGroup: {

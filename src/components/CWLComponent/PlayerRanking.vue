@@ -1,9 +1,9 @@
 <template>
   <div class="mb-8">
-    <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement Général des Joueurs (LDC)</h2>
+<!--    <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement Général des Joueurs (LDC)</h2>-->
 
     <div class="flex flex-col sm:flex-row items-center mb-4 gap-2 md:gap-4">
-      <div class="mb-2 md:mb-0 w-full md:w-auto">
+      <div class="mb-2 md:mb-0 w-8/12 md:w-auto">
         <label for="playerNameFilter" class="block text-gray-700 text-sm font-bold mb-1">Rechercher un joueur :</label>
         <input
           type="text"
@@ -14,19 +14,19 @@
         />
       </div>
 
-      <div class="mb-2 md:mb-0 w-full md:w-auto">
+      <div class="mb-2 md:mb-0 w-8/12 md:w-auto">
         <label for="clanFilter" class="block text-gray-700 text-sm font-bold mb-1">Filtrer par Clan :</label>
         <select
           id="clanFilter"
           v-model="selectedClan"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+          class="shadow appearance-none border rounded w-8/12 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
         >
           <option value="">Tous les clans</option>
           <option v-for="clanName in availableClans" :key="clanName" :value="clanName">{{ clanName }}</option>
         </select>
       </div>
 
-      <div class="flex w-full sm:w-auto flex-col sm:flex-row gap-2">
+      <div class="flex w-8/12 sm:w-auto flex-col sm:flex-row gap-2">
         <div class="mb-2 sm:mb-0 w-full sm:w-auto">
           <label for="sortByThreeStars" class="block text-gray-700 text-sm font-bold mb-1">Trier par 3 Étoiles :</label>
           <select
