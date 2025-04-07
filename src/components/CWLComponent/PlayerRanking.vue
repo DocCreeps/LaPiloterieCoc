@@ -206,12 +206,34 @@ export default {
     sortedPlayers() {
       let sortedPlayers = [...this.filteredPlayers];
 
-      // Tri par nombre de 3 étoiles
+      // Tri par qualité des étoiles (3 > 2 > 1 > 0)
       if (this.sortByThreeStars) {
         sortedPlayers.sort((a, b) => {
-          const threeStarsA = this.getPlayerAttackCounts(a.tag)[3] || 0;
-          const threeStarsB = this.getPlayerAttackCounts(b.tag)[3] || 0;
-          return this.sortByThreeStars === 'asc' ? threeStarsA - threeStarsB : threeStarsB - threeStarsA;
+          const countsA = this.getPlayerAttackCounts(a.tag);
+          const countsB = this.getPlayerAttackCounts(b.tag);
+
+          // Comparaison du nombre de 3 étoiles
+          if (countsB[3] !== countsA[3]) {
+            return this.sortByThreeStars === 'asc' ? countsA[3] - countsB[3] : countsB[3] - countsA[3];
+          }
+
+          // Si le nombre de 3 étoiles est égal, comparaison du nombre de 2 étoiles
+          if (countsB[2] !== countsA[2]) {
+            return this.sortByThreeStars === 'asc' ? countsA[2] - countsB[2] : countsB[2] - countsA[2];
+          }
+
+          // Si le nombre de 2 étoiles est égal, comparaison du nombre de 1 étoile
+          if (countsB[1] !== countsA[1]) {
+            return this.sortByThreeStars === 'asc' ? countsA[1] - countsB[1] : countsB[1] - countsA[1];
+          }
+
+          // Si le nombre de 1 étoile est égal, on peut comparer le nombre de 0 étoiles (facultatif)
+          if (countsB[0] !== countsA[0]) {
+            return this.sortByThreeStars === 'asc' ? countsA[0] - countsB[0] : countsB[0] - countsA[0];
+          }
+
+          // Si tous les nombres d'étoiles sont égaux, on ne change pas l'ordre
+          return 0;
         });
       }
       // Tri par pourcentage de destruction
@@ -220,14 +242,14 @@ export default {
           return this.sortDirectionDestruction === 'asc' ? a.totalDestruction - b.totalDestruction : b.totalDestruction - a.totalDestruction;
         });
       }
-      // Tri par colonne (nom, étoiles)
+      // Tri par colonne (nom, étoiles totales)
       else if (this.sortColumn) {
         sortedPlayers.sort((a, b) => {
           let comparison = 0;
           if (this.sortColumn === 'name') {
             comparison = a.name.localeCompare(b.name);
           } else if (this.sortColumn === 'totalStars') {
-            comparison = b.totalStars - a.totalStars;
+            comparison = b.totalStars - a.totalStars; // Ordre décroissant pour les étoiles totales par défaut
           }
           return this.sortDirection === 'asc' ? comparison : -comparison;
         });
