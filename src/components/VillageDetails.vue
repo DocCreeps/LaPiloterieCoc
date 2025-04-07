@@ -68,7 +68,7 @@ export default {
           "Barbarian Puppet", "Rage Vial", "Earthquake Boots", "Vampstache", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet"
         ],
         "Archer Queen": [
-          "Archer Puppet", "Invisibility Vial", "Giant Arrow", "Healer Puppet", "Frozen Arrow", "Magic Mirror"
+          "Archer Puppet", "Invisibility Vial", "Giant Arrow", "Healer Puppet", "Frozen Arrow", "Magic Mirror", "Action Figure"
         ],
         "Grand Warden": [
           "Eternal Tome", "Life Gem", "Healing Tome", "Rage Gem", "Fireball", "Lavaloon Puppet"
