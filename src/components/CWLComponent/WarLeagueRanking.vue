@@ -57,12 +57,20 @@
       </div>
     </div>
   </div>
+  <PlayerRanking
+    :warDetails="warDetails"
+    :warLeagueGroup="warLeagueGroup"
+  />
 </template>
 
 <script>
 import icons from '@/assets/icons.js';
+import PlayerRanking from '@/components/CWLComponent/PlayerRanking.vue'
 
 export default {
+  components: {
+    PlayerRanking,
+  },
   props: {
     warLeagueGroup: {
       type: Object,
