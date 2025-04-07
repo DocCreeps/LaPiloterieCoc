@@ -8,7 +8,7 @@
     <div class="flex flex-col sm:flex-row justify-around items-center mt-4">
       <div class="flex flex-col items-center cursor-pointer mb-4 sm:mb-0" @click="$emit('goToWarsDetail', clan.tag)">
         <img :src="warLeagueIcon" :alt="`Ligue des Guerres ${clan?.warLeague?.name}`" class="h-16 w-16 sm:h-20 sm:w-20 mb-1" />
-        <p class="text-sm text-gray-600">Ligue</p>
+        <p class="text-sm text-gray-600 font-bold">Ligue</p>
       </div>
 
       <div class="flex flex-row">
@@ -16,17 +16,17 @@
           <div class="flex items-center flex-row justify-around sm:flex-col sm:items-center">
             <div class="flex items-center mb-2 sm:mb-0 mx-4">
               <img :src="icons['icon/clanxp']" alt="Expérience du clan" class="h-8 w-8 sm:h-10 sm:w-10" />
-              <p class="text-base sm:text-lg ml-2">lvl {{ clan?.clanLevel || 0 }}</p>
+              <p class="text-base sm:text-lg ml-2 font-bold">lvl {{ clan?.clanLevel || 0 }}</p>
             </div>
             <hr class="my-2 border-l sm:border-t sm:border-l-0 h-10 w-0 sm:h-0 sm:w-full sm:mx-0" />
             <div class="flex flex-col sm:flex-row">
             <div class="flex items-center mx-4">
               <img :src="icons['icon/Trophy']" alt="Trophées du clan" class="h-8 w-8 sm:h-10 sm:w-10" />
-              <p class="text-base sm:text-lg ml-2">{{ clan?.clanPoints || 0 }}</p>
+              <p class="text-base sm:text-lg ml-2 font-bold ">{{ clan?.clanPoints || 0 }}</p>
             </div>
             <div class="flex items-center mx-4 mt-2 sm:mt-0">
               <img :src="icons['icon/mdo_trophy']" alt="Trophées du clan" class="h-8 w-8 sm:h-10 sm:w-10" />
-              <p class="text-base sm:text-lg ml-2">{{ clan?.clanBuilderBasePoints || 0 }}</p>
+              <p class="text-base sm:text-lg ml-2 font-bold">{{ clan?.clanBuilderBasePoints || 0 }}</p>
             </div>
           </div>
           </div>
@@ -37,7 +37,7 @@
 
       <div class="flex flex-col items-center cursor-pointer" @click="$emit('goToCapitalRaid', clan.tag)">
         <img :src="capitalLeagueIcon" :alt="`Ligue des Raids ${clan?.capitalLeague?.name}`" class="h-16 w-16 sm:h-20 sm:w-20 mb-1" />
-        <p class="text-sm text-gray-600">Raids</p>
+        <p class="text-sm text-gray-600 font-bold">Raids</p>
       </div>
     </div>
   </div>

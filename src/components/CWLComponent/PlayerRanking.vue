@@ -1,107 +1,122 @@
 <template>
-  <div class="py-4">
-    <h3 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement Général des Joueurs (LDC)</h3>
+  <div class="mb-8">
+    <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement Général des Joueurs (LDC)</h2>
 
-    <div class="flex flex-col sm:flex-row items-center mb-4">
-      <div class="mb-2 sm:mb-0 sm:mr-4">
-        <label for="playerNameFilter" class="block text-gray-700 text-sm font-bold mb-2">Rechercher un joueur :</label>
+    <div class="flex flex-col sm:flex-row items-center mb-4 gap-2 md:gap-4">
+      <div class="mb-2 md:mb-0 w-full md:w-auto">
+        <label for="playerNameFilter" class="block text-gray-700 text-sm font-bold mb-1">Rechercher un joueur :</label>
         <input
           type="text"
           id="playerNameFilter"
           v-model="searchName"
           placeholder="Nom du joueur"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
         />
       </div>
 
-      <div class="mb-2 sm:mb-0 sm:mr-4">
-        <label for="clanFilter" class="block text-gray-700 text-sm font-bold mb-2">Filtrer par Clan :</label>
+      <div class="mb-2 md:mb-0 w-full md:w-auto">
+        <label for="clanFilter" class="block text-gray-700 text-sm font-bold mb-1">Filtrer par Clan :</label>
         <select
           id="clanFilter"
           v-model="selectedClan"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
         >
           <option value="">Tous les clans</option>
           <option v-for="clanName in availableClans" :key="clanName" :value="clanName">{{ clanName }}</option>
         </select>
       </div>
 
-      <div class="mb-2 sm:mb-0 sm:mr-4">
-        <label for="sortByThreeStars" class="block text-gray-700 text-sm font-bold mb-2">Trier par 3 Étoiles :</label>
-        <select
-          id="sortByThreeStars"
-          v-model="sortByThreeStars"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        >
-          <option value="">Par défaut</option>
-          <option value="desc">Décroissant</option>
-          <option value="asc">Croissant</option>
-        </select>
-      </div>
+      <div class="flex w-full sm:w-auto flex-col sm:flex-row gap-2">
+        <div class="mb-2 sm:mb-0 w-full sm:w-auto">
+          <label for="sortByThreeStars" class="block text-gray-700 text-sm font-bold mb-1">Trier par 3 Étoiles :</label>
+          <select
+            id="sortByThreeStars"
+            v-model="sortByThreeStars"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+          >
+            <option value="">Par défaut</option>
+            <option value="desc">Décroissant</option>
+            <option value="asc">Croissant</option>
+          </select>
+        </div>
 
-      <div>
-        <label for="sortDestruction" class="block text-gray-700 text-sm font-bold mb-2">Trier par % Destr. :</label>
-        <select
-          id="sortDestruction"
-          v-model="sortDirectionDestruction"
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        >
-          <option value="">Par défaut</option>
-          <option value="desc">Décroissant</option>
-          <option value="asc">Croissant</option>
-        </select>
+        <div class="mb-2 sm:mb-0 w-full sm:w-auto">
+          <label for="sortDestruction" class="block text-gray-700 text-sm font-bold mb-1">Trier par % Destr. :</label>
+          <select
+            id="sortDestruction"
+            v-model="sortDirectionDestruction"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm"
+          >
+            <option value="">Par défaut</option>
+            <option value="desc">Décroissant</option>
+            <option value="asc">Croissant</option>
+          </select>
+        </div>
       </div>
     </div>
 
     <div class="flex flex-col">
-      <div class="flex flex-row justify-between bg-gray-50 font-bold text-sm sm:text-xl text-gray-500 border-b border-gray-200 py-3 px-2">
-        <div class="w-1/6 sm:w-12 text-center sm:text-left">#</div>
-        <div class="w-1/4 sm:text-left cursor-pointer" @click="sortColumn = 'name'">Joueur</div>
-        <div class="w-1/6 flex items-center justify-center cursor-pointer" @click="sortColumn = 'totalStars'">
-          <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-1 sm:mr-2" />
-          <span>Étoiles</span>
-        </div>
-        <div class="w-1/6 flex items-center justify-center">Destruction</div>
-        <div class="w-1/6 flex items-center justify-center">Attaques</div>
-      </div>
-      <div v-for="(player, index) in searchName ? filteredByNamePlayers : filteredAndSortedPlayers" :key="player.tag" class="flex flex-row justify-between border-b border-gray-200 py-4 px-2 items-center">
-        <div class="w-1/6 sm:w-12 text-center sm:text-left">
-          <span class="font-bold text-lg sm:text-2xl">
-            {{ player.globalPosition }}
-          </span>
-        </div>
-        <div class="w-1/4 flex items-center sm:block">
-          <span class="font-bold mr-2 text-xl">{{ player.name }}</span>
-          <div class="flex items-center mt-1 sm:mt-0">
-            <img v-if="player.clanBadgeUrl" :src="player.clanBadgeUrl" alt="Badge du Clan" class="h-8 w-8 mr-2" />
-            <span class="text-xs sm:text-lg text-gray-600">{{ getPlayerClanName(player.tag) }}</span>
+      <div class="flex-col hidden sm:flex sm:flex-row justify-between bg-gray-50 font-bold text-sm sm:text-xl text-gray-500 border-b border-gray-200">
+        <div class="px-4 py-3 w-full sm:w-12 text-center sm:text-left">#</div>
+        <div class="px-4 py-3 w-full sm:w-1/4 sm:text-left cursor-pointer" @click="sortColumn = 'name'">Joueur</div>
+        <div class="px-4 py-3 w-full sm:w-32">
+          <div class="flex items-center justify-center">
+            <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-2" />
+            <span>Étoiles</span>
           </div>
         </div>
-        <div class="w-1/6 flex items-center justify-center">
-          <img :src="icons['icon/stars']" alt="étoiles" class="h-4 w-4 mr-1 sm:mr-2" />
-          <span class="font-bold text-lg sm:text-xl">{{ player.totalStars }}</span>
+        <div class="px-4 py-3 w-full sm:w-32">
+          <div class="flex items-center justify-center">
+            <span class="mr-2">%</span>
+            <span>Destruction</span>
+          </div>
         </div>
-        <div class="w-1/6 flex items-center justify-center">
-          <span class="font-bold text-sm sm:text-lg">{{ player.totalDestruction }}%</span>
+        <div class="px-4 py-3 w-full sm:w-64">
+          <div class="flex items-center justify-center">Attaques</div>
         </div>
-        <div class="w-1/6 flex items-center justify-around px-2">
-          <div class="flex flex-col items-center">
-            <div class="flex flex-row justify-center mb-1 sm:mb-2">
-              <img :src="icons['icon/Sword']" alt="Total Atk" class="h-8 w-8 mr-1 sm:mr-2" />
-              <span class="font-bold text-lg sm:text-xl">{{ getPlayerTotalAttacks(player.tag) }}</span>
+      </div>
+
+      <div v-for="(player, index) in searchName ? filteredByNamePlayers : filteredAndSortedPlayers" :key="player.tag" class="flex flex-col sm:flex-row justify-between border-b border-gray-200">
+        <div class="px-4 py-4 w-full sm:w-12 flex items-center justify-center">
+          <span class="font-bold text-2xl">{{ player.globalPosition }}</span>
+        </div>
+        <div class="px-4 py-4 w-full sm:w-1/4 flex items-center justify-center sm:justify-start">
+          <div class="flex flex-col sm:block">
+            <span class="text-lg sm:text-xl font-bold mr-2 text-center sm:text-left">{{ player.name }}</span>
+            <div class="flex items-center mt-1 sm:mt-0">
+              <img v-if="player.clanBadgeUrl" :src="player.clanBadgeUrl" alt="Badge du Clan" class="mr-2 h-8 w-8" />
+              <span class="text-sm  text-gray-600">{{ getPlayerClanName(player.tag) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center px-4 py-4 w-full sm:w-32">
+          <img :src="icons['icon/stars']" alt="étoiles" class="h-5 w-5 mr-2" />
+          <span class="mr-2 font-bold text-lg">{{ player.totalStars }}</span>
+        </div>
+
+        <div class="flex items-center justify-center px-4 py-4 w-full sm:w-30">
+          <span class="font-bold text-lg">{{ player.totalDestruction }}%</span>
+        </div>
+
+        <div class="flex items-center justify-around px-4 py-4 w-full sm:w-64">
+          <div class="flex flex-col">
+            <div class="flex flex-row justify-center mb-2">
+              <img :src="icons['icon/Sword']" alt="Total Atk" class="h-8 w-8 mr-2" />
+              <span class="font-bold text-xl">{{ getPlayerTotalAttacks(player.tag) }}</span>
             </div>
             <div class="flex flex-row">
-              <div v-for="star in sortAttackCountsKeys([3, 2, 1, 0])" :key="star" class="flex flex-col items-center mx-0.5 sm:mx-1">
-                <span class="text-center font-bold text-lg sm:text-xl">{{ getPlayerAttackCounts(player.tag)[star] || 0 }}</span>
+              <div v-for="star in sortAttackCountsKeys([3, 2, 1, 0])" :key="star" class="flex flex-col items-center mx-2">
+                <span class="text-center font-bold text-xl">{{ getPlayerAttackCounts(player.tag)[star] || 0 }}</span>
                 <img :src="icons[`icon/stars-${star}`]" :alt="`${star} étoiles`" class="h-5 w-10" />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <p v-if="filteredAndSortedPlayers.length === 0 && selectedClan" class="text-center py-4 text-gray-500">Aucun joueur trouvé pour le clan "{{ selectedClan }}".</p>
-      <p v-if="filteredAndSortedPlayers.length === 0 && searchName" class="text-center py-4 text-gray-500">Aucun joueur trouvé avec le nom "{{ searchName }}".</p>
-      <p v-if="allPlayers.length === 0" class="text-center py-4 text-gray-500">Aucun joueur trouvé dans les données de guerre.</p>
+      <p v-if="filteredAndSortedPlayers.length === 0 && selectedClan" class="text-center py-4 text-gray-500 text-sm">Aucun joueur trouvé pour le clan "{{ selectedClan }}".</p>
+      <p v-if="filteredAndSortedPlayers.length === 0 && searchName" class="text-center py-4 text-gray-500 text-sm">Aucun joueur trouvé avec le nom "{{ searchName }}".</p>
+      <p v-if="allPlayers.length === 0" class="text-center py-4 text-gray-500 text-sm">Aucun joueur trouvé dans les données de guerre.</p>
     </div>
 
     <div v-if="totalPages > 1" class="flex justify-center mt-4">
