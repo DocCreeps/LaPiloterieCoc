@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap mx-4">
+  <div v-if="isVisible" class="flex flex-wrap mx-4">
     <div v-for="clan in warLeagueGroup.clans" :key="clan.tag" class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-4">
       <div class="rounded border p-4 h-full shadow-md transition-transform duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
         <div class="text-center">
@@ -38,7 +38,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import icons from '@/assets/icons.js';
 
@@ -48,8 +47,12 @@ export default {
       type: Object,
       required: true,
     },
+    isVisible: {
+      type: Boolean,
+      default: false,
+    },
   },
-  emits: ['clanClicked'], // Ajout de l'option emits
+  emits: ['clanClicked'],
   data() {
     return {
       icons: icons,

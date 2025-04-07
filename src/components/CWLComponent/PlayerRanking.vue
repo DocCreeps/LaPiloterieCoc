@@ -4,6 +4,17 @@
 
     <div class="flex flex-col sm:flex-row items-center  mb-4">
       <div class="mb-2 sm:mb-0 sm:mr-4">
+        <label for="playerNameFilter" class="block text-gray-700 text-sm font-bold mb-2">Rechercher un joueur :</label>
+        <input
+          type="text"
+          id="playerNameFilter"
+          v-model="searchName"
+          placeholder="Nom du joueur"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        />
+      </div>
+
+      <div class="mb-2 sm:mb-0 sm:mr-4">
         <label for="clanFilter" class="block text-gray-700 text-sm font-bold mb-2">Filtrer par Clan :</label>
         <select
           id="clanFilter"
@@ -62,6 +73,7 @@
         </div>
       </div>
       <p v-if="filteredAndSortedPlayers.length === 0 && selectedClan" class="text-center py-4 text-gray-500">Aucun joueur trouvé pour le clan "{{ selectedClan }}".</p>
+      <p v-if="filteredAndSortedPlayers.length === 0 && searchName" class="text-center py-4 text-gray-500">Aucun joueur trouvé avec le nom "{{ searchName }}".</p>
       <p v-if="allPlayers.length === 0" class="text-center py-4 text-gray-500">Aucun joueur trouvé dans les données de guerre.</p>
     </div>
     <div v-if="totalPages > 1" class="flex justify-center mt-4">
@@ -85,7 +97,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import icons from '@/assets/icons.js';
@@ -113,6 +124,7 @@ export default {
       sortDirection: 'asc',
       sortDirectionDestruction: '',
       previousSortColumn: '',
+      searchName: '',
     };
   },
   computed: {
@@ -151,10 +163,18 @@ export default {
       return [...new Set(this.allPlayers.map(player => this.getPlayerClanName(player.tag))).values()].sort();
     },
     filteredPlayers() {
-      if (!this.selectedClan) {
-        return this.allPlayers;
+      let players = this.allPlayers;
+
+      if (this.searchName) {
+        const searchTerm = this.searchName.toLowerCase();
+        players = players.filter(player => player.name.toLowerCase().includes(searchTerm));
       }
-      return this.allPlayers.filter(player => this.getPlayerClanName(player.tag) === this.selectedClan);
+
+      if (this.selectedClan) {
+        players = players.filter(player => this.getPlayerClanName(player.tag) === this.selectedClan);
+      }
+
+      return players;
     },
     sortedPlayers() {
       let sortedPlayers = [...this.filteredPlayers].filter(player => {
@@ -220,6 +240,9 @@ export default {
         this.sortDirection = this.sortColumn === this.previousSortColumn ? (this.sortDirection === 'asc' ? 'desc' : 'asc') : 'asc';
         this.previousSortColumn = this.sortColumn;
       }
+    },
+    searchName() {
+      this.currentPage = 1;
     },
   },
   methods: {
