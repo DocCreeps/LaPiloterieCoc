@@ -23,7 +23,6 @@
       >
         Raids de Capital
       </button>
-      <p v-if="!clan.isWarLogPublic">Les guerres de ce clan ne sont pas publiques.</p>
     </div>
 
     <ClanMemberList :clan="clan" :icons="icons" />
