@@ -11,24 +11,24 @@
         <button
           tabindex="0"
           role="tab"
-          :class="{'flex-grow text-center py-2 px-4 cursor-pointer opacity-70 transition-opacity duration-300 ease-in-out': true, 'opacity-100': selectedView === 'clan'}"
-          @click="selectedView = 'clan'; $nextTick(updateSlider)"
+          :class="{'flex-grow text-center py-2 px-4 cursor-pointer transition-colors duration-300 ease-in-out': true, 'bg-blue-500 text-white': selectedView === 'clan'}"
+          @click="selectedView = 'clan'"
         >
           Clans
         </button>
         <button
           tabindex="0"
           role="tab"
-          :class="{'flex-grow text-center py-2 px-4 cursor-pointer opacity-70 transition-opacity duration-300 ease-in-out': true, 'opacity-100': selectedView === 'player'}"
-          @click="selectedView = 'player'; $nextTick(updateSlider)"
+          :class="{'flex-grow text-center py-2 px-4 cursor-pointer transition-colors duration-300 ease-in-out': true, 'bg-blue-500 text-white': selectedView === 'player'}"
+          @click="selectedView = 'player'"
         >
           Joueurs
         </button>
         <button
           tabindex="0"
           role="tab"
-          :class="{'flex-grow text-center py-2 px-4 cursor-pointer opacity-70 transition-opacity duration-300 ease-in-out': true, 'opacity-100': selectedView === 'roster'}"
-          @click="selectedView = 'roster'; $nextTick(updateSlider)"
+          :class="{'flex-grow text-center py-2 px-4 cursor-pointer transition-colors duration-300 ease-in-out': true, 'bg-blue-500 text-white': selectedView === 'roster'}"
+          @click="selectedView = 'roster'"
         >
           Roster
         </button>
@@ -115,20 +115,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.relative {
-  position: relative;
-}
 
-.absolute {
-  position: absolute;
-}
-
-.bottom-0 {
-  bottom: 0;
-}
-
-.left-0 {
-  left: 0;
-}
-</style>

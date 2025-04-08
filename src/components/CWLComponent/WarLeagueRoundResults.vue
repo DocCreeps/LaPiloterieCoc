@@ -134,27 +134,38 @@ export default {
   methods: {
     setInitialSelectedRound() {
       if (this.warLeagueGroup.rounds && this.warLeagueGroup.rounds.length > 0 && this.warDetails) {
-        let inWarRoundIndex = -1;
+        let selectedRoundIndex = -1;
+        // Priorité 1 : Rechercher un round en statut 'inWar'
         for (let i = 0; i < this.warLeagueGroup.rounds.length; i++) {
           const round = this.warLeagueGroup.rounds[i];
           if (round.warTags && round.warTags.length > 0) {
             const isInWar = round.warTags.some(warTag => this.warDetails[warTag] && this.warDetails[warTag].state === 'inWar');
             if (isInWar) {
-              inWarRoundIndex = i;
+              selectedRoundIndex = i;
               break;
             }
           }
         }
-
-        if (inWarRoundIndex !== -1) {
-          this.selectedRound = inWarRoundIndex;
-        } else {
-          this.selectedRound = 0;
+        // Priorité 2 : Si aucun round 'inWar' trouvé, rechercher un round en statut 'preparation'
+        if (selectedRoundIndex === -1) {
+          for (let i = 0; i < this.warLeagueGroup.rounds.length; i++) {
+            const round = this.warLeagueGroup.rounds[i];
+            if (round.warTags && round.warTags.length > 0) {
+              const isPreparing = round.warTags.some(warTag => this.warDetails[warTag] && this.warDetails[warTag].state === 'preparation');
+              if (isPreparing) {
+                selectedRoundIndex = i;
+                break;
+              }
+            }
+          }
         }
+        // Si aucun round 'inWar' ou 'preparation' trouvé, sélectionner le premier round par défaut
+        this.selectedRound = selectedRoundIndex !== -1 ? selectedRoundIndex : 0;
       } else {
         this.selectedRound = this.warLeagueGroup.rounds && this.warLeagueGroup.rounds.length > 0 ? 0 : null;
       }
     },
+
     getWarCardGradient(warDetails) {
       if (!warDetails) {
         return 'bg-white';
@@ -167,20 +178,25 @@ export default {
         return 'bg-white';
       }
     },
+
     openAttackDetailsModal(warTag) {
       this.selectedWarTagForDetails = warTag;
       this.showAttackDetailsModal = true;
       document.body.classList.add('modal-open');
     },
+
     closeAttackDetailsModal() {
       this.selectedWarTagForDetails = null;
       this.showAttackDetailsModal = false;
       document.body.classList.remove('modal-open');
     },
+
     getWarDetailsForModal() {
       return this.warDetails[this.selectedWarTagForDetails] || null;
     },
+
   },
+  
   mounted() {
     this.setInitialSelectedRound();
   }

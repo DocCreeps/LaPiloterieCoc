@@ -292,17 +292,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.bg-green-200 {
-  background-color: #c6f6d5;
-}
-
-.bg-orange-200 {
-  background-color: #fde68a;
-}
-
-.bg-red-200 {
-  background-color: #fecaca;
-}
-</style>
