@@ -1,7 +1,5 @@
 <template>
   <div class="mb-8">
-<!--    <h2 class="font-bold text-2xl sm:text-3xl mb-4 text-center">Classement Général des Joueurs (LDC)</h2>-->
-
     <div class="flex flex-col sm:flex-row items-center mb-4 gap-2 md:gap-4">
       <div class="mb-2 md:mb-0 w-8/12 md:w-auto">
         <label for="playerNameFilter" class="block text-gray-700 text-sm font-bold mb-1">Rechercher un joueur :</label>
@@ -119,25 +117,46 @@
       <p v-if="allPlayers.length === 0" class="text-center py-4 text-gray-500 text-sm">Aucun joueur trouvé dans les données de guerre.</p>
     </div>
 
-    <div v-if="totalPages > 1" class="flex justify-center mt-4">
-      <div class="flex items-center space-x-2">
-        <button
-          :disabled="currentPage === 1"
-          @click="currentPage--"
-          class="px-3 py-1 border rounded text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:text-gray-400 disabled:bg-gray-50"
-        >
-          Précédent
-        </button>
-        <span class="text-gray-700 text-sm">{{ currentPage }} / {{ totalPages }}</span>
-        <button
-          :disabled="currentPage === totalPages"
-          @click="currentPage++"
-          class="px-3 py-1 border rounded text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50"
-        >
-          Suivant
-        </button>
-      </div>
-    </div>
+    <nav v-if="totalPages > 1" aria-label="Navigation des pages" class="mt-4 flex justify-center">
+      <ul class="inline-flex -space-x-px text-sm">
+        <li>
+          <button
+            :disabled="currentPage === 1"
+            @click="currentPage--"
+            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 disabled:text-gray-400 disabled:bg-gray-100 disabled:border-gray-300"
+          >
+            Précédent
+          </button>
+        </li>
+
+        <li v-for="(page, index) in visiblePages" :key="index">
+          <button
+            v-if="typeof page === 'number'"
+            :aria-current="page === currentPage ? 'page' : null"
+            @click="goToPage(page)"
+            :class="[
+      'flex items-center justify-center px-3 h-8 leading-tight text-gray-500  border border-gray-300 ',
+      {'text-white bg-blue-500': page === currentPage}
+    ]"
+          >
+            {{ page }}
+          </button>
+          <span v-else class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500">
+    {{ page }}
+  </span>
+        </li>
+
+        <li>
+          <button
+            :disabled="currentPage === totalPages"
+            @click="currentPage++"
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 disabled:text-gray-400 disabled:bg-gray-100 disabled:border-gray-300"
+          >
+            Suivant
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -170,6 +189,7 @@ export default {
       searchName: '',
       playersWithGlobalPosition: [],
       sortByThreeStars: '', // Nouveau pour le tri par 3 étoiles
+      visiblePageCount: 5, // Nombre de pages visibles dans la pagination
     };
   },
   computed: {
@@ -275,6 +295,41 @@ export default {
     totalPages() {
       return Math.ceil(this.sortedPlayers.length / this.itemsPerPage);
     },
+    visiblePages() {
+      const total = this.totalPages;
+      const current = this.currentPage;
+      const visibleCount = 3; // Nombre de pages visibles au centre
+      const pagesArray = [];
+
+      if (total <= visibleCount + 2) {
+        for (let i = 1; i <= total; i++) {
+          pagesArray.push(i);
+        }
+      } else {
+        pagesArray.push(1);
+
+        if (current > 3) {
+          pagesArray.push('...');
+        }
+
+        const start = Math.max(2, current - Math.floor(visibleCount / 2));
+        const end = Math.min(total - 1, current + Math.floor(visibleCount / 2));
+
+        for (let i = start; i <= end; i++) {
+          if (i > 1 && i < total) {
+            pagesArray.push(i);
+          }
+        }
+
+        if (end < total - 1) {
+          pagesArray.push('...');
+        }
+
+        pagesArray.push(total);
+      }
+
+      return pagesArray;
+    },
     filteredAndSortedPlayers() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
@@ -319,6 +374,10 @@ export default {
       this.sortColumn = ''; // Reset autre tri
       this.sortDirectionDestruction = ''; // Reset autre tri
       this.currentPage = 1;
+    },
+    currentPage() {
+      // Tu peux ajouter ici une logique supplémentaire à exécuter lorsque la page change,
+      // comme remonter en haut de la liste des joueurs.
     },
   },
   methods: {
@@ -378,6 +437,9 @@ export default {
     },
     sortAttackCountsKeys(keys) {
       return keys.sort((a, b) => parseInt(b) - parseInt(a));
+    },
+    goToPage(page) {
+      this.currentPage = page;
     },
   },
 };
