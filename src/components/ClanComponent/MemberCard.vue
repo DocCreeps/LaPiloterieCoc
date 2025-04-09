@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-4 rounded-lg shadow-md cursor-pointer w-full flex flex-col ">
+  <div class="bg-white p-4 rounded-lg shadow-md cursor-pointer w-full flex flex-col">
     <div class="flex flex-col lg:flex-row items-center lg:items-start lg:justify-between mb-4">
       <div class="flex items-center mb-2 lg:mb-0">
         <img :src="member.league?.iconUrls.small" :alt="`Ligue de ${member.name}`" class="w-12 h-12 mr-4" />
@@ -23,7 +23,7 @@
     </div>
 
     <div class="flex flex-col flex-wrap sm:flex-row justify-around items-center flex-grow">
-      <div class="flex items-center mb-4 lg:mb-0 ">
+      <div class="flex items-center mb-4 lg:mb-0">
         <img :src="townHallImage" :alt="`Hôtel de ville niveau ${member.townHallLevel}`" class="w-20 h-20 mr-4" />
         <div class="flex items-center">
           <img :src="icons['icon/Trophy']" alt="Trophées" class="h-10 w-10 mr-1" />
@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <div class="flex items-center ">
+      <div class="flex items-center">
         <img :src="builderHallImage" :alt="`Maison des ouvriers niveau ${member.builderHallLevel}`" class="w-20 h-20 lg:ml-8 mr-4" />
         <div class="flex items-center">
           <img :src="icons['icon/mdo_trophy']" alt="Trophées MDO" class="h-10 w-10 mr-1" />
@@ -45,11 +45,18 @@
 <script>
 export default {
   props: {
-    member: Object,
-    icons: Object,
+    member: {
+      type: Object,
+      required: true
+    },
+    icons: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     translatedRole() {
+      if (!this.member) return '';
       const roles = {
         leader: 'Chef',
         coLeader: 'Adjoint',
@@ -59,9 +66,11 @@ export default {
       return roles[this.member.role] || this.member.role;
     },
     rankChange() {
+      if (!this.member) return 0;
       return this.member.previousClanRank - this.member.clanRank;
     },
     townHallImage() {
+      if (!this.member) return null;
       const level = this.member.townHallLevel;
       if (level >= 1 && level <= 17) {
         return this.icons[`HDV/th_${level}`];
@@ -69,13 +78,14 @@ export default {
       return null;
     },
     builderHallImage() {
+      if (!this.member) return null;
       const level = this.member.builderHallLevel;
       if (level >= 1 && level <= 10) {
         return this.icons[`HDV/MDO_${level}`];
       }
       return null;
-    },
-  },
+    }
+  }
 };
 </script>
 

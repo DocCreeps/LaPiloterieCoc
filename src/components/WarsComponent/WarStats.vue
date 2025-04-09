@@ -1,5 +1,5 @@
 <template>
-  <div :class="clan?.isWarLogPublic ? 'bg-blue-500' : 'bg-red-500'" class="p-4 rounded-lg shadow-md text-white  lg:w-1/3 mb-4 lg:mb-0 mx-auto">
+  <div :class="clan?.isWarLogPublic ? 'bg-blue-500' : 'bg-red-500'" class="p-4 rounded-lg shadow-md text-white lg:w-1/3 mb-4 lg:mb-0 mx-auto">
     <h2 class="text-xl font-bold mb-4 text-center">{{ clan?.isWarLogPublic ? 'Statistiques de Guerre' : 'Journal de Guerre Privé' }}</h2>
     <div v-if="clan?.isWarLogPublic" class="flex flex-col justify-center space-y-4">
       <div class="flex flex-row justify-center space-x-1">
@@ -28,12 +28,20 @@
 <script>
 export default {
   props: {
-    clan: Object,
+    clan: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     totalWars() {
-      return (this.clan?.warWins || 0) + (this.clan?.warLosses || 0) + (this.clan?.warTies || 0);
-    },
-  },
+      if (!this.clan) return 0;
+      return (this.clan.warWins || 0) + (this.clan.warLosses || 0) + (this.clan.warTies || 0);
+    }
+  }
 };
 </script>
+
+<style scoped>
+/* Vos styles ici */
+</style>

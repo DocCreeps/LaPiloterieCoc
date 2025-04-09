@@ -66,9 +66,10 @@ export default {
     async fetchData() {
       try {
         const clanTag = this.$route.params.clanTag;
-        const [clanResponse, leaguesResponse] = await Promise.all([
+        const [clanResponse, leaguesResponse, memberDetails] = await Promise.all([
           apiService.getClanDetails(clanTag),
           apiService.getLeagues(),
+          this.fetchMemberDetails(clanTag),
         ]);
         this.clan = clanResponse;
         this.leagues = leaguesResponse.items;
@@ -79,7 +80,7 @@ export default {
           this.unrankedLeagueIcon = unrankedLeague.iconUrls.small;
         }
         document.title = `Détails du Clan - ${this.clan.name}`;
-        await this.fetchMemberDetails();
+        this.clan.memberList = memberDetails;
       } catch (err) {
         this.error = 'Erreur lors de la récupération des données. Veuillez réessayer.';
         console.error(err);
@@ -95,21 +96,23 @@ export default {
       const cleanedClanTag = clanTag.replace('#', '');
       this.$router.push(`/clan/${cleanedClanTag}/CapitalRaid`);
     },
-    async fetchMemberDetails() {
-      if (!this.clan || !this.clan.memberList) {
-        return;
+    async fetchMemberDetails(clanTag) {
+      const clanResponse = await apiService.getClanDetails(clanTag);
+      if (!clanResponse || !clanResponse.memberList) {
+        return [];
       }
-      const memberTags = this.clan.memberList.map((member) => member.tag);
+      const memberTags = clanResponse.memberList.map((member) => member.tag);
       try {
         const responses = await Promise.all(
           memberTags.map((tag) => apiService.getMemberDetails(tag))
         );
-        this.clan.memberList = this.clan.memberList.map((member, index) => ({
+        return clanResponse.memberList.map((member, index) => ({
           ...member,
           ...responses[index],
         }));
       } catch (error) {
         console.error('Erreur lors de la récupération des détails des membres :', error);
+        return clanResponse.memberList;
       }
     },
   },

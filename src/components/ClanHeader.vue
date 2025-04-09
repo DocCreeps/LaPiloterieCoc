@@ -1,13 +1,14 @@
 <template>
-  <div class="flex flex-col lg:flex-row w-full mb-4 lg:mb-0" v-if="clan">
+  <div class="flex flex-col lg:flex-row w-full mb-4 lg:mb-0" v-if="isClanAvailable">
     <ClanInfo :clan="clan" :icons="icons" :leagues="leagues" :unrankedLeagueIcon="unrankedLeagueIcon" @goToWarsDetail="goToWarsDetail" @goToCapitalRaid="goToCapitalRaid" class="w-10/12 lg:w-1/3 mb-4 lg:mb-0"/>
     <ClanDescription :clan="clan" :icons="icons" class="w-10/12 lg:w-1/3 mb-4 lg:mb-0"/>
     <WarStats :clan="clan" class="w-10/12 lg:w-1/3"/>
   </div>
   <div v-else>
-    <p>Chargement des informations du clan...</p>
+    <p class="text-center">Chargement des informations du clan...</p>
   </div>
 </template>
+
 <script>
 import ClanInfo from './ClanComponent/ClanInfo.vue';
 import ClanDescription from './ClanComponent/ClanDescription.vue';
@@ -24,9 +25,23 @@ export default {
       type: Object,
       default: null,
     },
-    icons: Object,
-    leagues: Array,
-    unrankedLeagueIcon: String,
+    icons: {
+      type: Object,
+      required: true
+    },
+    leagues: {
+      type: Array,
+      required: true
+    },
+    unrankedLeagueIcon: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    isClanAvailable() {
+      return this.clan !== null;
+    }
   },
   methods: {
     goToWarsDetail(clanTag) {

@@ -20,19 +20,17 @@
             </div>
             <hr class="my-2 border-l sm:border-t sm:border-l-0 h-10 w-0 sm:h-0 sm:w-full sm:mx-0" />
             <div class="flex flex-col sm:flex-row">
-            <div class="flex items-center mx-4">
-              <img :src="icons['icon/Trophy']" alt="Trophées du clan" class="h-8 w-8 sm:h-10 sm:w-10" />
-              <p class="text-base sm:text-lg ml-2 font-bold ">{{ clan?.clanPoints || 0 }}</p>
+              <div class="flex items-center mx-4">
+                <img :src="icons['icon/Trophy']" alt="Trophées du clan" class="h-8 w-8 sm:h-10 sm:w-10" />
+                <p class="text-base sm:text-lg ml-2 font-bold">{{ clan?.clanPoints || 0 }}</p>
+              </div>
+              <div class="flex items-center mx-4 mt-2 sm:mt-0">
+                <img :src="icons['icon/mdo_trophy']" alt="Trophées du clan" class="h-8 w-8 sm:h-10 sm:w-10" />
+                <p class="text-base sm:text-lg ml-2 font-bold">{{ clan?.clanBuilderBasePoints || 0 }}</p>
+              </div>
             </div>
-            <div class="flex items-center mx-4 mt-2 sm:mt-0">
-              <img :src="icons['icon/mdo_trophy']" alt="Trophées du clan" class="h-8 w-8 sm:h-10 sm:w-10" />
-              <p class="text-base sm:text-lg ml-2 font-bold">{{ clan?.clanBuilderBasePoints || 0 }}</p>
-            </div>
-          </div>
           </div>
         </div>
-
-
       </div>
 
       <div class="flex flex-col items-center cursor-pointer" @click="$emit('goToCapitalRaid', clan.tag)">
@@ -46,19 +44,37 @@
 <script>
 export default {
   props: {
-    clan: Object,
-    icons: Object,
-    leagues: Array,
-    unrankedLeagueIcon: String,
+    clan: {
+      type: Object,
+      required: true
+    },
+    icons: {
+      type: Object,
+      required: true
+    },
+    leagues: {
+      type: Array,
+      required: true
+    },
+    unrankedLeagueIcon: {
+      type: String,
+      required: true
+    }
   },
   computed: {
     capitalLeagueIcon() {
-      const league = this.leagues.find(league => league.name === this.clan?.capitalLeague?.name);
+      if (!this.clan || !this.leagues) return this.unrankedLeagueIcon;
+      const league = this.leagues.find(league => league.name === this.clan.capitalLeague?.name);
       return league?.iconUrls?.small || this.unrankedLeagueIcon;
     },
     warLeagueIcon() {
-      return this.icons[`league/${this.clan?.warLeague?.name}`];
-    },
-  },
+      if (!this.clan) return '';
+      return this.icons[`league/${this.clan.warLeague?.name}`] || '';
+    }
+  }
 };
 </script>
+
+<style scoped>
+/* Vos styles ici */
+</style>
