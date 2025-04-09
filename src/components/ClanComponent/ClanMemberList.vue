@@ -3,13 +3,16 @@
     <h2 class="text-2xl font-bold mb-6 text-center">Membres</h2>
 
     <div class="mb-6 flex flex-col sm:flex-row justify-center items-center gap-2">
+      <label for="search" class="sr-only">Rechercher un membre</label>
       <input
+        id="search"
         v-model="searchQuery"
         type="text"
         placeholder="Rechercher un membre..."
         class="w-full sm:w-64 p-2 border rounded"
       />
-      <select v-model="selectedTownHallLevel" class="p-2 border rounded w-full sm:w-auto">
+      <label for="townHallLevel" class="sr-only">Niveau de l'Hôtel de Ville</label>
+      <select id="townHallLevel" v-model="selectedTownHallLevel" class="p-2 border rounded w-full sm:w-auto">
         <option value="">Tous les HDV</option>
         <option v-for="level in townHallLevels" :key="level" :value="level">
           HDV {{ level }}
@@ -37,36 +40,36 @@ export default {
     MemberCard,
   },
   props: {
-    clan: Object,
-    icons: Object,
+    clan: {
+      type: Object,
+      required: true
+    },
+    icons: {
+      type: Object,
+      required: true
+    }
   },
   data() {
     return {
       searchQuery: '',
       selectedTownHallLevel: '',
       townHallLevels: [],
+      debounceTimeout: null
     };
   },
   computed: {
     filteredMembers() {
       let members = this.clan?.memberList || [];
+      const query = this.searchQuery.toLowerCase();
+      const selectedLevel = parseInt(this.selectedTownHallLevel);
 
-      if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase();
-        members = members.filter(member => {
-          return member.name.toLowerCase().includes(query) ||
-            this.translateRole(member.role).toLowerCase().includes(query);
-        });
-      }
-
-      if (this.selectedTownHallLevel && this.selectedTownHallLevel !== '') {
-        members = members.filter(member => {
-          return member.townHallLevel === parseInt(this.selectedTownHallLevel);
-        });
-      }
-
-      return members;
-    },
+      return members.filter(member => {
+        const nameMatch = member.name.toLowerCase().includes(query);
+        const roleMatch = this.translateRole(member.role).toLowerCase().includes(query);
+        const levelMatch = !selectedLevel || member.townHallLevel === selectedLevel;
+        return (nameMatch || roleMatch) && levelMatch;
+      });
+    }
   },
   methods: {
     translateRole(role) {
@@ -80,23 +83,26 @@ export default {
     },
     goToMemberDetails(memberTag) {
       this.$router.push(`/players/${encodeURIComponent(memberTag)}`);
-    },
+    }
   },
   watch: {
     clan: {
       immediate: true,
       handler(newClan) {
-        if (newClan && newClan.memberList) {
+        if (newClan && Array.isArray(newClan.memberList)) {
           this.townHallLevels = [...new Set(newClan.memberList.map(member => member.townHallLevel))].sort((a, b) => a - b);
         } else {
           this.townHallLevels = [];
         }
       }
     },
-    selectedTownHallLevel() {
-      this.filteredMembers;
-    },
-  },
+    searchQuery(newQuery) {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(() => {
+        this.filteredMembers;
+      }, 300);
+    }
+  }
 };
 </script>
 
