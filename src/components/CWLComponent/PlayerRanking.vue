@@ -129,17 +129,21 @@
           </button>
         </li>
 
-        <li v-for="page in visiblePages" :key="page">
+        <li v-for="(page, index) in visiblePages" :key="index">
           <button
+            v-if="typeof page === 'number'"
             :aria-current="page === currentPage ? 'page' : null"
             @click="goToPage(page)"
             :class="[
-              'flex items-center justify-center px-3 h-8 leading-tight text-gray-500  border border-gray-300 ',
-              {'text-white bg-blue-500': page === currentPage}
-            ]"
+      'flex items-center justify-center px-3 h-8 leading-tight text-gray-500  border border-gray-300 ',
+      {'text-white bg-blue-500': page === currentPage}
+    ]"
           >
             {{ page }}
           </button>
+          <span v-else class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500">
+    {{ page }}
+  </span>
         </li>
 
         <li>
@@ -294,26 +298,36 @@ export default {
     visiblePages() {
       const total = this.totalPages;
       const current = this.currentPage;
-      const visibleCount = this.visiblePageCount;
-      const halfVisible = Math.floor(visibleCount / 2);
-
-      let start = current - halfVisible;
-      let end = current + halfVisible;
-
-      if (start < 1) {
-        start = 1;
-        end = Math.min(total, visibleCount);
-      }
-
-      if (end > total) {
-        end = total;
-        start = Math.max(1, total - visibleCount + 1);
-      }
-
+      const visibleCount = 3; // Nombre de pages visibles au centre
       const pagesArray = [];
-      for (let i = start; i <= end; i++) {
-        pagesArray.push(i);
+
+      if (total <= visibleCount + 2) {
+        for (let i = 1; i <= total; i++) {
+          pagesArray.push(i);
+        }
+      } else {
+        pagesArray.push(1);
+
+        if (current > 3) {
+          pagesArray.push('...');
+        }
+
+        const start = Math.max(2, current - Math.floor(visibleCount / 2));
+        const end = Math.min(total - 1, current + Math.floor(visibleCount / 2));
+
+        for (let i = start; i <= end; i++) {
+          if (i > 1 && i < total) {
+            pagesArray.push(i);
+          }
+        }
+
+        if (end < total - 1) {
+          pagesArray.push('...');
+        }
+
+        pagesArray.push(total);
       }
+
       return pagesArray;
     },
     filteredAndSortedPlayers() {
