@@ -170,9 +170,9 @@ export default {
       if (!warDetails) {
         return 'bg-white';
       }
-      if (warDetails.clan.stars > warDetails.opponent.stars) {
+      if (warDetails.clan.stars > warDetails.opponent.stars || warDetails.clan.destructionPercentage > warDetails.opponent.destructionPercentage) {
         return 'bg-gradient-to-r from-green-400 via-orange-200 to-red-400';
-      } else if (warDetails.clan.stars < warDetails.opponent.stars) {
+      } else if (warDetails.clan.stars < warDetails.opponent.stars || warDetails.clan.destructionPercentage < warDetails.opponent.destructionPercentage) {
         return 'bg-gradient-to-r from-red-400 via-orange-200 to-green-400';
       } else {
         return 'bg-white';
@@ -196,7 +196,7 @@ export default {
     },
 
   },
-  
+
   mounted() {
     this.setInitialSelectedRound();
   }
