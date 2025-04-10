@@ -15,11 +15,13 @@
         <div v-else-if="error">Une erreur est survenue : {{ error }}</div>
         <div v-else>
           <CurrentCWL
+            v-if="!isCWLNotFound"
             :warLeagueGroup="warLeagueGroup"
             :warDetails="warDetails"
             @clanClicked="getClanDetails"
             :icons="icons"
           />
+
           <CurrentWars
             :wars="wars"
             :currentWar="currentWar"
@@ -74,6 +76,7 @@ export default {
       error: null,
       warLeagueGroup: null,
       warDetails: {},
+      isCWLNotFound: false,
     };
   },
 
@@ -89,27 +92,40 @@ export default {
       if (unrankedLeague) {
         this.unrankedLeagueIcon = unrankedLeague.iconUrls.medium;
       }
-      this.warLeagueGroup = await apiService.getCurrentWarLeague(clanTag);
 
-      if (this.warLeagueGroup && this.warLeagueGroup.rounds) {
-        for (const round of this.warLeagueGroup.rounds) {
-          for (const warTag of round.warTags) {
-            if (warTag !== "#0" && !this.warDetails[warTag]) {
-              try {
-                const war = await apiService.getWarDetails(warTag);
-                this.warDetails[warTag] = Object.assign({}, war);
-              } catch (error) {
-                console.error(`Erreur lors de la récupération des détails de la guerre ${warTag} :`, error);
-                this.warDetails[warTag] = { error: "Erreur de chargement" };
+      try {
+        const cwlResponse = await apiService.getCurrentWarLeague(clanTag);
+        this.warLeagueGroup = cwlResponse;
+        this.isCWLNotFound = false;
+
+        if (this.warLeagueGroup && this.warLeagueGroup.rounds) {
+          for (const round of this.warLeagueGroup.rounds) {
+            for (const warTag of round.warTags) {
+              if (warTag !== "#0" && !this.warDetails[warTag]) {
+                try {
+                  const war = await apiService.getWarDetails(warTag);
+                  this.warDetails[warTag] = Object.assign({}, war);
+                } catch (error) {
+                  console.error(`Erreur lors de la récupération des détails de la guerre ${warTag} :`, error);
+                  this.warDetails[warTag] = { error: "Erreur de chargement" };
+                }
               }
             }
           }
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404 && error.response.data && error.response.data.reason === 'notFound') {
+          this.isCWLNotFound = true;
+          this.warLeagueGroup = null;
+        } else {
+          console.error("Erreur lors de la récupération des données de la LDC :", error);
+          this.error = this.error || "Erreur lors du chargement des données de la LDC.";
         }
       }
 
       document.title = `GDC/LDC - ${this.clan?.name}`;
     } catch (err) {
-      console.error("Erreur lors de la récupération des données :", err);
+      console.error("Erreur lors de la récupération des données initiales :", err);
       this.error = err.message;
     } finally {
       this.loading = false;
@@ -124,15 +140,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.stat-item {
-  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  margin-bottom: 0;
-}
-
-.stat-item:hover {
-  transform: scale(1.05);
-  opacity: 0.8;
-}
-</style>
