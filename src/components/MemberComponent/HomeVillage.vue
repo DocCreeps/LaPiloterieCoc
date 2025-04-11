@@ -109,7 +109,6 @@ export default {
   props: {
     member: Object,
     icons: Object,
-    heroGear: Function,
   },
   emits: ['openEquipmentModal'],
   computed: {
@@ -218,13 +217,34 @@ export default {
       const heroPetNames = ["L.A.S.S.I", "Electro Owl", "Mighty Yak", "Unicorn", "Phoenix", "Poison Lizard", "Diggy", "Frosty", "Spirit Fox", "Angry Jelly","Sneezy"];
       return heroPetNames.includes(troopName);
     },
-    isEquipment(equipmentName) {
-      const epicEquipmentNames = ["Barbarian Puppet", "Archer Puppet", "Eternal Tome", "Seeking Shield", "Dark Orb", "Rage Vial", "Invisibility Vial", "Life Gem", "Royal Gem", "Metal Pants"];
-      return epicEquipmentNames.includes(equipmentName);
-    },
     isEpiqueEquipment(equipmentName) {
       const heroEquipmentNames = ["Electro Boots", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet", "Magic Mirror", "Action Figure", "Frozen Arrow",  "Fireball", "Lavaloon Puppet", "Rocket Spear"];
       return heroEquipmentNames.includes(equipmentName);
+    },
+
+    heroGear(heroName) {
+      const heroEquipmentMap = {
+        "Barbarian King": [
+          "Barbarian Puppet", "Rage Vial", "Earthquake Boots", "Vampstache", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet"
+        ],
+        "Archer Queen": [
+          "Archer Puppet", "Invisibility Vial", "Giant Arrow", "Healer Puppet", "Frozen Arrow", "Magic Mirror", "Action Figure"
+        ],
+        "Grand Warden": [
+          "Eternal Tome", "Life Gem", "Healing Tome", "Rage Gem", "Fireball", "Lavaloon Puppet"
+        ],
+        "Royal Champion": [
+          "Seeking Shield", "Royal Gem", "Hog Rider Puppet", "Haste Vial", "Rocket Spear", "Electro Boots"
+        ],
+        "Minion Prince": [
+          "Dark Orb", "Metal Pants", "Henchmen Puppet", "Noble Iron"
+        ],
+      };
+
+      if (heroEquipmentMap[heroName]) {
+        return heroEquipmentMap[heroName];
+      }
+      return [];
     },
   },
 };
