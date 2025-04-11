@@ -15,6 +15,8 @@
         </div>
       </div>
 
+
+
       <div v-if="heroPets && heroPets.length > 0">
         <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Familiers</h3>
         <div class="flex flex-wrap justify-center mt-2">
@@ -32,26 +34,26 @@
   <div class="mt-4 flex flex-col md:flex-row">
     <div class="w-full md:w-1/2">
 
-     <div class="flex flex-col justify-center mt-2">
-       <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
-      <div class="mt-2 flex flex-wrap justify-center">
-        <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
-          <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
-          <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': troop.level === troop.maxLevel }, { 'bg-black': troop.level !== troop.maxLevel }]">
-            {{ troop.level }}
+
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
+        <div class="mt-2 flex flex-wrap justify-center">
+          <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+            <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+            <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': troop.level === troop.maxLevel }, { 'bg-black': troop.level !== troop.maxLevel }]">
+              {{ troop.level }}
+            </div>
           </div>
         </div>
-      </div>
-       <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes Noire</h3>
-       <div class="mt-2 flex flex-wrap justify-center">
-         <div v-for="troop in darkTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
-           <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
-           <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': troop.level === troop.maxLevel }, { 'bg-black': troop.level !== troop.maxLevel }]">
-             {{ troop.level }}
-           </div>
-         </div>
-       </div>
-    </div>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes Noire</h3>
+        <div class="mt-2 flex flex-wrap justify-center">
+          <div v-for="troop in darkTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+            <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
+            <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': troop.level === troop.maxLevel }, { 'bg-black': troop.level !== troop.maxLevel }]">
+              {{ troop.level }}
+            </div>
+          </div>
+        </div>
+
     </div>
 
     <div class="w-full md:w-1/2 md:mr-4">
@@ -64,16 +66,41 @@
           </div>
         </div>
       </div>
+
+      <div class="mt-4" v-if="siegeMachines && siegeMachines.length > 0">
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Machines de siège</h3>
+        <div class="mt-2 flex flex-wrap justify-center">
+          <div v-for="siege in siegeMachines" :key="siege.name" class="relative h-12 w-12 md:h-15 md:w-15 mx-2 mb-2 md:mx-4 md:mb-2">
+            <img :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="w-full h-full " />
+            <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': siege.level === siege.maxLevel }, { 'bg-black': siege.level !== siege.maxLevel }]">
+              {{ siege.level }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
 
-  <div class="mt-4" v-if="siegeMachines && siegeMachines.length > 0">
-    <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Machines de siège</h3>
-    <div class="mt-2 flex flex-wrap justify-center">
-      <div v-for="siege in siegeMachines" :key="siege.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
-        <img :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
-        <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': siege.level === siege.maxLevel }, { 'bg-black': siege.level !== siege.maxLevel }]">
-          {{ siege.level }}
+
+
+  <div v-if="heroEquipment && heroEquipment.length > 0">
+    <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Équipements</h3>
+    <div class="flex flex-col justify-center mt-2">
+      <div v-for="hero in heroes" :key="hero.name" class="mb-4">
+
+        <div class="flex flex-wrap justify-center">
+          <div v-for="equipmentName in heroGear(hero.name)" :key="equipmentName" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+            <div v-if="heroEquipment.find(eq => eq.name === equipmentName)" :class="['relative', 'rounded-sm','h-12','w-12', 'md:w-15', 'md:h-15', { 'bg-[#B833FD]': isEpiqueEquipment(equipmentName) }]">
+              <img :src="getHeroEquipmentIcon(equipmentName)" :alt="equipmentName" :title="`${equipmentName} (Niveau ${heroEquipment.find(eq => eq.name === equipmentName).level})`" class="w-full h-full " />
+              <div :class="['absolute', 'bottom-0', 'left-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': heroEquipment.find(eq => eq.name === equipmentName).level === heroEquipment.find(eq => eq.name === equipmentName).maxLevel }, { 'bg-black': heroEquipment.find(eq => eq.name === equipmentName).level !== heroEquipment.find(eq => eq.name === equipmentName).maxLevel }]">
+                {{ heroEquipment.find(eq => eq.name === equipmentName).level }}
+              </div>
+            </div>
+            <div v-else>
+              Équipement {{ equipmentName }} non trouvé
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -85,6 +112,7 @@ export default {
   props: {
     member: Object,
     icons: Object,
+    heroGear: Function,
   },
   emits: ['openEquipmentModal'],
   computed: {
@@ -113,6 +141,9 @@ export default {
     spells() {
       return this.member.spells.filter((spell) => spell.village === "home");
     },
+    heroEquipment() {
+      return this.member.heroEquipment.filter((equipment) => equipment.village === "home");
+    },
     siegeMachines() {
       return this.member.troops.filter((troop) => troop.village === "home" && this.isSiege(troop.name));
     },
@@ -138,6 +169,10 @@ export default {
       const siegeIcons = `Siege/${siegeName}`;
       return this.icons[siegeIcons];
     },
+    getHeroEquipmentIcon(equipmentName) {
+      const equipmentIcons = `Equipment/${equipmentName}`;
+      return this.icons[equipmentIcons];
+    },
     isDarkTroop(troopName) {
       const darkTroopNames = ["Minion","Hog Rider", "Valkyrie", "Golem", "Witch", "Lava Hound", "Bowler", "Ice Golem",  "Headhunter", "Apprentice Warden", "Druid", "Furnace" ]
       return darkTroopNames.includes(troopName);
@@ -158,6 +193,14 @@ export default {
     isHeroPet(troopName) {
       const heroPetNames = ["L.A.S.S.I", "Electro Owl", "Mighty Yak", "Unicorn", "Phoenix", "Poison Lizard", "Diggy", "Frosty", "Spirit Fox", "Angry Jelly","Sneezy"];
       return heroPetNames.includes(troopName);
+    },
+    isEquipment(equipmentName) {
+      const epicEquipmentNames = ["Barbarian Puppet", "Archer Puppet", "Eternal Tome", "Seeking Shield", "Dark Orb", "Rage Vial", "Invisibility Vial", "Life Gem", "Royal Gem", "Metal Pants"];
+      return epicEquipmentNames.includes(equipmentName);
+    },
+    isEpiqueEquipment(equipmentName) {
+      const heroEquipmentNames = ["Electro Boots", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet", "Magic Mirror", "Action Figure", "Frozen Arrow",  "Fireball", "Lavaloon Puppet", "Rocket Spear"];
+      return heroEquipmentNames.includes(equipmentName);
     },
   },
 };
