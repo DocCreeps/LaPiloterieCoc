@@ -97,9 +97,6 @@
                 {{ heroEquipment.find(eq => eq.name === equipmentName).level }}
               </div>
             </div>
-            <div v-else>
-              Équipement {{ equipmentName }} non trouvé
-            </div>
           </div>
         </div>
       </div>
