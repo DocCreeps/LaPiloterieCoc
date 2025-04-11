@@ -35,7 +35,7 @@
     <div class="w-full md:w-1/2">
 
 
-        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-5">Troupes</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
             <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -44,7 +44,7 @@
             </div>
           </div>
         </div>
-        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes Noire</h3>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-10">Troupes Noire</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="troop in darkTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
             <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -57,7 +57,7 @@
     </div>
 
     <div class="w-full md:w-1/2 md:mr-4">
-      <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Sorts</h3>
+      <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-5">Sorts</h3>
       <div class="mt-2 flex flex-wrap justify-center">
         <div v-for="spell in spells" :key="spell.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
           <img :src="getSpellIcon(spell.name)" :alt="spell.name" :title="`${spell.name} (${spell.level}/${spell.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -68,7 +68,7 @@
       </div>
 
       <div class="mt-4" v-if="siegeMachines && siegeMachines.length > 0">
-        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Machines de siège</h3>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-10">Machines de siège</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="siege in siegeMachines" :key="siege.name" class="relative h-12 w-12 md:h-15 md:w-15 mx-2 mb-2 md:mx-4 md:mb-2">
             <img :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="w-full h-full " />
@@ -85,14 +85,15 @@
 
 
   <div v-if="heroEquipment && heroEquipment.length > 0">
-    <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Équipements</h3>
-    <div class="flex flex-col justify-center mt-2">
-      <div v-for="(equipments, heroName) in equipmentsByHero" :key="heroName" class="mb-4">
+    <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-8">Équipements</h3>
+    <div class="flex flex-wrap justify-center mt-2">
+      <div v-for="(equipments, heroName) in equipmentsByHero" :key="heroName" class="mb-2 w-full md:w-1/2 p-4 flex flex-col items-center">
+          <img :src="getHeroIcon(heroName)" :alt="heroName" :title="heroName" class="flex justify-center mb-2 h-12 w-12 md:h-15 md:w-15 " />
         <div class="flex flex-wrap justify-center">
           <div v-for="equipment in equipments" :key="equipment.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
             <div :class="['relative', 'rounded-sm','h-12','w-12', 'md:w-15', 'md:h-15', { 'bg-[#B833FD]': isEpiqueEquipment(equipment.name) }]">
               <img :src="getHeroEquipmentIcon(equipment.name)" :alt="equipment.name" :title="`${equipment.name} (Niveau ${equipment.level})`" class="w-full h-full " />
-              <div :class="['absolute', 'bottom-0', 'left-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': equipment.level === equipment.maxLevel }, { 'bg-black': equipment.level !== equipment.maxLevel }]">
+              <div :class="['absolute', 'bottom-0', 'right-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': equipment.level === equipment.maxLevel }, { 'bg-black': equipment.level !== equipment.maxLevel }]">
                 {{ equipment.level }}
               </div>
             </div>
@@ -108,7 +109,6 @@ export default {
   props: {
     member: Object,
     icons: Object,
-    heroGear: Function,
   },
   emits: ['openEquipmentModal'],
   computed: {
@@ -217,13 +217,34 @@ export default {
       const heroPetNames = ["L.A.S.S.I", "Electro Owl", "Mighty Yak", "Unicorn", "Phoenix", "Poison Lizard", "Diggy", "Frosty", "Spirit Fox", "Angry Jelly","Sneezy"];
       return heroPetNames.includes(troopName);
     },
-    isEquipment(equipmentName) {
-      const epicEquipmentNames = ["Barbarian Puppet", "Archer Puppet", "Eternal Tome", "Seeking Shield", "Dark Orb", "Rage Vial", "Invisibility Vial", "Life Gem", "Royal Gem", "Metal Pants"];
-      return epicEquipmentNames.includes(equipmentName);
-    },
     isEpiqueEquipment(equipmentName) {
       const heroEquipmentNames = ["Electro Boots", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet", "Magic Mirror", "Action Figure", "Frozen Arrow",  "Fireball", "Lavaloon Puppet", "Rocket Spear"];
       return heroEquipmentNames.includes(equipmentName);
+    },
+
+    heroGear(heroName) {
+      const heroEquipmentMap = {
+        "Barbarian King": [
+          "Barbarian Puppet", "Rage Vial", "Earthquake Boots", "Vampstache", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet"
+        ],
+        "Archer Queen": [
+          "Archer Puppet", "Invisibility Vial", "Giant Arrow", "Healer Puppet", "Frozen Arrow", "Magic Mirror", "Action Figure"
+        ],
+        "Grand Warden": [
+          "Eternal Tome", "Life Gem", "Healing Tome", "Rage Gem", "Fireball", "Lavaloon Puppet"
+        ],
+        "Royal Champion": [
+          "Seeking Shield", "Royal Gem", "Hog Rider Puppet", "Haste Vial", "Rocket Spear", "Electro Boots"
+        ],
+        "Minion Prince": [
+          "Dark Orb", "Metal Pants", "Henchmen Puppet", "Noble Iron"
+        ],
+      };
+
+      if (heroEquipmentMap[heroName]) {
+        return heroEquipmentMap[heroName];
+      }
+      return [];
     },
   },
 };
