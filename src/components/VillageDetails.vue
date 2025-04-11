@@ -84,7 +84,7 @@ export default {
       if (heroEquipmentMap[heroName]) {
         return heroEquipmentMap[heroName];
       }
-      return false;
+      return [];
     },
   },
   computed: {

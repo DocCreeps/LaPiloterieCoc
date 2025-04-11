@@ -87,14 +87,13 @@
   <div v-if="heroEquipment && heroEquipment.length > 0">
     <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Équipements</h3>
     <div class="flex flex-col justify-center mt-2">
-      <div v-for="hero in heroes" :key="hero.name" class="mb-4">
-
+      <div v-for="(equipments, heroName) in equipmentsByHero" :key="heroName" class="mb-4">
         <div class="flex flex-wrap justify-center">
-          <div v-for="equipmentName in heroGear(hero.name)" :key="equipmentName" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
-            <div v-if="heroEquipment.find(eq => eq.name === equipmentName)" :class="['relative', 'rounded-sm','h-12','w-12', 'md:w-15', 'md:h-15', { 'bg-[#B833FD]': isEpiqueEquipment(equipmentName) }]">
-              <img :src="getHeroEquipmentIcon(equipmentName)" :alt="equipmentName" :title="`${equipmentName} (Niveau ${heroEquipment.find(eq => eq.name === equipmentName).level})`" class="w-full h-full " />
-              <div :class="['absolute', 'bottom-0', 'left-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': heroEquipment.find(eq => eq.name === equipmentName).level === heroEquipment.find(eq => eq.name === equipmentName).maxLevel }, { 'bg-black': heroEquipment.find(eq => eq.name === equipmentName).level !== heroEquipment.find(eq => eq.name === equipmentName).maxLevel }]">
-                {{ heroEquipment.find(eq => eq.name === equipmentName).level }}
+          <div v-for="equipment in equipments" :key="equipment.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
+            <div :class="['relative', 'rounded-sm','h-12','w-12', 'md:w-15', 'md:h-15', { 'bg-[#B833FD]': isEpiqueEquipment(equipment.name) }]">
+              <img :src="getHeroEquipmentIcon(equipment.name)" :alt="equipment.name" :title="`${equipment.name} (Niveau ${equipment.level})`" class="w-full h-full " />
+              <div :class="['absolute', 'bottom-0', 'left-0', 'text-white', 'text-xs md:text-sm', 'px-1', 'rounded-sm', { 'bg-yellow-300 text-zinc-950': equipment.level === equipment.maxLevel }, { 'bg-black': equipment.level !== equipment.maxLevel }]">
+                {{ equipment.level }}
               </div>
             </div>
           </div>
@@ -143,6 +142,33 @@ export default {
     },
     siegeMachines() {
       return this.member.troops.filter((troop) => troop.village === "home" && this.isSiege(troop.name));
+    },
+    equipmentsByHero() {
+      const equipmentsByHero = {};
+      const allPossibleHeroes = Object.keys({
+        "Barbarian King": [],
+        "Archer Queen": [],
+        "Grand Warden": [],
+        "Royal Champion": [],
+        "Minion Prince": [],
+      });
+
+      for (const heroName of allPossibleHeroes) {
+        const orderedGearNames = this.heroGear(heroName);
+        if (orderedGearNames && orderedGearNames.length > 0) {
+          const orderedEquipments = [];
+          for (const gearName of orderedGearNames) {
+            const foundEquipment = this.heroEquipment.find(eq => eq.name === gearName);
+            if (foundEquipment) {
+              orderedEquipments.push(foundEquipment);
+            }
+          }
+          if (orderedEquipments.length > 0) {
+            equipmentsByHero[heroName] = orderedEquipments;
+          }
+        }
+      }
+      return equipmentsByHero;
     },
   },
   methods: {
