@@ -2,7 +2,7 @@
   <div class="container mx-auto px-4">
     <div class="bg-white p-6 md:p-8 rounded-lg shadow-md mt-2 mx-auto">
       <h2 class="text-2xl md:text-3xl font-bold text-center mb-6 md:mb-10">Villages Principal</h2>
-      <HomeVillage :member="member" :icons="icons" @openEquipmentModal="openEquipmentModal" />
+      <HomeVillage :member="member" :icons="icons" @openEquipmentModal="openEquipmentModal" :heroGear="heroGear" />
     </div>
 
     <div class="bg-white p-6 md:p-8 rounded-lg shadow-md mt-2 mx-auto">
