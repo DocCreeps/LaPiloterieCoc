@@ -35,7 +35,7 @@
     <div class="w-full md:w-1/2">
 
 
-        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes</h3>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-5">Troupes</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="troop in regularTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
             <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -44,7 +44,7 @@
             </div>
           </div>
         </div>
-        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Troupes Noire</h3>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-10">Troupes Noire</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="troop in darkTroops" :key="troop.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
             <img :src="getTroopsIcon(troop.name)" :alt="troop.name" :title="`${troop.name} (${troop.level}/${troop.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -57,7 +57,7 @@
     </div>
 
     <div class="w-full md:w-1/2 md:mr-4">
-      <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Sorts</h3>
+      <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-5">Sorts</h3>
       <div class="mt-2 flex flex-wrap justify-center">
         <div v-for="spell in spells" :key="spell.name" class="relative mx-2 mb-2 md:mx-4 md:mb-2">
           <img :src="getSpellIcon(spell.name)" :alt="spell.name" :title="`${spell.name} (${spell.level}/${spell.maxLevel})`" class="h-12 w-12 md:h-15 md:w-15 " />
@@ -68,7 +68,7 @@
       </div>
 
       <div class="mt-4" v-if="siegeMachines && siegeMachines.length > 0">
-        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Machines de siège</h3>
+        <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-10">Machines de siège</h3>
         <div class="mt-2 flex flex-wrap justify-center">
           <div v-for="siege in siegeMachines" :key="siege.name" class="relative h-12 w-12 md:h-15 md:w-15 mx-2 mb-2 md:mx-4 md:mb-2">
             <img :src="getSiegeIcon(siege.name)" :alt="siege.name" :title="`${siege.name} (${siege.level}/${siege.maxLevel})`" class="w-full h-full " />
@@ -85,7 +85,7 @@
 
 
   <div v-if="heroEquipment && heroEquipment.length > 0">
-    <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Équipements</h3>
+    <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-8">Équipements</h3>
     <div class="flex flex-wrap justify-center mt-2">
       <div v-for="(equipments, heroName) in equipmentsByHero" :key="heroName" class="mb-2 w-full md:w-1/2 p-4 flex flex-col items-center">
           <img :src="getHeroIcon(heroName)" :alt="heroName" :title="heroName" class="flex justify-center mb-2 h-12 w-12 md:h-15 md:w-15 " />

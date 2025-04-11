@@ -54,7 +54,7 @@
     </div>
     <div class="text-center mt-4">
       <div class="player-label-holder flex flex-row justify-center">
-        <img v-for="label in member?.labels" :key="label.id" :src="label.iconUrls.small" :title="label.name" class="player-label mx-2 h-12 w-12 lg:h-auto sm:w-auto" />
+        <img v-for="label in member?.labels" :key="label.id" :src="label.iconUrls.small" :title="label.name" class="player-label mx-2 h-12 w-12" />
       </div>
     </div>
   </div>
