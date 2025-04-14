@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col lg:flex-row items-center">
-    <div class="mb-4 md:mr-4">
-      <img :src="townHallImage" :alt="`Hôtel de ville niveau ${member.townHallLevel}`" class="w-24 h-24 md:w-40 md:h-40 mb-2 md:mb-4 mx-auto" />
+    <div class="mb-4 md:mr-4 w-1/2">
+      <img :src="townHallImage" :alt="`Hôtel de ville niveau ${member.townHallLevel}`" class="w-24 h-24 md:w-50 md:h-50 mb-2 md:mb-4 mx-auto" />
     </div>
 
     <div class="flex-grow flex flex-col items-center">
@@ -14,8 +14,6 @@
           </div>
         </div>
       </div>
-
-
 
       <div v-if="heroPets && heroPets.length > 0">
         <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-4">Familiers</h3>
@@ -33,7 +31,6 @@
 
   <div class="mt-4 flex flex-col md:flex-row">
     <div class="w-full md:w-1/2">
-
 
         <h3 class="sm:text-2xl text-lg mb-3 font-bold text-center mt-5">Troupes</h3>
         <div class="mt-2 flex flex-wrap justify-center">
@@ -248,6 +245,8 @@ export default {
     },
   },
 };
+
+
 </script>
 
 <style scoped>
