@@ -9,7 +9,19 @@ const apiClient = axios.create({
     Authorization: `Bearer ${API_KEY}`
   }
 });
-
+// Intercepteur de réponse pour détecter les erreurs de maintenance
+apiClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.data && error.response.data.reason === 'inMaintenance') {
+      console.log('API en maintenance détectée.');
+      return Promise.resolve({ isMaintenance: true, message: error.response.data.message });
+    }
+    return Promise.reject(error);
+  }
+);
 // Fonction utilitaire pour gérer les erreurs
 const handleError = (error, requestName) => {
   console.error(`Erreur lors de la requête API (${requestName}) :`, error);

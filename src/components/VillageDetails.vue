@@ -57,7 +57,8 @@ export default {
   computed: {
     heroEquipment() {
       return this.member.heroEquipment.filter((gear) => gear.village === "home");
-    }
+    },
+
   },
 };
 </script>
