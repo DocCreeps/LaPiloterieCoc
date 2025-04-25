@@ -46,7 +46,7 @@ export default {
       if (this.raids.length <= 5) {
         return this.raids;
       } else {
-        return this.raids.slice(this.raids.length - 5);
+        return this.raids.slice(0, 6);
       }
     },
     selectedRaid() {
