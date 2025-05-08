@@ -4,8 +4,8 @@ import './assets/main.css';
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import apiService from './apiService'; // Assurez-vous que le chemin est correct
-import ErrorInitialisation from './components/ErrorInitialisation.vue'; // Créez ce composant
+import apiService from './apiService';
+import MaintenancePage from './pages/MaintenancePage.vue';
 
 let appInstance = null;
 
@@ -14,7 +14,7 @@ async function checkMaintenanceAndInitializeApp() {
     const response = await apiService.getLeagues();
 
     if (response && response.isMaintenance) {
-      console.log('API en maintenance détectée au démarrage, redirection...');
+      console.log('API en maintenance détectée au démarrage, redirection via route...');
       router.push({ name: 'maintenance', query: { message: response.message } });
     } else {
       appInstance = createApp(App)
@@ -23,16 +23,16 @@ async function checkMaintenanceAndInitializeApp() {
     }
   } catch (error) {
     console.error('Erreur initiale lors de la vérification de maintenance :', error);
-    // Si l'application n'a pas pu être créée (première tentative d'erreur),
-    // on monte un composant d'erreur initial.
+    // En cas d'erreur initiale (autre que la maintenance gérée par l'intercepteur),
+    // on monte directement le composant MaintenancePage.
     if (!appInstance) {
-      appInstance = createApp(ErrorInitialisation)
+      appInstance = createApp(MaintenancePage)
         .mount('#app');
     } else {
-      // Si l'application est déjà montée et qu'une erreur survient lors de la vérification,
-      // vous pouvez afficher un message d'erreur dans l'application elle-même.
-      console.error('Erreur lors de la vérification de maintenance après le démarrage.');
-      // Vous pourriez émettre un événement global pour informer les composants de l'erreur.
+      // Si l'application est déjà montée et qu'une erreur survient,
+      // vous pouvez naviguer vers la page de maintenance via le routeur
+      console.error('Erreur lors de la vérification de maintenance après le démarrage, redirection via route...');
+      router.push({ name: 'maintenance', query: { message: 'L\'API rencontre des problèmes techniques. Veuillez réessayer ultérieurement.' } });
     }
   }
 }
