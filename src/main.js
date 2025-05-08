@@ -20,8 +20,9 @@ async function checkMaintenanceAndInitializeApp() {
     }
   } catch (error) {
     console.error('Erreur initiale lors de la vérification de maintenance :', error);
-    // Rediriger vers la page de maintenance en cas d'erreur initiale (y compris 500)
-    router.push({ name: 'maintenance', query: { message: 'L\'API rencontre des problèmes techniques. Veuillez réessayer ultérieurement.' } });
+    createApp(App)
+      .use(router)
+      .mount('#app');
   }
 }
 
