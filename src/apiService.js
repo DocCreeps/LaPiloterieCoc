@@ -12,14 +12,14 @@ const apiClient = axios.create({
 // Intercepteur de réponse pour détecter les erreurs de maintenance
 apiClient.interceptors.response.use(
   (response) => {
-    return response;
+    return response; // Retourne la réponse normale si tout va bien
   },
   (error) => {
     if (error.response && error.response.data && error.response.data.reason === 'inMaintenance') {
       console.log('API en maintenance détectée.');
       return Promise.resolve({ isMaintenance: true, message: error.response.data.message });
     }
-    return Promise.reject(error);
+    return Promise.reject(error); // Rejette l'erreur pour les autres cas
   }
 );
 // Fonction utilitaire pour gérer les erreurs
