@@ -17,13 +17,19 @@ async function checkMaintenanceAndInitializeApp() {
       console.log('API en maintenance détectée au démarrage, redirection via route...');
       router.push({ name: 'maintenance', query: { message: response.message } });
     } else {
+<<<<<<< Updated upstream
       appInstance = createApp(App)
+=======
+      // Monter l'application principale SEULEMENT s'il n'y a pas de maintenance
+      createApp(App)
+>>>>>>> Stashed changes
         .use(router)
         .mount('#app');
     }
   } catch (error) {
     console.error('Erreur initiale lors de la vérification de maintenance :', error);
     // En cas d'erreur initiale (autre que la maintenance gérée par l'intercepteur),
+<<<<<<< Updated upstream
     // on monte directement le composant MaintenancePage.
     if (!appInstance) {
       appInstance = createApp(MaintenancePage)
@@ -34,6 +40,10 @@ async function checkMaintenanceAndInitializeApp() {
       console.error('Erreur lors de la vérification de maintenance après le démarrage, redirection via route...');
       router.push({ name: 'maintenance', query: { message: 'L\'API rencontre des problèmes techniques. Veuillez réessayer ultérieurement.' } });
     }
+=======
+    // rediriger vers la page de maintenance avec un message générique.
+    router.push({ name: 'maintenance', query: { message: 'L\'application n\'a pas pu démarrer correctement. Veuillez réessayer plus tard.' } });
+>>>>>>> Stashed changes
   }
 }
 
