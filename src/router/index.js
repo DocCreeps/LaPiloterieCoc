@@ -25,12 +25,6 @@ const routes = [
     name: 'CapitalRaid',
     component: () => import(/* webpackChunkName: "capital-details" */ '../pages/CapitalDetail.vue')
   },
-  {
-    path: '/maintenance',
-    name: 'maintenance',
-    component: () => import('../pages/MaintenancePage.vue'),
-    props: route => ({ message: route.query.message })
-  }
 ];
 
 const router = createRouter({
