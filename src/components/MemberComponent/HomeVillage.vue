@@ -215,7 +215,7 @@ export default {
       return heroPetNames.includes(troopName);
     },
     isEpiqueEquipment(equipmentName) {
-      const heroEquipmentNames = ["Electro Boots", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet", "Magic Mirror", "Action Figure", "Frozen Arrow",  "Fireball", "Lavaloon Puppet", "Rocket Spear"];
+      const heroEquipmentNames = ["Electro Boots", "Giant Gauntlet", "Spiky Ball", "Snake Bracelet", "Magic Mirror", "Action Figure", "Frozen Arrow",  "Fireball", "Lavaloon Puppet", "Rocket Spear", "Dark Crown"];
       return heroEquipmentNames.includes(equipmentName);
     },
 
@@ -234,7 +234,7 @@ export default {
           "Seeking Shield", "Royal Gem", "Hog Rider Puppet", "Haste Vial", "Rocket Spear", "Electro Boots"
         ],
         "Minion Prince": [
-          "Dark Orb", "Metal Pants", "Henchmen Puppet", "Noble Iron"
+          "Dark Orb", "Metal Pants", "Henchmen Puppet", "Noble Iron", "Dark Crown"
         ],
       };
 
